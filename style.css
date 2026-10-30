@@ -215,7 +215,11 @@ svg { width: 20px; height: 20px; fill: currentColor; flex-shrink: 0; }
 .contact-form input:focus, .contact-form textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(99, 102, 241, .2); }
 .contact-form .invalid { border-color: #f87171; }
 .form-error { color: #f87171; font-size: 14px; min-height: 0; }
-.form-error:empty { display: none; }
+.form-error:empty, .form-success:empty { display: none; }
+.form-error a { color: #fca5a5; text-decoration: underline; }
+.form-success { color: #4ade80; font-size: 14px; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.btn[disabled] { opacity: .6; cursor: wait; transform: none; }
 .form-actions { display: flex; flex-wrap: wrap; gap: 12px; }
 .form-actions .btn { flex: 1; justify-content: center; min-width: 180px; }
 
