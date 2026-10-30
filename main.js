@@ -1,4 +1,4 @@
-const EMAIL = "wassim.rifay@uit.ac.ma";
+const EMAIL = "rifaywassim@gmail.com";
 const WHATSAPP = "212631367496";
 
 document.getElementById("year").textContent = new Date().getFullYear();
