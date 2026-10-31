@@ -12,7 +12,7 @@ await mkdir(OUT, { recursive: true });
 
 await writeFile(`${OUT}/index.html`, render(content));
 
-const COPY = ["style.css", "main.js", "favicon.svg", "site.webmanifest", "404.html", "robots.txt", ".nojekyll", "assets", "admin", "src", "data"];
+const COPY = ["style.css", "main.js", "scenes.js", "favicon.svg", "site.webmanifest", "404.html", "robots.txt", ".nojekyll", "assets", "admin", "src", "data"];
 for (const path of COPY) {
   if (existsSync(path)) await cp(path, `${OUT}/${path}`, { recursive: true });
 }

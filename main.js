@@ -165,6 +165,24 @@ document.querySelectorAll(".card, .project").forEach((card) =>
   })
 );
 
+// 3D tilt that follows the mouse on projects, skill cards and the photo
+if (matchMedia("(hover: hover) and (pointer: fine)").matches && !reduceMotion) {
+  document.querySelectorAll(".project, .skills-grid .card, .photo-frame").forEach((el) => {
+    const max = el.classList.contains("photo-frame") ? 10 : 6;
+    el.addEventListener("pointermove", (e) => {
+      const r = el.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      el.classList.add("tilt");
+      el.style.transform = `perspective(1000px) rotateX(${(-y * max).toFixed(2)}deg) rotateY(${(x * max).toFixed(2)}deg) scale(1.02)`;
+    });
+    el.addEventListener("pointerleave", () => {
+      el.style.transform = "";
+      setTimeout(() => el.classList.remove("tilt"), 200);
+    });
+  });
+}
+
 // Project filters
 const chips = document.querySelectorAll(".chip");
 const projects = document.querySelectorAll(".project");
