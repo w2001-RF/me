@@ -1,6 +1,7 @@
 const EMAIL = "rifaywassim@gmail.com";
 const WHATSAPP = "212631367496";
-const CONTACT_API = "https://wassim-portfolio-api.vercel.app/api/contact";
+// Web3Forms access key (public by design, safe to keep in the page). Create one at https://web3forms.com
+const WEB3FORMS_KEY = "YOUR_WEB3FORMS_ACCESS_KEY";
 
 document.getElementById("year").textContent = new Date().getFullYear();
 
@@ -32,7 +33,7 @@ const observer = new IntersectionObserver(
 );
 document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
 
-// Contact form: "Send message" posts to the Resend-backed API, WhatsApp opens a prefilled chat
+// Contact form: "Send message" posts to Web3Forms, WhatsApp opens a prefilled chat
 const form = document.getElementById("contact-form");
 const errorBox = document.getElementById("form-error");
 const successBox = document.getElementById("form-success");
@@ -73,19 +74,22 @@ form.addEventListener("submit", async (e) => {
   sendBtn.disabled = true;
   label.textContent = "Sending…";
   try {
-    const res = await fetch(CONTACT_API, {
+    if (WEB3FORMS_KEY.startsWith("YOUR_")) throw new Error("The message could not be sent.");
+    const res = await fetch("https://api.web3forms.com/submit", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify({
-        name: name.value,
-        email: email.value,
-        subject: subject.value,
-        message: message.value,
-        website: website.value,
+        access_key: WEB3FORMS_KEY,
+        subject: `[Portfolio] ${subj}`,
+        from_name: "Wassim Rifay Portfolio",
+        name: name.value.trim(),
+        email: email.value.trim(),
+        message: message.value.trim(),
+        botcheck: website.value,
       }),
     });
     const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(data.error || "The message could not be sent.");
+    if (!res.ok || !data.success) throw new Error("The message could not be sent.");
     form.reset();
     successBox.textContent = "Thanks! Your message has been sent. I'll get back to you soon.";
   } catch (err) {
