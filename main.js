@@ -1,7 +1,5 @@
-const EMAIL = "rifaywassim@gmail.com";
-const WHATSAPP = "212631367496";
-// Web3Forms access key (public by design, safe to keep in the page). Create one at https://web3forms.com
-const WEB3FORMS_KEY = "25ae6517-5af4-4602-92ca-dad5e70ff928";
+// Contact details come from data/content.json (rendered into <body data-*> at build time)
+const { email: EMAIL, whatsapp: WHATSAPP, formKey: WEB3FORMS_KEY = "" } = document.body.dataset;
 
 const root = document.documentElement;
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -68,6 +66,14 @@ const revealObserver = new IntersectionObserver(
   { threshold: 0.12 }
 );
 document.querySelectorAll(".reveal").forEach((el) => revealObserver.observe(el));
+// Fallback for pages opened on an anchor (e.g. /#projects): reveal whatever is already on screen
+const revealInView = () =>
+  document.querySelectorAll(".reveal:not(.visible)").forEach((el) => {
+    const r = el.getBoundingClientRect();
+    if (r.top < window.innerHeight && r.bottom > 0) el.classList.add("visible");
+  });
+window.addEventListener("load", () => setTimeout(revealInView, 100));
+window.addEventListener("hashchange", () => setTimeout(revealInView, 600));
 
 // Typing effect for the hero role
 const typed = document.querySelector(".typed");
@@ -183,7 +189,7 @@ form.addEventListener("submit", async (e) => {
   sendBtn.disabled = true;
   label.textContent = "Sending…";
   try {
-    if (WEB3FORMS_KEY.startsWith("YOUR_")) throw new Error("The message could not be sent.");
+    if (!WEB3FORMS_KEY) throw new Error("The message could not be sent.");
     const res = await fetch("https://api.web3forms.com/submit", {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },

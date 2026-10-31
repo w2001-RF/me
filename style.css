@@ -238,13 +238,13 @@ code { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
 
 /* Timeline */
 .timeline { position: relative; max-width: 860px; margin: 0 auto; }
-.timeline::before { content: ""; position: absolute; left: 170px; top: 14px; bottom: 14px; width: 1px; background: var(--border); }
-.timeline > li { display: grid; grid-template-columns: 170px 1fr; gap: 44px; padding-bottom: 24px; position: relative; }
+.timeline::before { content: ""; position: absolute; left: 200px; top: 14px; bottom: 14px; width: 1px; background: var(--border); }
+.timeline > li { display: grid; grid-template-columns: 200px 1fr; gap: 40px; padding-bottom: 24px; position: relative; }
 .timeline > li::before {
-  content: ""; position: absolute; left: 165px; top: 30px; width: 11px; height: 11px; border-radius: 50%;
+  content: ""; position: absolute; left: 195px; top: 30px; width: 11px; height: 11px; border-radius: 50%;
   background: var(--blue); box-shadow: 0 0 0 5px var(--bg);
 }
-.tl-date { color: var(--muted); font-size: 14px; font-weight: 500; text-align: right; padding-top: 24px; }
+.tl-date { color: var(--muted); font-size: 14px; font-weight: 500; text-align: right; padding: 24px 20px 0 0; white-space: nowrap; }
 .tl-body { padding: 28px 30px; background: var(--surface-alt); box-shadow: none; }
 .tl-body:hover { transform: none; }
 .tl-body h3 { font-size: 21px; font-weight: 700; margin-bottom: 14px; letter-spacing: -0.015em; }
