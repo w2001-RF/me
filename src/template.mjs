@@ -17,6 +17,7 @@ const ICONS = {
   linkedin: `<path d="M20.4 20.5h-3.6v-5.6c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9v5.7H9.3V9h3.4v1.6h.1c.5-.9 1.6-1.8 3.4-1.8 3.6 0 4.3 2.4 4.3 5.5v6.2ZM5.3 7.4a2.1 2.1 0 1 1 0-4.2 2.1 2.1 0 0 1 0 4.2ZM7.1 20.5H3.5V9h3.6v11.5ZM22.2 0H1.8C.8 0 0 .8 0 1.7v20.6c0 .9.8 1.7 1.8 1.7h20.4c1 0 1.8-.8 1.8-1.7V1.7C24 .8 23.2 0 22.2 0Z"/>`,
   mail: `<path d="M2 5.5A2.5 2.5 0 0 1 4.5 3h15A2.5 2.5 0 0 1 22 5.5v13a2.5 2.5 0 0 1-2.5 2.5h-15A2.5 2.5 0 0 1 2 18.5v-13Zm2.4-.5L12 10.7 19.6 5H4.4ZM20 6.6l-7.4 5.6a1 1 0 0 1-1.2 0L4 6.6v11.9c0 .3.2.5.5.5h15c.3 0 .5-.2.5-.5V6.6Z"/>`,
   whatsapp: `<path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1 2.7c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/>`,
+  work: `<path d="M9 3h6a2 2 0 0 1 2 2v1h3a2 2 0 0 1 2 2v4.5a2 2 0 0 1-1.2 1.8L14 17v-1a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v1l-6.8-2.7A2 2 0 0 1 2 12.5V8a2 2 0 0 1 2-2h3V5a2 2 0 0 1 2-2Zm0 3h6V5H9v1ZM2 15.6l8 3.1V19a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-.3l8-3.1V19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-3.4Z"/>`,
   pin: `<path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/>`,
   download: `<path d="M12 3a1 1 0 0 1 1 1v9.6l3.3-3.3a1 1 0 1 1 1.4 1.4l-5 5a1 1 0 0 1-1.4 0l-5-5a1 1 0 1 1 1.4-1.4l3.3 3.3V4a1 1 0 0 1 1-1ZM4 19a1 1 0 0 1 1 1h14a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2 1 1 0 0 1 1-1Z"/>`,
   arrow: `<path d="M13.3 5.3a1 1 0 0 1 1.4 0l6 6a1 1 0 0 1 0 1.4l-6 6a1 1 0 0 1-1.4-1.4l4.3-4.3H4a1 1 0 1 1 0-2h13.6l-4.3-4.3a1 1 0 0 1 0-1.4Z"/>`,
@@ -142,14 +143,20 @@ export function renderPage(c, pageId = "home", { base = "", root = "" } = {}) {
       <div class="container hero-grid">
         <div class="hero-text reveal">
           ${p.availability ? `<p class="eyebrow"><span class="dot"></span> ${esc(p.availability)}</p>` : ""}
-          <h1 id="hero-title">Hi, I'm <span class="grad">${esc(name)}</span></h1>
+          <h1 id="hero-title"><span class="hero-hi">Hi, I'm</span> <span class="grad hero-name">${esc(name)}</span></h1>
           <p class="hero-role">
             <span class="sr-only">${esc(p.roles.join(", "))}.</span>
             <span aria-hidden="true"><span class="typed" data-words="${esc(JSON.stringify(p.roles))}">${esc(p.roles[0] || "")}</span><span class="caret"></span></span>
           </p>
           <p class="lead">${rich(p.intro)}</p>
+          <ul class="hero-meta" aria-label="At a glance">
+            ${p.currentEmployer ? `<li>${icon("work")}<span>${esc(p.jobTitle.replace(/ Software/, ""))} at <strong>${esc(p.currentEmployer)}</strong></span></li>` : ""}
+            <li>${icon("pin")}<span>${esc(p.city)}, ${esc(p.country)}</span></li>
+            ${p.school ? `<li>${icon("grad")}<span>${esc(p.school)}</span></li>` : ""}
+          </ul>
           <div class="hero-cta">
             <a href="${to("contact")}" class="btn">Let's talk ${icon("arrow")}</a>
+            <a href="${to("projects")}" class="btn btn-ghost">View my work</a>
             ${p.cv ? `<a href="${esc(u(p.cv))}" class="btn btn-link" download>Download CV ${icon("download")}</a>` : ""}
           </div>
           <ul class="socials" aria-label="Social profiles">${socials}
