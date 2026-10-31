@@ -373,13 +373,15 @@ code { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
 .footer-bottom { border-top: 1px solid var(--border); padding: 18px 0 22px; }
 
 /* Reveal animation (only with JS, so content stays visible to crawlers and no-JS users) */
-.js .reveal { opacity: 0; transform: translateY(40px); transition: opacity 1s cubic-bezier(.2, .7, .2, 1), transform 1s cubic-bezier(.2, .7, .2, 1); }
-.js .reveal.visible { opacity: 1; transform: none; }
-.js .hero-photo.reveal { transform: translateY(60px) scale(.96); }
+/* Content is never hidden: it only glides into place, so full-page screenshots, print and
+   link previews always show everything even if the scroll observer never runs */
+.js .reveal { transform: translateY(28px); transition: transform 1s cubic-bezier(.2, .7, .2, 1); }
+.js .reveal.visible { transform: none; }
+.js .hero-photo.reveal { transform: translateY(40px) scale(.97); }
 .js .hero-photo.reveal.visible { transform: none; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .js .reveal, .js .hero-photo.reveal { opacity: 1; transform: none; transition: none; }
+  .js .reveal, .js .hero-photo.reveal { transform: none; transition: none; }
   .float-card, .dot, .marquee-track, .caret { animation: none; }
 }
 
@@ -614,4 +616,9 @@ code { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
   .floating { right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); gap: 10px; }
   .wa-float { width: 52px; height: 52px; }
   .to-top { width: 44px; height: 44px; }
+}
+
+@media print {
+  .js .reveal { transform: none !important; }
+  .nav, .floating, .progress, .hero-canvas, .universe, .marquee, .contact-form, .cta-band { display: none !important; }
 }
