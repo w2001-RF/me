@@ -36,131 +36,107 @@ export const ICON_NAMES = ["brain", "bot", "server", "layout", "db", "cloud", "c
 const icon = (name) => `<svg><use href="#i-${ICONS[name] ? name : "code"}"/></svg>`;
 const FACT_ICONS = ["pin", "grad", "brain"];
 
-export function render(c, { base = "" } = {}) {
+// Pages of the site. Each one is built as its own static HTML file (good for SEO and direct links);
+// main.js then navigates between them without full reloads (SPA-style).
+export const PAGES = [
+  { id: "home", path: "", label: "Home" },
+  { id: "about", path: "about/", label: "About" },
+  { id: "skills", path: "skills/", label: "Skills" },
+  { id: "experience", path: "experience/", label: "Experience" },
+  { id: "projects", path: "projects/", label: "Projects" },
+  { id: "contact", path: "contact/", label: "Contact" },
+];
+const NAV = PAGES.filter((pg) => pg.id !== "home");
+const plain = (v = "") => String(v).replace(/\*\*(.+?)\*\*/g, "$1");
+const clip = (v, n = 158) => (v.length > n ? `${v.slice(0, n - 1).replace(/\s+\S*$/, "")}…` : v);
+
+// root: relative path from the page to the site root ("" for home, "../" for subpages,
+// or an absolute path such as "/me/" for the 404 page, which can be served at any depth)
+export function renderPage(c, pageId = "home", { base = "", root = "" } = {}) {
   const s = c.site;
   const p = c.profile;
   const name = `${p.firstName} ${p.lastName}`;
   const url = s.url.replace(/\/?$/, "/");
-  const abs = (path) => (/^https?:/.test(path) ? path : url + path.replace(/^\//, ""));
+  const page = PAGES.find((pg) => pg.id === pageId) || { id: "404", path: "", label: "Not found" };
+  const pageUrl = url + page.path;
+  const absUrl = (path) => (/^https?:/.test(path) ? path : url + path.replace(/^\//, ""));
+  const u = (path = "") => (/^(https?:|mailto:|data:|blob:|#)/.test(path) ? path : root + path.replace(/^\//, ""));
+  const to = (id) => u(PAGES.find((pg) => pg.id === id).path) || "./";
   const wa = `https://wa.me/${p.whatsapp}`;
   const initials = `${p.firstName[0] || ""}${p.lastName[0] || ""}`;
+  const H = (level, id, text, cls = "section-title") => `<h${level} class="${cls}" id="${id}">${text}</h${level}>`;
+  const first = (id) => (page.id === id ? 1 : 2); // the page's main section uses <h1>
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Person",
-        "@id": `${url}#person`,
-        name,
-        url,
-        image: abs(p.photo),
-        email: `mailto:${p.email}`,
-        jobTitle: p.jobTitle,
-        description: p.description,
-        worksFor: p.currentEmployer ? { "@type": "Organization", name: p.currentEmployer } : undefined,
-        alumniOf: p.school ? { "@type": "CollegeOrUniversity", name: p.school } : undefined,
-        address: { "@type": "PostalAddress", addressLocality: p.city, addressCountry: p.countryCode },
-        knowsLanguage: p.languages,
-        knowsAbout: p.keywords,
-        sameAs: [p.github, p.linkedin].filter(Boolean),
-      },
-      {
-        "@type": "ProfilePage",
-        "@id": `${url}#webpage`,
-        url,
-        name: s.shareTitle,
-        inLanguage: "en",
-        mainEntity: { "@id": `${url}#person` },
-      },
-    ],
+  const meta = {
+    home: { title: s.title, description: s.description },
+    about: { title: `About ${name} | ${p.jobTitle}`, description: clip(plain(c.about.paragraphs.join(" "))) },
+    skills: { title: `Skills & Tools | ${name}`, description: clip(`${c.skills.subtitle} ${c.skills.groups.map((g) => g.title).join(", ")}.`) },
+    experience: { title: `Experience | ${name}`, description: clip(`${name}'s professional experience: ${c.experience.items.map((x) => `${x.role} at ${x.company.split("·")[0].trim()}`).join("; ")}.`) },
+    projects: { title: `Projects | ${name}`, description: clip(`${c.projects.subtitle} ${c.projects.items.slice(0, 4).map((x) => x.title).join(", ")}.`) },
+    contact: { title: `Contact | ${name}`, description: clip(`${c.contact.subtitle} Email, WhatsApp or LinkedIn. Based in ${p.city}, ${p.country}.`) },
+    404: { title: `Page not found | ${name}`, description: "This page doesn't exist." },
+  }[page.id];
+  Object.assign(meta, (c.pages && c.pages[page.id]) || {});
+  const ogTitle = page.id === "home" ? s.shareTitle : meta.title;
+  const ogDesc = page.id === "home" ? s.shareDescription : meta.description;
+
+  const person = {
+    "@type": "Person",
+    "@id": `${url}#person`,
+    name,
+    url,
+    image: absUrl(p.photo),
+    email: `mailto:${p.email}`,
+    jobTitle: p.jobTitle,
+    description: p.description,
+    worksFor: p.currentEmployer ? { "@type": "Organization", name: p.currentEmployer } : undefined,
+    alumniOf: p.school ? { "@type": "CollegeOrUniversity", name: p.school } : undefined,
+    address: { "@type": "PostalAddress", addressLocality: p.city, addressCountry: p.countryCode },
+    knowsLanguage: p.languages,
+    knowsAbout: p.keywords,
+    sameAs: [p.github, p.linkedin].filter(Boolean),
+    hasCredential: ((c.certifications && c.certifications.items) || []).map((ct) => ({
+      "@type": "EducationalOccupationalCredential",
+      name: ct.title,
+      credentialCategory: "certificate",
+      recognizedBy: { "@type": "Organization", name: ct.issuer },
+      ...(ct.url ? { url: ct.url } : {}),
+    })),
   };
+  const graph = [person, {
+    "@type": page.id === "home" || page.id === "about" ? "ProfilePage" : "WebPage",
+    "@id": `${pageUrl}#webpage`,
+    url: pageUrl,
+    name: meta.title,
+    description: meta.description,
+    inLanguage: "en",
+    mainEntity: { "@id": `${url}#person` },
+    ...(page.path ? { breadcrumb: { "@type": "BreadcrumbList", itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: url },
+      { "@type": "ListItem", position: 2, name: page.label, item: pageUrl },
+    ] } } : {}),
+  }];
+  if (page.id === "projects") {
+    graph.push({
+      "@type": "ItemList",
+      name: c.projects.title,
+      itemListElement: c.projects.items.map((x, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        item: { "@type": "CreativeWork", name: x.title, description: plain(x.description), ...(x.image ? { image: absUrl(x.image) } : {}), ...((x.demo || x.link) ? { url: x.demo || x.link } : {}), author: { "@id": `${url}#person` } },
+      })),
+    });
+  }
 
   const socials = `
             <li><a href="${esc(p.github)}" target="_blank" rel="noopener me" aria-label="GitHub">${icon("github")}</a></li>
             <li><a href="${esc(p.linkedin)}" target="_blank" rel="noopener me" aria-label="LinkedIn">${icon("linkedin")}</a></li>
             <li><a href="mailto:${esc(p.email)}" aria-label="Email">${icon("mail")}</a></li>`;
+  const navLinks = NAV.map((pg) => `<a href="${to(pg.id)}"${pg.id === page.id ? ' aria-current="page" class="active"' : ""}>${pg.label}</a>`).join("\n        ");
 
-  return `<!doctype html>
-<html lang="en" class="no-js">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  ${base ? `<base href="${esc(base)}">` : ""}
-  <script>
-    document.documentElement.classList.replace("no-js", "js");
-    try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
-  </script>
+  /* ---------- Sections ---------- */
 
-  <title>${esc(s.title)}</title>
-  <meta name="description" content="${esc(s.description)}">
-  <meta name="author" content="${esc(name)}">
-  <meta name="robots" content="index, follow, max-image-preview:large">
-  <link rel="canonical" href="${esc(url)}">
-
-  <meta property="og:type" content="profile">
-  <meta property="og:site_name" content="${esc(name)}">
-  <meta property="og:url" content="${esc(url)}">
-  <meta property="og:title" content="${esc(s.shareTitle)}">
-  <meta property="og:description" content="${esc(s.shareDescription)}">
-  <meta property="og:image" content="${esc(abs(p.photo))}">
-  <meta property="og:image:alt" content="Portrait of ${esc(name)}">
-  <meta property="og:locale" content="en_US">
-  <meta property="profile:first_name" content="${esc(p.firstName)}">
-  <meta property="profile:last_name" content="${esc(p.lastName)}">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="${esc(s.shareTitle)}">
-  <meta name="twitter:description" content="${esc(s.shareDescription)}">
-  <meta name="twitter:image" content="${esc(abs(p.photo))}">
-
-  <meta name="theme-color" content="#fbfbfd">
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="${esc(p.photo)}">
-  <link rel="manifest" href="site.webmanifest">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Apple devices use SF Pro from the system stack; Inter is the fallback elsewhere -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="preload" as="image" href="${esc(p.photo)}" fetchpriority="high">
-  <link rel="stylesheet" href="style.css">
-
-  <script type="application/ld+json">${JSON.stringify(jsonLd).replace(/</g, "\\u003c")}</script>
-</head>
-<body data-email="${esc(p.email)}" data-whatsapp="${esc(p.whatsapp)}" data-form-key="${esc(s.web3formsKey)}">
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-${Object.entries(ICONS).map(([k, v]) => `    <symbol id="i-${k}" viewBox="0 0 24 24">${v}</symbol>`).join("\n")}
-  </svg>
-
-  <a class="skip-link" href="#main">Skip to content</a>
-  <div class="progress" aria-hidden="true"><span></span></div>
-
-  <header class="nav">
-    <div class="container nav-inner">
-      <a href="#top" class="logo" aria-label="${esc(name)}, home"><span class="logo-mark">${esc(initials)}</span><span class="logo-text">${esc(name)}</span></a>
-      <nav class="nav-links" id="nav-links" aria-label="Primary">
-        <a href="#about">About</a>
-        <a href="#skills">Skills</a>
-        <a href="#experience">Experience</a>
-        <a href="#projects">Projects</a>
-        <a href="#contact">Contact</a>
-        <div class="menu-extra">
-          <a href="#contact" class="btn">Hire me</a>
-          ${p.cv ? `<a href="${esc(p.cv)}" class="btn btn-ghost" download>Download CV</a>` : ""}
-        </div>
-      </nav>
-      <div class="nav-actions">
-        <button class="icon-btn theme-toggle" type="button" aria-label="Toggle dark and light theme">
-          <svg class="ic-sun"><use href="#i-sun"/></svg><svg class="ic-moon"><use href="#i-moon"/></svg>
-        </button>
-        <a href="#contact" class="btn btn-sm nav-cta">Hire me</a>
-        <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <main id="main">
+  const hero = () => `
     <section class="hero" id="top" aria-labelledby="hero-title">
       <canvas class="hero-canvas" aria-hidden="true"></canvas>
       <div class="container hero-grid">
@@ -173,8 +149,8 @@ ${Object.entries(ICONS).map(([k, v]) => `    <symbol id="i-${k}" viewBox="0 0 24
           </p>
           <p class="lead">${rich(p.intro)}</p>
           <div class="hero-cta">
-            <a href="#contact" class="btn">Let's talk ${icon("arrow")}</a>
-            ${p.cv ? `<a href="${esc(p.cv)}" class="btn btn-link" download>Download CV ${icon("download")}</a>` : ""}
+            <a href="${to("contact")}" class="btn">Let's talk ${icon("arrow")}</a>
+            ${p.cv ? `<a href="${esc(u(p.cv))}" class="btn btn-link" download>Download CV ${icon("download")}</a>` : ""}
           </div>
           <ul class="socials" aria-label="Social profiles">${socials}
             <li><a href="${wa}" target="_blank" rel="noopener" aria-label="WhatsApp">${icon("whatsapp")}</a></li>
@@ -182,7 +158,7 @@ ${Object.entries(ICONS).map(([k, v]) => `    <symbol id="i-${k}" viewBox="0 0 24
         </div>
         <div class="hero-photo reveal">
           <div class="photo-frame">
-            <img src="${esc(p.photo)}" alt="${esc(name)}, ${esc(p.jobTitle)}" width="1138" height="1600" fetchpriority="high" decoding="async">
+            <img src="${esc(u(p.photo))}" alt="${esc(name)}, ${esc(p.jobTitle)}" width="1138" height="1600" fetchpriority="high" decoding="async">
           </div>
           <div class="float-card fc-1"><strong>${esc(c.heroCards.statValue)}</strong><span>${esc(c.heroCards.statLabel)}</span></div>
           <div class="float-card fc-2"><code>${esc(c.heroCards.code)}</code><span>${esc(c.heroCards.codeLabel)}</span></div>
@@ -195,45 +171,82 @@ ${Object.entries(ICONS).map(([k, v]) => `    <symbol id="i-${k}" viewBox="0 0 24
           <ul>${c.trusted.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>
         </div>
       </div>` : ""}
-    </section>
+    </section>`;
 
-    <section id="about" class="section" aria-labelledby="about-title">
+  const stats = () => `
+          <dl class="stats">
+${list(c.about.stats, (st) => `            <div><dt>${esc(st.label)}</dt><dd><span class="count" data-to="${Number(st.value) || 0}">${Number(st.value) || 0}</span>${esc(st.suffix)}</dd></div>`)}
+          </dl>`;
+
+  const about = (teaser = false) => `
+    <section class="section${teaser ? " section-alt" : " page-first"}" aria-labelledby="about-title">
       <div class="container about-grid">
         <div class="reveal">
           <p class="section-tag">About me</p>
-          <h2 class="section-title" id="about-title">${esc(c.about.title)}</h2>
+          ${H(first("about"), "about-title", esc(c.about.title))}
           <ul class="about-facts">
 ${list(c.about.facts, (f, i) => `            <li>${icon(FACT_ICONS[i] || "pin")} ${esc(f)}</li>`)}
           </ul>
         </div>
         <div class="reveal">
-${list(c.about.paragraphs, (t) => `          <p>${rich(t)}</p>`)}
-          <dl class="stats">
-${list(c.about.stats, (st) => `            <div><dt>${esc(st.label)}</dt><dd><span class="count" data-to="${Number(st.value) || 0}">${Number(st.value) || 0}</span>${esc(st.suffix)}</dd></div>`)}
-          </dl>
+${list(teaser ? c.about.paragraphs.slice(0, 1) : c.about.paragraphs, (t) => `          <p>${rich(t)}</p>`)}
+          ${stats()}
+          ${teaser ? `<a class="more-link" href="${to("about")}">More about me ${icon("arrow")}</a>` : ""}
         </div>
       </div>
-    </section>
+    </section>`;
 
-    <section id="skills" class="section section-alt" aria-labelledby="skills-title">
+  const education = () => list(c.experience.education, (ed) => `        <div class="edu reveal">
+          <div class="card-icon">${icon("grad")}</div>
+          <div>
+            <h3>${esc(ed.degree)}</h3>
+            <p>${esc(ed.school)} · ${esc(ed.period)}</p>
+          </div>
+        </div>`);
+
+  const certs = c.certifications && c.certifications.items.length ? () => `
+    <section class="section" aria-labelledby="certs-title">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="section-tag">Learning</p>
+          ${H(2, "certs-title", esc(c.certifications.title))}
+          <p class="section-sub">${esc(c.certifications.subtitle)}</p>
+        </header>
+        <div class="certs-grid">
+${list(c.certifications.items, (ct) => `          <article class="cert reveal">
+            ${ct.image ? `<a class="cert-media" href="${esc(u(ct.image))}" data-lightbox="${esc(ct.title)} — ${esc(ct.issuer)}"><img src="${esc(u(ct.image))}" alt="${esc(ct.issuer)} certificate: ${esc(ct.title)}" loading="lazy" width="1200" height="740"></a>` : ""}
+            <div class="cert-body">
+              <p class="cert-issuer">${esc(ct.issuer)} · ${esc(ct.date)}</p>
+              <h3>${esc(ct.title)}</h3>
+              ${ct.url ? `<a class="project-link" href="${esc(ct.url)}" target="_blank" rel="noopener">Verify on ${esc(ct.issuer)} ↗</a>` : ""}
+            </div>
+          </article>`)}
+        </div>
+      </div>
+    </section>` : () => "";
+
+  const languages = (teaser = false) => `
+        <div class="marquee reveal" aria-label="Programming languages">
+          <ul class="marquee-track">
+            ${c.skills.programmingLanguages.map((l) => `<li>${esc(l)}</li>`).join("")}
+            ${c.skills.programmingLanguages.map((l) => `<li aria-hidden="true">${esc(l)}</li>`).join("")}
+          </ul>
+        </div>
+        ${teaser ? `<div class="center reveal"><a class="more-link" href="${to("skills")}">Explore my skills in 3D ${icon("arrow")}</a></div>` : ""}`;
+
+  const skills = () => `
+    <section class="section section-alt page-first" aria-labelledby="skills-title">
       <div class="container">
         <header class="section-head reveal">
           <p class="section-tag">Tech stack</p>
-          <h2 class="section-title" id="skills-title">${esc(c.skills.title)}</h2>
+          ${H(1, "skills-title", esc(c.skills.title))}
           <p class="section-sub">${esc(c.skills.subtitle)}</p>
         </header>
-        <div class="skills-grid">
-${list(c.skills.groups, (g) => `          <article class="card reveal">
-            <div class="card-icon">${icon(g.icon)}</div>
-            <h3>${esc(g.title)}</h3>
-            ${tags(g.items, "tags")}
-          </article>`)}
-        </div>
         <div class="universe reveal">
           <div class="universe-head">
             <div>
               <p class="universe-kicker">Interactive · Built with Three.js</p>
-              <h3>Skill universe</h3>
+              <h2>Skill universe</h2>
             </div>
             <p class="universe-help"><span class="universe-count"></span><span>Drag to rotate · Hover or tap a skill · Pick a field</span></p>
           </div>
@@ -245,85 +258,130 @@ ${list(c.skills.groups, (g) => `          <article class="card reveal">
           </div>
           <div class="universe-legend" role="group" aria-label="Highlight a field"></div>
         </div>
-        <div class="marquee reveal" aria-label="Programming languages">
-          <ul class="marquee-track">
-            ${c.skills.programmingLanguages.map((l) => `<li>${esc(l)}</li>`).join("")}
-            ${c.skills.programmingLanguages.map((l) => `<li aria-hidden="true">${esc(l)}</li>`).join("")}
-          </ul>
+        <div class="skills-grid">
+${list(c.skills.groups, (g) => `          <article class="card reveal">
+            <div class="card-icon">${icon(g.icon)}</div>
+            <h3>${esc(g.title)}</h3>
+            ${tags(g.items, "tags")}
+          </article>`)}
         </div>
+        ${languages()}
       </div>
-    </section>
+    </section>`;
 
-    <section id="experience" class="section" aria-labelledby="exp-title">
+  const experience = () => `
+    <section class="section page-first" aria-labelledby="exp-title">
       <div class="container">
         <header class="section-head reveal">
           <p class="section-tag">Career</p>
-          <h2 class="section-title" id="exp-title">${esc(c.experience.title)}</h2>
+          ${H(1, "exp-title", esc(c.experience.title))}
         </header>
         <ol class="timeline">
 ${list(c.experience.items, (x) => `          <li class="reveal">
             <time class="tl-date"${x.startDate ? ` datetime="${esc(x.startDate)}"` : ""}>${esc(x.period)}</time>
             <article class="tl-body">
-              <h3>${esc(x.role)} <span>${esc(x.company)}</span></h3>
+              <div class="tl-head">
+                ${x.logo
+                  ? `<img class="co-logo" src="${esc(u(x.logo))}" alt="${esc(x.company.split("·")[0].trim())} logo" width="44" height="44" loading="lazy">`
+                  : `<span class="co-logo" style="--co:${esc(x.logoColor || "#6e6e73")}" aria-hidden="true">${esc(x.logoText || "")}</span>`}
+                <h2 class="tl-title">${esc(x.role)} <span>${esc(x.company)}</span></h2>
+              </div>
               <ul>
 ${list(x.bullets, (b) => `                <li>${rich(b)}</li>`)}
               </ul>
               ${tags(x.tags)}
+              ${(x.gallery || []).length ? `<div class="tl-gallery">${x.gallery.map((g, gi) => `<a href="${esc(u(g))}" data-lightbox="${esc(x.role)} — photo ${gi + 1}"><img src="${esc(u(g))}" alt="${esc(x.role)} at ${esc(x.company.split("·")[0].trim())}, photo ${gi + 1}" loading="lazy"></a>`).join("")}</div>` : ""}
             </article>
           </li>`)}
         </ol>
-${list(c.experience.education, (ed) => `        <div class="edu reveal">
-          <div class="card-icon">${icon("grad")}</div>
-          <div>
-            <h3>${esc(ed.degree)}</h3>
-            <p>${esc(ed.school)} · ${esc(ed.period)}</p>
-          </div>
-        </div>`)}
+${education()}
       </div>
-    </section>
+    </section>`;
 
-    <section id="projects" class="section section-alt" aria-labelledby="projects-title">
+  const projectCard = (pr, i, h = 3) => {
+    const primary = pr.demo || pr.link || pr.repo || "";
+    return `          <article class="project reveal${pr.image ? " has-image" : ""}" data-cat="${esc((pr.categories || []).join(" "))}" data-index="${i}">
+            ${pr.image ? `<div class="project-media">
+              <img src="${esc(u(pr.image))}" alt="Screenshot of ${esc(pr.title)}" loading="lazy" decoding="async" width="1280" height="800">
+              ${pr.demo ? `<span class="live-badge">Live demo</span>` : ""}
+            </div>` : ""}
+            <div class="project-body">
+              <div class="project-head"><span class="badge">${esc(pr.badge)}</span><span class="year">${esc(pr.year)}</span></div>
+              <h${h}>${esc(pr.title)}</h${h}>
+              <p>${rich(pr.description)}</p>
+              ${tags(pr.tags)}
+              <div class="project-actions">
+                <button type="button" class="project-open" aria-haspopup="dialog">Details ${icon("arrow")}</button>
+                ${pr.demo ? `<a class="project-link" href="${esc(pr.demo)}" target="_blank" rel="noopener">Live demo ↗</a>` : ""}
+                ${(pr.repo || pr.link) ? `<a class="project-link" href="${esc(pr.repo || pr.link)}" target="_blank" rel="noopener">${icon("github")} Code</a>` : ""}
+              </div>
+            </div>
+          </article>`;
+  };
+  // Full project data for the details dialog, embedded so it works on every page
+  const projectData = (items) => `<script type="application/json" id="projects-data">${JSON.stringify(items.map((x) => ({ ...x, image: x.image ? u(x.image) : "", gallery: (x.gallery || []).map((g) => u(g)) }))).replace(/</g, "\\u003c")}</script>`;
+  const projectDialog = () => `
+    <dialog class="project-dialog" aria-labelledby="pd-title">
+      <form method="dialog"><button class="pd-close" aria-label="Close">✕</button></form>
+      <div class="pd-media"></div>
+      <div class="pd-body">
+        <div class="project-head"><span class="badge pd-badge"></span><span class="year pd-year"></span></div>
+        <h2 id="pd-title"></h2>
+        <p class="pd-desc"></p>
+        <ul class="pd-highlights"></ul>
+        <ul class="tags sm pd-tags"></ul>
+        <p class="pd-meta"></p>
+        <div class="pd-actions"></div>
+      </div>
+    </dialog>`;
+
+  const projects = (featured = false) => {
+    const flagged = c.projects.items.filter((x) => x.featured);
+    const items = featured ? (flagged.length ? flagged : c.projects.items).slice(0, 3) : c.projects.items;
+    return `
+    <section class="section section-alt${featured ? "" : " page-first"}" aria-labelledby="projects-title">
       <div class="container">
         <header class="section-head reveal">
           <p class="section-tag">Portfolio</p>
-          <h2 class="section-title" id="projects-title">${esc(c.projects.title)}</h2>
+          ${H(featured ? 2 : 1, "projects-title", esc(featured ? "Featured projects" : c.projects.title))}
           <p class="section-sub">${esc(c.projects.subtitle)}</p>
         </header>
-        <div class="filters reveal" role="group" aria-label="Filter projects">
+        ${featured ? "" : `<div class="filters reveal" role="group" aria-label="Filter projects">
           <button type="button" class="chip active" data-filter="all" aria-pressed="true">All</button>
 ${list(c.projects.filters, (f) => `          <button type="button" class="chip" data-filter="${esc(f.id)}" aria-pressed="false">${esc(f.label)}</button>`)}
-        </div>
+        </div>`}
         <div class="projects-grid">
-${list(c.projects.items, (pr) => `          <article class="project reveal" data-cat="${esc((pr.categories || []).join(" "))}">
-            <div class="project-head"><span class="badge">${esc(pr.badge)}</span><span class="year">${esc(pr.year)}</span></div>
-            <h3>${esc(pr.title)}</h3>
-            <p>${rich(pr.description)}</p>
-            ${tags(pr.tags)}
-            ${pr.link ? `<a class="project-link" href="${esc(pr.link)}"${ext(pr.link)}>View project ${icon("arrow")}</a>` : ""}
-          </article>`)}
+${items.map((pr, i) => projectCard(pr, i, featured ? 3 : 2)).join("\n")}
         </div>
         <div class="swipe-hint" aria-hidden="true"><span>Swipe to see more →</span><span class="swipe-dots"></span></div>
         <div class="center reveal">
-          <a href="${esc(p.github)}?tab=repositories" target="_blank" rel="noopener" class="btn btn-ghost">${icon("github")} See all repositories</a>
+          ${featured
+            ? `<a href="${to("projects")}" class="btn btn-ghost">See all ${c.projects.items.length} projects ${icon("arrow")}</a>`
+            : `<a href="${esc(p.github)}?tab=repositories" target="_blank" rel="noopener" class="btn btn-ghost">${icon("github")} See all repositories</a>`}
         </div>
       </div>
-    </section>
+      ${projectData(items)}
+      ${projectDialog()}
+    </section>`;
+  };
 
+  const cta = () => `
     <section class="cta-band" aria-label="Call to action">
       <div class="container cta-inner reveal">
         <div>
           <h2>${esc(c.cta.title)}</h2>
           <p>${esc(c.cta.text)}</p>
         </div>
-        <a href="#contact" class="btn btn-light">${esc(c.cta.button)} ${icon("arrow")}</a>
+        <a href="${to("contact")}" class="btn btn-light">${esc(c.cta.button)} ${icon("arrow")}</a>
       </div>
-    </section>
+    </section>`;
 
-    <section id="contact" class="section" aria-labelledby="contact-title">
+  const contact = () => `
+    <section class="section page-first" aria-labelledby="contact-title">
       <div class="container">
         <header class="section-head reveal">
           <p class="section-tag">Contact</p>
-          <h2 class="section-title" id="contact-title">${esc(c.contact.title)}</h2>
+          ${H(1, "contact-title", esc(c.contact.title))}
           <p class="section-sub">${esc(c.contact.subtitle)}</p>
         </header>
         <div class="contact-grid">
@@ -375,22 +433,131 @@ ${list(c.projects.items, (pr) => `          <article class="project reveal" data
           </form>
         </div>
       </div>
-    </section>
+    </section>`;
+
+  const notFound = () => `
+    <section class="section page-first not-found" aria-labelledby="nf-title">
+      <div class="container center">
+        <p class="nf-code grad">404</p>
+        ${H(1, "nf-title", "This page doesn't exist")}
+        <p class="section-sub">But the rest of my portfolio does.</p>
+        <div class="hero-cta"><a class="btn" href="${to("home")}">Back to the homepage ${icon("arrow")}</a><a class="btn btn-link" href="${to("projects")}">See my projects</a></div>
+      </div>
+    </section>`;
+
+  const body = {
+    home: () => hero() + about(true) + `
+    <section class="section" aria-label="Programming languages">
+      <div class="container">${languages(true)}
+      </div>
+    </section>` + projects(true) + cta(),
+    about: () => about() + `
+    <section class="section section-alt" aria-label="Education">
+      <div class="container">
+${education()}
+        <div class="center reveal"><a class="more-link" href="${to("experience")}">See my experience ${icon("arrow")}</a></div>
+      </div>
+    </section>` + certs() + cta(),
+    skills: () => skills() + cta(),
+    experience: () => experience() + cta(),
+    projects: () => projects() + cta(),
+    contact: () => contact(),
+    404: () => notFound(),
+  }[page.id]();
+
+  return `<!doctype html>
+<html lang="en" class="no-js" data-page="${page.id}" data-root="${esc(root)}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  ${base ? `<base href="${esc(base)}">` : ""}
+  <script>
+    document.documentElement.classList.replace("no-js", "js");
+    try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+
+  <title>${esc(meta.title)}</title>
+  <meta name="description" content="${esc(meta.description)}">
+  <meta name="author" content="${esc(name)}">
+  <meta name="robots" content="${page.id === "404" ? "noindex" : "index, follow, max-image-preview:large"}">
+  <link rel="canonical" href="${esc(pageUrl)}">
+
+  <meta property="og:type" content="${page.id === "home" ? "profile" : "website"}">
+  <meta property="og:site_name" content="${esc(name)}">
+  <meta property="og:url" content="${esc(pageUrl)}">
+  <meta property="og:title" content="${esc(ogTitle)}">
+  <meta property="og:description" content="${esc(ogDesc)}">
+  <meta property="og:image" content="${esc(absUrl(p.photo))}">
+  <meta property="og:image:alt" content="Portrait of ${esc(name)}">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${esc(ogTitle)}">
+  <meta name="twitter:description" content="${esc(ogDesc)}">
+  <meta name="twitter:image" content="${esc(absUrl(p.photo))}">
+
+  <meta name="theme-color" content="#fbfbfd">
+  <link rel="icon" href="${u("favicon.svg")}" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="${esc(u(p.photo))}">
+  <link rel="manifest" href="${u("site.webmanifest")}">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Apple devices use SF Pro from the system stack; Inter is the fallback elsewhere -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  ${page.id === "home" ? `<link rel="preload" as="image" href="${esc(u(p.photo))}" fetchpriority="high">` : ""}
+  <link rel="stylesheet" href="${u("style.css")}">
+
+  <script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replace(/</g, "\\u003c")}</script>
+</head>
+<body data-email="${esc(p.email)}" data-whatsapp="${esc(p.whatsapp)}" data-form-key="${esc(s.web3formsKey)}">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+${Object.entries(ICONS).map(([k, v]) => `    <symbol id="i-${k}" viewBox="0 0 24 24">${v}</symbol>`).join("\n")}
+  </svg>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"><span></span></div>
+  <div class="route-progress" aria-hidden="true"></div>
+  <p class="sr-only" id="route-announcer" aria-live="polite"></p>
+
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="${to("home")}" class="logo" aria-label="${esc(name)}, home"><span class="logo-mark">${esc(initials)}</span><span class="logo-text">${esc(name)}</span></a>
+      <nav class="nav-links" id="nav-links" aria-label="Primary">
+        ${navLinks}
+        <div class="menu-extra">
+          <a href="${to("contact")}" class="btn">Hire me</a>
+          ${p.cv ? `<a href="${esc(u(p.cv))}" class="btn btn-ghost" download>Download CV</a>` : ""}
+        </div>
+      </nav>
+      <div class="nav-actions">
+        <button class="icon-btn theme-toggle" type="button" aria-label="Toggle dark and light theme">
+          <svg class="ic-sun"><use href="#i-sun"/></svg><svg class="ic-moon"><use href="#i-moon"/></svg>
+        </button>
+        <a href="${to("contact")}" class="btn btn-sm nav-cta">Hire me</a>
+        <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">${body}
+    <dialog class="lightbox" aria-label="Image viewer"><form method="dialog"><button class="pd-close" aria-label="Close">✕</button></form><img alt=""><p></p></dialog>
   </main>
 
   <div class="floating">
-    <a class="to-top" href="#top" aria-label="Back to top">${icon("up")}</a>
+    <a class="to-top" href="#main" aria-label="Back to top">${icon("up")}</a>
     <a class="wa-float" href="${wa}" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">${icon("whatsapp")}</a>
   </div>
 
   <footer class="footer">
     <div class="container footer-inner">
       <div>
-        <a href="#top" class="logo"><span class="logo-mark">${esc(initials)}</span><span class="logo-text">${esc(name)}</span></a>
+        <a href="${to("home")}" class="logo"><span class="logo-mark">${esc(initials)}</span><span class="logo-text">${esc(name)}</span></a>
         <p>${esc(p.jobTitle)}, based in ${esc(p.city)}, ${esc(p.country)}.</p>
       </div>
       <nav aria-label="Footer">
-        <a href="#about">About</a><a href="#skills">Skills</a><a href="#experience">Experience</a><a href="#projects">Projects</a><a href="#contact">Contact</a>
+        ${NAV.map((pg) => `<a href="${to(pg.id)}">${pg.label}</a>`).join("")}
       </nav>
       <ul class="socials">${socials}
       </ul>
@@ -400,9 +567,12 @@ ${list(c.projects.items, (pr) => `          <article class="project reveal" data
     </div>
   </footer>
 
-  <script src="main.js" defer></script>
-  <script type="module" src="scenes.js"></script>
+  <script src="${u("main.js")}" defer></script>
+  <script type="module" src="${u("scenes.js")}"></script>
 </body>
 </html>
 `;
 }
+
+// Kept for the admin preview: renders the home page
+export const render = (c, opts = {}) => renderPage(c, "home", opts);

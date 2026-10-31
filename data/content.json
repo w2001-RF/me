@@ -219,7 +219,11 @@
           "MariaDB",
           "Docker",
           "CI/CD"
-        ]
+        ],
+        "logo": "",
+        "logoText": "OB",
+        "logoColor": "#ff7900",
+        "gallery": []
       },
       {
         "role": "Software Engineer / AI Intern",
@@ -238,7 +242,11 @@
           "Computer Vision",
           "Kafka",
           "AWS"
-        ]
+        ],
+        "logo": "",
+        "logoText": "Ar",
+        "logoColor": "#1d1d1f",
+        "gallery": []
       },
       {
         "role": "PFE Intern, Backend / AI Engineer",
@@ -258,7 +266,11 @@
           "DVC",
           "MongoDB",
           "ELK"
-        ]
+        ],
+        "logo": "",
+        "logoText": "OB",
+        "logoColor": "#ff7900",
+        "gallery": []
       },
       {
         "role": "AI / Machine Learning Intern",
@@ -273,7 +285,11 @@
           "TensorFlow",
           "FastAPI",
           "Streamlit"
-        ]
+        ],
+        "logo": "",
+        "logoText": "OCP",
+        "logoColor": "#00843d",
+        "gallery": []
       },
       {
         "role": "Data Science Intern",
@@ -288,7 +304,11 @@
           "Scikit-learn",
           "R",
           "Power BI"
-        ]
+        ],
+        "logo": "",
+        "logoText": "TI",
+        "logoColor": "#0071e3",
+        "gallery": []
       }
     ],
     "education": [
@@ -300,8 +320,8 @@
     ]
   },
   "projects": {
-    "title": "Featured projects",
-    "subtitle": "A selection of AI, full-stack and 3D web work, from competitions and internships to personal builds.",
+    "title": "Projects",
+    "subtitle": "AI systems, full-stack platforms and interactive 3D web apps, most of them live: open the demo, read the code.",
     "filters": [
       {
         "id": "ai",
@@ -321,29 +341,320 @@
         "title": "Intelligent Medical Assistant",
         "badge": "AI / LLM",
         "year": "2024",
+        "featured": true,
+        "categories": [
+          "ai",
+          "web"
+        ],
+        "description": "Dell Technologies competition: an assistant for healthcare professionals that answers questions from medical documents (RAG) and analyses medical images.",
+        "details": "Built for the **Dell Technologies competition**. Doctors chat with an assistant that retrieves answers from the knowledge base and patient files, and upload medical images that **YOLOv8** models detect and segment. Patients, history, medications, lab results and visit notes are managed in the same app.",
+        "highlights": [
+          "**RAG pipeline**: LlamaIndex + Ollama (LLaMA) with nomic-embed-text embeddings and a ChromaDB vector store, streaming answers",
+          "**Medical imaging**: YOLOv8 detection and segmentation models (e.g. blood cells, COVID detection) served through the API",
+          "**Next.js** web app (chat, patients, dashboard, image analysis, files) + React Native mobile app",
+          "Flask / FastAPI backend with JWT auth, MongoDB, Docker Compose and GitLab CI"
+        ],
+        "tags": [
+          "LLaMA",
+          "RAG",
+          "LlamaIndex",
+          "ChromaDB",
+          "YOLOv8",
+          "Next.js",
+          "Flask",
+          "MongoDB",
+          "Docker"
+        ],
+        "image": "assets/projects/medical-assistant.jpg",
+        "gallery": [],
+        "demo": "",
+        "repo": "",
+        "role": "Full-stack & AI engineer · 237 commits"
+      },
+      {
+        "title": "Fidāʾī — Morocco 1945",
+        "badge": "3D Game",
+        "year": "2026",
+        "featured": true,
+        "categories": [
+          "3d"
+        ],
+        "description": "A third-person survival open-world RPG in the browser, set in Morocco in 1945 under the French Protectorate. Playable in English and Moroccan Darija.",
+        "details": "You play Driss, a young resistance fighter. Survive (hunger, thirst), loot and craft, fight with five weapons, stay unseen from guards with vision cones, hunt, trade, camp and grow six skills, all in a procedural open world rendered with **Three.js**.",
+        "highlights": [
+          "Stealth AI with vision cones and detection meters; daylight changes guard sight",
+          "Survival, crafting, trading, hunting and camping systems",
+          "Bilingual: English and Moroccan Darija (Arabic script, right-to-left)",
+          "TypeScript + Vite, deployed on GitHub Pages"
+        ],
+        "tags": [
+          "Three.js",
+          "TypeScript",
+          "WebGL",
+          "Game AI",
+          "Vite"
+        ],
+        "image": "assets/projects/fidaa.jpg",
+        "gallery": [],
+        "demo": "https://w2001-rf.github.io/Fidaa/",
+        "repo": "https://github.com/w2001-RF/Fidaa",
+        "role": ""
+      },
+      {
+        "title": "Wood Depot — 3D Catalogue",
+        "badge": "3D / Web",
+        "year": "2026",
+        "featured": true,
+        "categories": [
+          "3d",
+          "web"
+        ],
+        "description": "The 3D timber yard is the catalogue: visitors walk through a procedural depot, inspect real-scale products, build a cart and request a quote on WhatsApp.",
+        "details": "A single-page app for a timber depot in Sidi Yahya El Gharb. The whole yard is generated from a plan file (zones, racks, piles), with colliders and pathfinding. A classic catalogue, plan view and configurator expose the same products without 3D.",
+        "highlights": [
+          "Procedural 3D world: instanced timber piles, procedural textures, no downloaded assets",
+          "Walkable depot with collisions, pathfinding and a minimap",
+          "Cart and **WhatsApp quote** flow; catalogue, plan view and configurator",
+          "Unit tests for layout, collisions, navigation and quotes; single-file build"
+        ],
+        "tags": [
+          "Three.js",
+          "React",
+          "TypeScript",
+          "WebGL",
+          "Vitest"
+        ],
+        "image": "assets/projects/wood-depot.jpg",
+        "gallery": [
+          "assets/projects/wood-depot-3d.jpg",
+          "assets/projects/wood-depot-catalogue.jpg"
+        ],
+        "demo": "https://w2001-rf.github.io/wood-depot/",
+        "repo": "https://github.com/w2001-RF/wood-depot",
+        "role": ""
+      },
+      {
+        "title": "Café-Restaurant — 3D Visit",
+        "badge": "3D / Web",
+        "year": "2026",
+        "featured": false,
+        "categories": [
+          "3d",
+          "web"
+        ],
+        "description": "Walk into a Moroccan café-restaurant in 3D, find each dish where it is served, build an order and send it by WhatsApp. Every page also works without 3D.",
+        "details": "The 3D space is the menu: the pass, the pastry case, the bar, the drinks fridge. Visitors inspect dishes, choose options, pick a table in 3D or on the 2D plan, and hand the order to the restaurant.",
+        "highlights": [
+          "Menu ordering with option groups, line totals and a WhatsApp hand-off",
+          "Table selection in 3D and on a 2D plan; QR **table mode** (#table-5)",
+          "Live open/closed badge computed in Africa/Casablanca time; Ramadan mode",
+          "51 unit tests + headless end-to-end journeys (desktop, 390px touch, Arabic RTL)"
+        ],
+        "tags": [
+          "Three.js",
+          "TypeScript",
+          "SPA",
+          "i18n / RTL",
+          "E2E tests"
+        ],
+        "image": "assets/projects/restaurant3d.jpg",
+        "gallery": [
+          "assets/projects/restaurant3d-3d.jpg",
+          "assets/projects/restaurant3d-menu.jpg"
+        ],
+        "demo": "https://w2001-rf.github.io/restaurant3D/",
+        "repo": "https://github.com/w2001-RF/restaurant3D",
+        "role": ""
+      },
+      {
+        "title": "SKYWAY — 3D Flight Simulator",
+        "badge": "3D Simulation",
+        "year": "2026",
+        "featured": false,
+        "categories": [
+          "3d"
+        ],
+        "description": "A free 3D flight simulator in the browser: take off, navigate with instruments and radar, and complete missions.",
+        "details": "A browser flight simulator with a cockpit HUD, radar, engine and fuel systems, missions and records, built with **WebGL**.",
+        "highlights": [
+          "Flight model with throttle, autonomy, drift and turbulence readouts",
+          "Radar, navigation route and mission system",
+          "Runs in any modern browser, deployed on GitHub Pages"
+        ],
+        "tags": [
+          "Three.js",
+          "WebGL",
+          "JavaScript",
+          "Simulation"
+        ],
+        "image": "assets/projects/skyway.jpg",
+        "gallery": [],
+        "demo": "https://w2001-rf.github.io/skyway-3D-simulator/",
+        "repo": "https://github.com/w2001-RF/skyway-3D-simulator",
+        "role": ""
+      },
+      {
+        "title": "TopoGIS 3D",
+        "badge": "GIS",
+        "year": "2026",
+        "featured": false,
+        "categories": [
+          "web",
+          "3d"
+        ],
+        "description": "A topographic survey and analysis tool in one HTML file: GPS, OpenStreetMap buildings, parcels, measurements, relief, contour lines and elevation profiles.",
+        "details": "A CAD-like GIS that runs entirely in the browser, with no server, build step or required API key. Objects are stored in planar UTM coordinates.",
+        "highlights": [
+          "Drawing and editing tools with snapping, layers and orthogonal mode",
+          "Distances (planar and geodesic), areas, earthworks and equal-area subdivision",
+          "DXF import/export, GeoJSON export, PNG plans with title block",
+          "Optional real-time collaboration relay (Node.js, no dependencies)"
+        ],
+        "tags": [
+          "JavaScript",
+          "OpenStreetMap",
+          "GIS",
+          "UTM",
+          "DXF"
+        ],
+        "image": "assets/projects/topogis.jpg",
+        "gallery": [],
+        "demo": "https://w2001-rf.github.io/topoGIS-3D/",
+        "repo": "https://github.com/w2001-RF/topoGIS-3D",
+        "role": ""
+      },
+      {
+        "title": "Personal Finance Tracker",
+        "badge": "Full Stack + AI",
+        "year": "2026",
+        "featured": false,
+        "categories": [
+          "web",
+          "ai"
+        ],
+        "description": "Track income, expenses, rental income against a loan and a savings goal, with charts, quick insights and opt-in monthly AI advice.",
+        "details": "A static app backed by **Supabase** (auth, Postgres with Row Level Security, Edge Functions). A scheduled job asks an LLM for personalised monthly advice.",
+        "highlights": [
+          "Quick transactions, search, filters and CSV export",
+          "Rule-based insights: savings rate, rising expenses, loan repayment pace",
+          "Monthly **AI advice** via Supabase Edge Functions and a GitHub Actions schedule",
+          "Single active session, 30-day inactivity logout, light/dark theme"
+        ],
+        "tags": [
+          "Supabase",
+          "PostgreSQL",
+          "Chart.js",
+          "Edge Functions",
+          "LLM API"
+        ],
+        "image": "assets/projects/finance-tracker.jpg",
+        "gallery": [],
+        "demo": "https://w2001-rf.github.io/myFinanceTracker/",
+        "repo": "https://github.com/w2001-RF/myFinanceTracker",
+        "role": ""
+      },
+      {
+        "title": "Katib Oumoumi",
+        "badge": "Automation",
+        "year": "2026",
+        "featured": false,
+        "categories": [
+          "web"
+        ],
+        "description": "Generates Moroccan administrative documents (complaints, powers of attorney, contracts) in Word and PDF from admin templates and a dynamic form.",
+        "details": "A vanilla JavaScript SPA with no framework and no build step, backed by **Supabase**. Users fill a dynamic form and download or share the document; an admin manages categories, document types and template fields.",
+        "highlights": [
+          "Word and PDF generation from templates with typed placeholders",
+          "Admin dashboard: categories, document types, field types (ID card, dates, lists…)",
+          "Row Level Security: public read, admin-only write",
+          "Arabic right-to-left interface"
+        ],
+        "tags": [
+          "JavaScript",
+          "Supabase",
+          "PDF / DOCX",
+          "RTL"
+        ],
+        "image": "assets/projects/katib-oumoumi.jpg",
+        "gallery": [],
+        "demo": "https://w2001-rf.github.io/katib-oumoumi/",
+        "repo": "https://github.com/w2001-RF/katib-oumoumi",
+        "role": ""
+      },
+      {
+        "title": "DarnaLux Concierge",
+        "badge": "Full Stack",
+        "year": "2026",
+        "featured": false,
+        "categories": [
+          "web"
+        ],
+        "description": "A production-oriented monorepo for a short-term rental concierge platform: web app, mobile app and shared business logic.",
+        "details": "Owners estimate their rental income and hand over management. The monorepo shares business logic between the web (React + Vite) and mobile (Expo / React Native) apps.",
+        "highlights": [
+          "Monorepo with a shared core package for business logic",
+          "React + Vite + TypeScript web app; Expo / React Native mobile",
+          "Supabase backend, CI/CD with GitHub Actions"
+        ],
+        "tags": [
+          "React",
+          "TypeScript",
+          "React Native",
+          "Supabase",
+          "Monorepo"
+        ],
+        "image": "assets/projects/darnalux.jpg",
+        "gallery": [],
+        "demo": "https://w2001-rf.github.io/darnalux/",
+        "repo": "https://github.com/w2001-RF/darnalux",
+        "role": ""
+      },
+      {
+        "title": "AI-Driven Cache Benchmark",
+        "badge": "AI Research",
+        "year": "2026",
+        "featured": false,
         "categories": [
           "ai"
         ],
-        "description": "Dell Technologies Competition. A medical assistant combining LLaMA 3, Retrieval-Augmented Generation and computer vision for document retrieval and image analysis.",
-        "tags": [
-          "LLaMA 3",
-          "LangChain",
-          "RAG",
-          "ChromaDB",
-          "YOLOv8",
-          "Next.js"
+        "description": "Benchmarks AI-driven cache eviction policies on Magento shop traffic, from classic LRU/ARC/LIRS to learned eviction and semantic caching.",
+        "details": "A research toolkit with a Python core, a Magento traffic generator, official CACHEUS/LeCaR/ARC/LIRS code, learned eviction in the style of DRL-Cache, a semantic cache, CACHEUS++ and a PHP module for Magento 1, plus a local web UI to run experiments.",
+        "highlights": [
+          "Experts (LRU, LFU, GDSF) arbitrated by regret minimisation (LeCaR / CACHEUS)",
+          "Learned eviction: a small NumPy network exported to JSON and reused in PHP",
+          "Reproducible experiments: separate training and evaluation seeds",
+          "Web interface to configure and run benchmarks without the command line"
         ],
-        "link": ""
+        "tags": [
+          "Python",
+          "NumPy",
+          "Machine Learning",
+          "PHP",
+          "Magento"
+        ],
+        "image": "assets/projects/cachebench.jpg",
+        "gallery": [],
+        "demo": "",
+        "repo": "https://github.com/w2001-RF/cachbench-magento1",
+        "role": ""
       },
       {
         "title": "Student Records Management Platform",
         "badge": "Full Stack",
         "year": "2025 — 2026",
+        "featured": false,
         "categories": [
           "web"
         ],
-        "description": "Web platform managing the full lifecycle of student records, with scheduled processing, SFTP document exchange and notification workflows.",
+        "description": "A web platform managing the full lifecycle of student records, with scheduled processing, SFTP document exchange and notification workflows.",
+        "details": "",
+        "highlights": [
+          "Automated scheduled processing of records",
+          "Document exchange through SFTP and object storage (MinIO)",
+          "Notification workflows; deployed with Docker behind Nginx"
+        ],
         "tags": [
+          "Python",
           "Flask",
           "React",
           "PostgreSQL",
@@ -351,114 +662,212 @@
           "Nginx",
           "MinIO"
         ],
-        "link": ""
+        "image": "assets/projects/student-records.jpg",
+        "gallery": [],
+        "demo": "",
+        "repo": "",
+        "role": ""
       },
       {
         "title": "Predictive Maintenance, OCP",
         "badge": "Machine Learning",
         "year": "2023",
+        "featured": false,
         "categories": [
           "ai"
         ],
-        "description": "Predictive maintenance for industrial stacker machines from infrared thermal data and vibration signals, served through an API and an interactive UI.",
+        "description": "Predicts faults on industrial stacker machines from infrared thermal images and vibration signals, served through an API and a dashboard.",
+        "details": "",
+        "highlights": [
+          "VGG16 classification of motor fault states from thermal images",
+          "Metaheuristics for hyperparameter optimisation",
+          "FastAPI prediction service + Streamlit operator interface"
+        ],
         "tags": [
           "TensorFlow",
+          "VGG16",
+          "OpenCV",
           "FastAPI",
           "Streamlit"
         ],
-        "link": "https://github.com/w2001-RF/MotorFaultsStateClassification"
+        "image": "assets/projects/predictive-maintenance.jpg",
+        "gallery": [],
+        "demo": "",
+        "repo": "https://github.com/w2001-RF/MotorFaultsStateClassification",
+        "role": ""
       },
       {
         "title": "Emotion Detection Application",
         "badge": "Deep Learning",
         "year": "2023",
+        "featured": false,
         "categories": [
           "ai"
         ],
-        "description": "Image-based emotion recognition using deep learning (VGG16 transfer learning) and OpenCV, with a desktop interface.",
+        "description": "Image-based emotion recognition using VGG16 transfer learning and OpenCV, with a desktop interface.",
+        "details": "",
+        "highlights": [],
         "tags": [
           "TensorFlow",
           "Keras",
           "VGG16",
-          "OpenCV"
+          "OpenCV",
+          "Tkinter"
         ],
-        "link": ""
+        "image": "assets/projects/emotion-detection.jpg",
+        "gallery": [],
+        "demo": "",
+        "repo": "",
+        "role": ""
       },
       {
-        "title": "Wood Depot, 3D Catalogue",
-        "badge": "3D / Web",
-        "year": "Open source",
+        "title": "Ticketus",
+        "badge": "Full Stack",
+        "year": "2024",
+        "featured": false,
         "categories": [
-          "3d",
           "web"
         ],
-        "description": "Interactive SPA where a procedural 3D timber yard is the catalogue. Visitors inspect products, build a cart and send a quote on WhatsApp.",
+        "description": "A ticket management application: an ASP.NET Core 8 REST API with authentication and an Angular 17 front end.",
+        "details": "",
+        "highlights": [
+          "ASP.NET Core 8 API: authentication, ticket management, Entity Framework migrations",
+          "Angular 17 front end (separate repository: Ticketus_Frontend)",
+          "SQL Server database"
+        ],
         "tags": [
+          "C#",
+          ".NET 8",
+          "Angular",
           "TypeScript",
-          "Three.js",
-          "SPA"
+          "SQL Server"
         ],
-        "link": "https://github.com/w2001-RF/wood-depot"
+        "image": "assets/projects/ticketus.jpg",
+        "gallery": [],
+        "demo": "",
+        "repo": "https://github.com/w2001-RF/Ticketus",
+        "role": ""
       },
       {
-        "title": "TopoGIS 3D",
-        "badge": "GIS",
-        "year": "Open source",
+        "title": "School Store Manager",
+        "badge": "Full Stack",
+        "year": "2026",
+        "featured": false,
         "categories": [
-          "3d",
           "web"
         ],
-        "description": "Topographic survey and analysis tool: GPS, OpenStreetMap buildings, parcels, measurements, contour lines and elevation profiles, all in a single file.",
+        "description": "Inventory and sales management for a school store, built with Vue (demo account included).",
+        "details": "",
+        "highlights": [],
+        "tags": [
+          "Vue",
+          "Vite",
+          "JavaScript"
+        ],
+        "image": "assets/projects/school-store.jpg",
+        "gallery": [],
+        "demo": "https://w2001-rf.github.io/school-store/",
+        "repo": "https://github.com/w2001-RF/school-store",
+        "role": ""
+      },
+      {
+        "title": "ThreadLab — T-Shirt Store",
+        "badge": "E-commerce",
+        "year": "2026",
+        "featured": false,
+        "categories": [
+          "web"
+        ],
+        "description": "A premium T-shirt store front with a product picker and WhatsApp ordering.",
+        "details": "",
+        "highlights": [],
         "tags": [
           "JavaScript",
-          "OpenStreetMap",
-          "3D"
+          "HTML",
+          "CSS"
         ],
-        "link": "https://github.com/w2001-RF/topoGIS-3D"
-      },
-      {
-        "title": "Katib Oumoumi",
-        "badge": "Automation",
-        "year": "Open source",
-        "categories": [
-          "web"
-        ],
-        "description": "Generates Moroccan administrative documents (complaints, powers of attorney, contracts) in Word and PDF from admin templates and dynamic forms.",
-        "tags": [
-          "TypeScript",
-          "Document generation"
-        ],
-        "link": "https://github.com/w2001-RF/katib-oumoumi"
-      },
-      {
-        "title": "Fidaa",
-        "badge": "Game / 3D",
-        "year": "Open source",
-        "categories": [
-          "3d"
-        ],
-        "description": "A third-person survival open-world RPG built in Three.js, set in Morocco in autumn 1945.",
-        "tags": [
-          "TypeScript",
-          "Three.js",
-          "WebGL"
-        ],
-        "link": "https://github.com/w2001-RF/Fidaa"
+        "image": "assets/projects/threadlab.jpg",
+        "gallery": [],
+        "demo": "https://w2001-rf.github.io/TShirts_store/",
+        "repo": "https://github.com/w2001-RF/TShirts_store",
+        "role": ""
       },
       {
         "title": "Telegram ChatGPT Bot",
         "badge": "Chatbot",
-        "year": "Open source",
+        "year": "2023",
+        "featured": false,
         "categories": [
           "ai"
         ],
-        "description": "A Python Telegram chat bot powered by OpenAI's ChatGPT language model.",
+        "description": "A Python Telegram bot that answers users with OpenAI's ChatGPT.",
+        "details": "",
+        "highlights": [
+          "Telegram Bot API through pyTelegramBotAPI (telebot)",
+          "OpenAI completions with temperature 0.7",
+          "Command handlers (/start, /hello) and free conversation"
+        ],
         "tags": [
           "Python",
-          "OpenAI",
-          "Telegram API"
+          "OpenAI API",
+          "Telegram"
         ],
-        "link": "https://github.com/w2001-RF/TelegramChatBotWithChatGPT"
+        "image": "assets/projects/telegram-bot.jpg",
+        "gallery": [],
+        "demo": "",
+        "repo": "https://github.com/w2001-RF/TelegramChatBotWithChatGPT",
+        "role": ""
+      },
+      {
+        "title": "Taquin (15-puzzle) Solver",
+        "badge": "Algorithms",
+        "year": "2023",
+        "featured": false,
+        "categories": [
+          "ai"
+        ],
+        "description": "Solves the sliding-tile puzzle with the A* and IDA* search algorithms and admissible heuristics.",
+        "details": "",
+        "highlights": [],
+        "tags": [
+          "C++",
+          "A*",
+          "IDA*",
+          "Heuristic search"
+        ],
+        "image": "assets/projects/taquin-solver.jpg",
+        "gallery": [],
+        "demo": "",
+        "repo": "https://github.com/w2001-RF/TaquinSolver",
+        "role": ""
+      },
+      {
+        "title": "Diet Recommendation System",
+        "badge": "Open-source study",
+        "year": "2023",
+        "featured": false,
+        "categories": [
+          "ai"
+        ],
+        "description": "Content-based diet and recipe recommendations (scikit-learn nearest neighbours, FastAPI, Streamlit). An open-source project by Zakaria Narjis that I deployed and studied.",
+        "details": "Open-source project created by **Zakaria Narjis**. I ran it locally with Docker Compose and studied its content-based recommendation approach: nearest neighbours with cosine similarity over the nutritional values of 500,000 Food.com recipes.",
+        "highlights": [
+          "Content-based recommendation: no cold-start problem",
+          "FastAPI recommendation service + Streamlit front end",
+          "Two-service Docker Compose deployment"
+        ],
+        "tags": [
+          "scikit-learn",
+          "Pandas",
+          "FastAPI",
+          "Streamlit",
+          "Docker"
+        ],
+        "image": "assets/projects/diet-recommendation.jpg",
+        "gallery": [],
+        "demo": "https://diet-recommendation-system.streamlit.app/",
+        "repo": "https://github.com/zakaria-narjis/Diet-Recommendation-System",
+        "role": "Original author: Zakaria Narjis"
       }
     ]
   },
@@ -470,5 +879,46 @@
   "contact": {
     "title": "Let's work together",
     "subtitle": "Send me a message by email or WhatsApp and I'll get back to you quickly."
+  },
+  "certifications": {
+    "title": "Certifications",
+    "subtitle": "Courses completed on Kaggle Learn, verifiable online.",
+    "items": [
+      {
+        "title": "Intermediate Machine Learning",
+        "issuer": "Kaggle",
+        "date": "June 9, 2023",
+        "image": "assets/certificates/kaggle-intermediate-machine-learning.jpg",
+        "url": "https://www.kaggle.com/learn/certification/rifay2001/intermediate-machine-learning"
+      },
+      {
+        "title": "Intro to Machine Learning",
+        "issuer": "Kaggle",
+        "date": "March 13, 2023",
+        "image": "assets/certificates/kaggle-intro-to-machine-learning.jpg",
+        "url": "https://www.kaggle.com/learn/certification/rifay2001/intro-to-machine-learning"
+      },
+      {
+        "title": "Time Series",
+        "issuer": "Kaggle",
+        "date": "June 18, 2023",
+        "image": "assets/certificates/kaggle-time-series.jpg",
+        "url": "https://www.kaggle.com/learn/certification/rifay2001/time-series"
+      },
+      {
+        "title": "Pandas",
+        "issuer": "Kaggle",
+        "date": "June 18, 2023",
+        "image": "assets/certificates/kaggle-pandas.jpg",
+        "url": "https://www.kaggle.com/learn/certification/rifay2001/pandas"
+      },
+      {
+        "title": "Python",
+        "issuer": "Kaggle",
+        "date": "June 13, 2023",
+        "image": "assets/certificates/kaggle-python.jpg",
+        "url": "https://www.kaggle.com/learn/certification/rifay2001/python"
+      }
+    ]
   }
 }

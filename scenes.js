@@ -24,7 +24,7 @@ function loopWhileVisible(el, frame) {
     frame(ms / 1000);
     raf = requestAnimationFrame(tick);
   };
-  new IntersectionObserver(([entry]) => {
+  const io = new IntersectionObserver(([entry]) => {
     if (entry.isIntersecting && !running) {
       running = true;
       raf = requestAnimationFrame(tick);
@@ -32,7 +32,23 @@ function loopWhileVisible(el, frame) {
       running = false;
       cancelAnimationFrame(raf);
     }
-  }, { rootMargin: "120px" }).observe(el);
+  }, { rootMargin: "120px" });
+  io.observe(el);
+  return () => {
+    io.disconnect();
+    cancelAnimationFrame(raf);
+    running = false;
+  };
+}
+
+// Frees the GPU resources of a scene (needed when the SPA router leaves the page)
+function disposeScene(scene, renderer) {
+  scene.traverse((o) => {
+    o.geometry?.dispose();
+    (Array.isArray(o.material) ? o.material : [o.material]).forEach((m) => m?.dispose());
+  });
+  renderer.dispose();
+  renderer.forceContextLoss();
 }
 
 /* ---------------------------------------------------------------- Hero wave */
@@ -119,7 +135,8 @@ function heroWave(THREE, hero, canvas) {
     material.needsUpdate = true;
     if (reduceMotion) render();
   };
-  new MutationObserver(applyTheme).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+  const themeObserver = new MutationObserver(applyTheme);
+  themeObserver.observe(root, { attributes: true, attributeFilter: ["data-theme"] });
 
   const resize = () => {
     const { width, height } = hero.getBoundingClientRect();
@@ -131,7 +148,8 @@ function heroWave(THREE, hero, canvas) {
     uniforms.uSize.value = (isSmall() ? 70 : 60) * renderer.getPixelRatio();
     if (reduceMotion) render();
   };
-  new ResizeObserver(resize).observe(hero);
+  const heroResize = new ResizeObserver(resize);
+  heroResize.observe(hero);
 
   // Pointer: parallax + a bump that follows the cursor on the wave
   const raycaster = new THREE.Raycaster();
@@ -166,11 +184,21 @@ function heroWave(THREE, hero, canvas) {
 
   resize();
   applyTheme();
-  if (reduceMotion) return render();
+  let stopLoop = () => {};
+  const dispose = () => {
+    stopLoop();
+    themeObserver.disconnect();
+    heroResize.disconnect();
+    disposeScene(scene, renderer);
+  };
+  if (reduceMotion) {
+    render();
+    return dispose;
+  }
 
   const mouse = uniforms.uMouse.value;
   const cam = { x: 0, y: 0 };
-  loopWhileVisible(hero, (t) => {
+  stopLoop = loopWhileVisible(hero, (t) => {
     now = t;
     uniforms.uTime.value = t;
     if (target.x > 900) mouse.set(999, 999);
@@ -182,6 +210,7 @@ function heroWave(THREE, hero, canvas) {
     camera.lookAt(0, 0, -8);
     renderer.render(scene, camera);
   });
+  return dispose;
 }
 
 /* ------------------------------------------------------------ Skill universe */
@@ -485,7 +514,8 @@ function skillUniverse(THREE, el) {
     pointUniforms.uScale.value = Math.min(width, height) * 0.55 * renderer.getPixelRatio() / 2;
     kick();
   };
-  new ResizeObserver(resize).observe(stage);
+  const stageResize = new ResizeObserver(resize);
+  stageResize.observe(stage);
 
   let lastActive = -2;
   let lastFocus = -2;
@@ -594,31 +624,53 @@ function skillUniverse(THREE, el) {
 
   resize();
   stage.classList.add("ready");
-  if (reduceMotion) kick();
-  else loopWhileVisible(stage, frame);
+  const stopLoop = reduceMotion ? (kick(), () => {}) : loopWhileVisible(stage, frame);
+  return () => {
+    stopLoop();
+    stageResize.disconnect();
+    disposeScene(scene, renderer);
+  };
 }
 
 /* ------------------------------------------------------------------ Start */
 
-async function init() {
+let THREE = null;
+let disposers = [];
+let mountId = 0;
+
+function unmount() {
+  mountId++;
+  disposers.forEach((d) => d?.());
+  disposers = [];
+}
+
+// Starts the 3D scenes present on the current page (called on load and after each SPA navigation)
+async function mount() {
+  unmount();
+  const id = mountId;
+  const heroCanvas = document.querySelector(".hero-canvas");
+  const universe = document.querySelector(".universe");
+  if (!heroCanvas && !universe) return;
   if (!webglAvailable()) {
     root.classList.add("no-webgl");
     return;
   }
   try {
-    const THREE = await import(THREE_URL);
-    const hero = document.querySelector(".hero");
-    const heroCanvas = document.querySelector(".hero-canvas");
-    if (hero && heroCanvas) heroWave(THREE, hero, heroCanvas);
-    const universe = document.querySelector(".universe");
-    if (universe) skillUniverse(THREE, universe);
-    root.classList.add("has-3d");
+    THREE ??= await import(THREE_URL);
   } catch (err) {
     console.warn("3D scenes disabled:", err);
     root.classList.add("no-webgl");
+    return;
   }
+  if (id !== mountId) return; // the visitor already left this page
+  if (heroCanvas?.isConnected) disposers.push(heroWave(THREE, heroCanvas.closest(".hero"), heroCanvas));
+  if (universe?.isConnected) disposers.push(skillUniverse(THREE, universe));
+  root.classList.add("has-3d");
 }
 
-const start = () => ("requestIdleCallback" in window ? requestIdleCallback(init, { timeout: 1500 }) : setTimeout(init, 400));
+document.addEventListener("page:mount", mount);
+document.addEventListener("page:unmount", unmount);
+
+const start = () => ("requestIdleCallback" in window ? requestIdleCallback(mount, { timeout: 1500 }) : setTimeout(mount, 400));
 if (document.readyState === "complete") start();
 else addEventListener("load", start);
