@@ -2,7 +2,7 @@
 
 Personal portfolio of **Wassim Rifay**, Full Stack Software Engineer & aspiring AI researcher.
 
-Live: https://w2001-rf.github.io/me/
+Live: [https://w2001-rf.github.io/me](https://w2001-rf.github.io/me/)
 
 ## How it works
 
