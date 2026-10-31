@@ -10,7 +10,7 @@
   "profile": {
     "firstName": "Wassim",
     "lastName": "Rifay",
-    "jobTitle": "Full Stack Software Engineer",
+    "jobTitle": "Full Stack Software Engineer | AI engineer",
     "description": "Passionate Full Stack Software Engineer and aspiring AI researcher, driven by learning, innovation and problem-solving.",
     "availability": "Available for new opportunities",
     "roles": [
@@ -33,8 +33,28 @@
     "github": "https://github.com/w2001-RF",
     "currentEmployer": "Orange Business",
     "school": "ENSA Kénitra",
-    "languages": ["French", "Arabic", "English"],
-    "keywords": ["Python", "Artificial Intelligence", "Machine Learning", "Large Language Models", "Retrieval-Augmented Generation", "LangChain", "PyTorch", "TensorFlow", "FastAPI", "Flask", "React", "Next.js", "Docker", "MLOps", "AWS"]
+    "languages": [
+      "French",
+      "Arabic",
+      "English"
+    ],
+    "keywords": [
+      "Python",
+      "Artificial Intelligence",
+      "Machine Learning",
+      "Large Language Models",
+      "Retrieval-Augmented Generation",
+      "LangChain",
+      "PyTorch",
+      "TensorFlow",
+      "FastAPI",
+      "Flask",
+      "React",
+      "Next.js",
+      "Docker",
+      "MLOps",
+      "AWS"
+    ]
   },
   "heroCards": {
     "statValue": "2+",
@@ -42,7 +62,12 @@
     "code": "model.fit()",
     "codeLabel": "AI · LLM · MLOps"
   },
-  "trusted": ["Orange Business", "Artéka", "OCP Group", "Dell Technologies Competition"],
+  "trusted": [
+    "Orange Business",
+    "Artéka",
+    "OCP Group",
+    "Dell Technologies Competition"
+  ],
   "about": {
     "title": "Driven by learning, innovation & problem-solving",
     "facts": [
@@ -56,23 +81,121 @@
       "I currently work at **Orange Business**, building business web applications and an internal AI chatbot. I care about software quality, performance and measurable impact."
     ],
     "stats": [
-      { "value": 30, "suffix": "%", "label": "faster ticket processing" },
-      { "value": 9, "suffix": "+", "label": "AI & software projects" },
-      { "value": 5, "suffix": "", "label": "internships & roles" }
+      {
+        "value": 30,
+        "suffix": "%",
+        "label": "faster ticket processing"
+      },
+      {
+        "value": 9,
+        "suffix": "+",
+        "label": "AI & software projects"
+      },
+      {
+        "value": 5,
+        "suffix": "",
+        "label": "internships & roles"
+      }
     ]
   },
   "skills": {
     "title": "Skills & tools",
     "subtitle": "From research notebooks to production systems: the tools I use to design, build and ship.",
     "groups": [
-      { "title": "AI & Machine Learning", "icon": "brain", "items": ["PyTorch", "TensorFlow", "Scikit-learn", "Computer Vision", "Deep Learning", "NLP", "YOLOv8", "VGG16"] },
-      { "title": "AI Agents & LLM", "icon": "bot", "items": ["LangChain", "CrewAI", "LLaMA 3", "RAG", "ChromaDB", "Prompt Engineering"] },
-      { "title": "Backend & APIs", "icon": "server", "items": ["FastAPI", "Flask", "Django", "Spring Boot", "ASP.NET", "REST APIs", "Microservices"] },
-      { "title": "Frontend", "icon": "layout", "items": ["React.js", "Next.js", "Vue.js", "Angular", "TypeScript", "HTML5", "CSS3"] },
-      { "title": "Data & Databases", "icon": "db", "items": ["PostgreSQL", "MySQL", "MariaDB", "MongoDB", "SQL Server", "Spark", "Hadoop", "Talend", "Power BI"] },
-      { "title": "MLOps, Cloud & DevOps", "icon": "cloud", "items": ["AWS", "Docker", "GitLab CI/CD", "Airflow", "MLflow", "DVC", "Kafka", "Linux", "Nginx", "ELK Stack"] }
+      {
+        "title": "AI & Machine Learning",
+        "icon": "brain",
+        "items": [
+          "PyTorch",
+          "TensorFlow",
+          "Scikit-learn",
+          "Computer Vision",
+          "Deep Learning",
+          "NLP",
+          "YOLOv8",
+          "VGG16"
+        ]
+      },
+      {
+        "title": "AI Agents & LLM",
+        "icon": "bot",
+        "items": [
+          "LangChain",
+          "CrewAI",
+          "LLaMA 3",
+          "RAG",
+          "ChromaDB",
+          "Prompt Engineering"
+        ]
+      },
+      {
+        "title": "Backend & APIs",
+        "icon": "server",
+        "items": [
+          "FastAPI",
+          "Flask",
+          "Django",
+          "Spring Boot",
+          "ASP.NET",
+          "REST APIs",
+          "Microservices"
+        ]
+      },
+      {
+        "title": "Frontend",
+        "icon": "layout",
+        "items": [
+          "React.js",
+          "Next.js",
+          "Vue.js",
+          "Angular",
+          "TypeScript",
+          "HTML5",
+          "CSS3"
+        ]
+      },
+      {
+        "title": "Data & Databases",
+        "icon": "db",
+        "items": [
+          "PostgreSQL",
+          "MySQL",
+          "MariaDB",
+          "MongoDB",
+          "SQL Server",
+          "Spark",
+          "Hadoop",
+          "Talend",
+          "Power BI"
+        ]
+      },
+      {
+        "title": "MLOps, Cloud & DevOps",
+        "icon": "cloud",
+        "items": [
+          "AWS",
+          "Docker",
+          "GitLab CI/CD",
+          "Airflow",
+          "MLflow",
+          "DVC",
+          "Kafka",
+          "Linux",
+          "Nginx",
+          "ELK Stack"
+        ]
+      }
     ],
-    "programmingLanguages": ["Python", "JavaScript", "TypeScript", "PHP", "Java", "SQL", "C/C++", "C#"]
+    "programmingLanguages": [
+      "Python",
+      "JavaScript",
+      "TypeScript",
+      "PHP",
+      "Java",
+      "SQL",
+      "C/C++",
+      "C#"
+    ]
   },
   "experience": {
     "title": "Professional experience",
@@ -89,7 +212,14 @@
           "Implemented authentication, role-based access control and permission management.",
           "Delivered through Git/GitLab, Docker and CI/CD in an Agile team, with code reviews and technical documentation."
         ],
-        "tags": ["Python", "PHP", "JavaScript", "MariaDB", "Docker", "CI/CD"]
+        "tags": [
+          "Python",
+          "PHP",
+          "JavaScript",
+          "MariaDB",
+          "Docker",
+          "CI/CD"
+        ]
       },
       {
         "role": "Software Engineer / AI Intern",
@@ -102,7 +232,13 @@
           "Implemented a real-time data streaming pipeline with **Apache Kafka**.",
           "Set up CI/CD workflows and deployed services on **AWS**."
         ],
-        "tags": ["Python", "FastAPI", "Computer Vision", "Kafka", "AWS"]
+        "tags": [
+          "Python",
+          "FastAPI",
+          "Computer Vision",
+          "Kafka",
+          "AWS"
+        ]
       },
       {
         "role": "PFE Intern, Backend / AI Engineer",
@@ -115,7 +251,14 @@
           "Contributed to an **MLOps pipeline** for customer detection with Airflow, MLflow and DVC.",
           "Implemented monitoring with the ELK Stack and containerized services with Docker."
         ],
-        "tags": ["Flask", "Airflow", "MLflow", "DVC", "MongoDB", "ELK"]
+        "tags": [
+          "Flask",
+          "Airflow",
+          "MLflow",
+          "DVC",
+          "MongoDB",
+          "ELK"
+        ]
       },
       {
         "role": "AI / Machine Learning Intern",
@@ -126,7 +269,11 @@
           "Developed a predictive maintenance model from infrared thermal images and vibration signals.",
           "Built an API and interactive interface to expose model predictions."
         ],
-        "tags": ["TensorFlow", "FastAPI", "Streamlit"]
+        "tags": [
+          "TensorFlow",
+          "FastAPI",
+          "Streamlit"
+        ]
       },
       {
         "role": "Data Science Intern",
@@ -137,31 +284,182 @@
           "Built sales forecasting models for SIM cards, dealers and scratch cards across three Moroccan telecom operators.",
           "Data analysis and visualization with Python, Scikit-learn, R and Power BI."
         ],
-        "tags": ["Scikit-learn", "R", "Power BI"]
+        "tags": [
+          "Scikit-learn",
+          "R",
+          "Power BI"
+        ]
       }
     ],
     "education": [
-      { "degree": "Engineering Degree (Master's equivalent), Computer Science", "school": "ENSA Kénitra, Morocco", "period": "2019 — 2024" }
+      {
+        "degree": "Engineering Degree (Master's equivalent), Computer Science",
+        "school": "ENSA Kénitra, Morocco",
+        "period": "2019 — 2024"
+      }
     ]
   },
   "projects": {
     "title": "Featured projects",
     "subtitle": "A selection of AI, full-stack and 3D web work, from competitions and internships to personal builds.",
     "filters": [
-      { "id": "ai", "label": "AI & ML" },
-      { "id": "web", "label": "Full Stack" },
-      { "id": "3d", "label": "3D & Games" }
+      {
+        "id": "ai",
+        "label": "AI & ML"
+      },
+      {
+        "id": "web",
+        "label": "Full Stack"
+      },
+      {
+        "id": "3d",
+        "label": "3D & Games"
+      }
     ],
     "items": [
-      { "title": "Intelligent Medical Assistant", "badge": "AI / LLM", "year": "2024", "categories": ["ai"], "description": "Dell Technologies Competition. A medical assistant combining LLaMA 3, Retrieval-Augmented Generation and computer vision for document retrieval and image analysis.", "tags": ["LLaMA 3", "LangChain", "RAG", "ChromaDB", "YOLOv8", "Next.js"], "link": "" },
-      { "title": "Student Records Management Platform", "badge": "Full Stack", "year": "2025 — 2026", "categories": ["web"], "description": "Web platform managing the full lifecycle of student records, with scheduled processing, SFTP document exchange and notification workflows.", "tags": ["Flask", "React", "PostgreSQL", "Docker", "Nginx", "MinIO"], "link": "" },
-      { "title": "Predictive Maintenance, OCP", "badge": "Machine Learning", "year": "2023", "categories": ["ai"], "description": "Predictive maintenance for industrial stacker machines from infrared thermal data and vibration signals, served through an API and an interactive UI.", "tags": ["TensorFlow", "FastAPI", "Streamlit"], "link": "https://github.com/w2001-RF/MotorFaultsStateClassification" },
-      { "title": "Emotion Detection Application", "badge": "Deep Learning", "year": "2023", "categories": ["ai"], "description": "Image-based emotion recognition using deep learning (VGG16 transfer learning) and OpenCV, with a desktop interface.", "tags": ["TensorFlow", "Keras", "VGG16", "OpenCV"], "link": "" },
-      { "title": "Wood Depot, 3D Catalogue", "badge": "3D / Web", "year": "Open source", "categories": ["3d", "web"], "description": "Interactive SPA where a procedural 3D timber yard is the catalogue. Visitors inspect products, build a cart and send a quote on WhatsApp.", "tags": ["TypeScript", "Three.js", "SPA"], "link": "https://github.com/w2001-RF/wood-depot" },
-      { "title": "TopoGIS 3D", "badge": "GIS", "year": "Open source", "categories": ["3d", "web"], "description": "Topographic survey and analysis tool: GPS, OpenStreetMap buildings, parcels, measurements, contour lines and elevation profiles, all in a single file.", "tags": ["JavaScript", "OpenStreetMap", "3D"], "link": "https://github.com/w2001-RF/topoGIS-3D" },
-      { "title": "Katib Oumoumi", "badge": "Automation", "year": "Open source", "categories": ["web"], "description": "Generates Moroccan administrative documents (complaints, powers of attorney, contracts) in Word and PDF from admin templates and dynamic forms.", "tags": ["TypeScript", "Document generation"], "link": "https://github.com/w2001-RF/katib-oumoumi" },
-      { "title": "Fidaa", "badge": "Game / 3D", "year": "Open source", "categories": ["3d"], "description": "A third-person survival open-world RPG built in Three.js, set in Morocco in autumn 1945.", "tags": ["TypeScript", "Three.js", "WebGL"], "link": "https://github.com/w2001-RF/Fidaa" },
-      { "title": "Telegram ChatGPT Bot", "badge": "Chatbot", "year": "Open source", "categories": ["ai"], "description": "A Python Telegram chat bot powered by OpenAI's ChatGPT language model.", "tags": ["Python", "OpenAI", "Telegram API"], "link": "https://github.com/w2001-RF/TelegramChatBotWithChatGPT" }
+      {
+        "title": "Intelligent Medical Assistant",
+        "badge": "AI / LLM",
+        "year": "2024",
+        "categories": [
+          "ai"
+        ],
+        "description": "Dell Technologies Competition. A medical assistant combining LLaMA 3, Retrieval-Augmented Generation and computer vision for document retrieval and image analysis.",
+        "tags": [
+          "LLaMA 3",
+          "LangChain",
+          "RAG",
+          "ChromaDB",
+          "YOLOv8",
+          "Next.js"
+        ],
+        "link": ""
+      },
+      {
+        "title": "Student Records Management Platform",
+        "badge": "Full Stack",
+        "year": "2025 — 2026",
+        "categories": [
+          "web"
+        ],
+        "description": "Web platform managing the full lifecycle of student records, with scheduled processing, SFTP document exchange and notification workflows.",
+        "tags": [
+          "Flask",
+          "React",
+          "PostgreSQL",
+          "Docker",
+          "Nginx",
+          "MinIO"
+        ],
+        "link": ""
+      },
+      {
+        "title": "Predictive Maintenance, OCP",
+        "badge": "Machine Learning",
+        "year": "2023",
+        "categories": [
+          "ai"
+        ],
+        "description": "Predictive maintenance for industrial stacker machines from infrared thermal data and vibration signals, served through an API and an interactive UI.",
+        "tags": [
+          "TensorFlow",
+          "FastAPI",
+          "Streamlit"
+        ],
+        "link": "https://github.com/w2001-RF/MotorFaultsStateClassification"
+      },
+      {
+        "title": "Emotion Detection Application",
+        "badge": "Deep Learning",
+        "year": "2023",
+        "categories": [
+          "ai"
+        ],
+        "description": "Image-based emotion recognition using deep learning (VGG16 transfer learning) and OpenCV, with a desktop interface.",
+        "tags": [
+          "TensorFlow",
+          "Keras",
+          "VGG16",
+          "OpenCV"
+        ],
+        "link": ""
+      },
+      {
+        "title": "Wood Depot, 3D Catalogue",
+        "badge": "3D / Web",
+        "year": "Open source",
+        "categories": [
+          "3d",
+          "web"
+        ],
+        "description": "Interactive SPA where a procedural 3D timber yard is the catalogue. Visitors inspect products, build a cart and send a quote on WhatsApp.",
+        "tags": [
+          "TypeScript",
+          "Three.js",
+          "SPA"
+        ],
+        "link": "https://github.com/w2001-RF/wood-depot"
+      },
+      {
+        "title": "TopoGIS 3D",
+        "badge": "GIS",
+        "year": "Open source",
+        "categories": [
+          "3d",
+          "web"
+        ],
+        "description": "Topographic survey and analysis tool: GPS, OpenStreetMap buildings, parcels, measurements, contour lines and elevation profiles, all in a single file.",
+        "tags": [
+          "JavaScript",
+          "OpenStreetMap",
+          "3D"
+        ],
+        "link": "https://github.com/w2001-RF/topoGIS-3D"
+      },
+      {
+        "title": "Katib Oumoumi",
+        "badge": "Automation",
+        "year": "Open source",
+        "categories": [
+          "web"
+        ],
+        "description": "Generates Moroccan administrative documents (complaints, powers of attorney, contracts) in Word and PDF from admin templates and dynamic forms.",
+        "tags": [
+          "TypeScript",
+          "Document generation"
+        ],
+        "link": "https://github.com/w2001-RF/katib-oumoumi"
+      },
+      {
+        "title": "Fidaa",
+        "badge": "Game / 3D",
+        "year": "Open source",
+        "categories": [
+          "3d"
+        ],
+        "description": "A third-person survival open-world RPG built in Three.js, set in Morocco in autumn 1945.",
+        "tags": [
+          "TypeScript",
+          "Three.js",
+          "WebGL"
+        ],
+        "link": "https://github.com/w2001-RF/Fidaa"
+      },
+      {
+        "title": "Telegram ChatGPT Bot",
+        "badge": "Chatbot",
+        "year": "Open source",
+        "categories": [
+          "ai"
+        ],
+        "description": "A Python Telegram chat bot powered by OpenAI's ChatGPT language model.",
+        "tags": [
+          "Python",
+          "OpenAI",
+          "Telegram API"
+        ],
+        "link": "https://github.com/w2001-RF/TelegramChatBotWithChatGPT"
+      }
     ]
   },
   "cta": {
