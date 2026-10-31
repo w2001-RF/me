@@ -220,7 +220,7 @@
           "Docker",
           "CI/CD"
         ],
-        "logo": "",
+        "logo": "assets/logos/orange-business.jpg",
         "logoText": "OB",
         "logoColor": "#ff7900",
         "gallery": []
@@ -243,7 +243,7 @@
           "Kafka",
           "AWS"
         ],
-        "logo": "",
+        "logo": "assets/logos/arteka.png",
         "logoText": "Ar",
         "logoColor": "#1d1d1f",
         "gallery": []
@@ -267,7 +267,7 @@
           "MongoDB",
           "ELK"
         ],
-        "logo": "",
+        "logo": "assets/logos/orange-business.jpg",
         "logoText": "OB",
         "logoColor": "#ff7900",
         "gallery": []
@@ -286,7 +286,7 @@
           "FastAPI",
           "Streamlit"
         ],
-        "logo": "",
+        "logo": "assets/logos/ocp.jpg",
         "logoText": "OCP",
         "logoColor": "#00843d",
         "gallery": []
@@ -305,7 +305,7 @@
           "R",
           "Power BI"
         ],
-        "logo": "",
+        "logo": "assets/logos/telecom-industry.jpg",
         "logoText": "TI",
         "logoColor": "#0071e3",
         "gallery": []
