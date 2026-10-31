@@ -84,7 +84,7 @@ export function render(c, { base = "" } = {}) {
 <html lang="en" class="no-js">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   ${base ? `<base href="${esc(base)}">` : ""}
   <script>
     document.documentElement.classList.replace("no-js", "js");
@@ -143,6 +143,10 @@ ${Object.entries(ICONS).map(([k, v]) => `    <symbol id="i-${k}" viewBox="0 0 24
         <a href="#experience">Experience</a>
         <a href="#projects">Projects</a>
         <a href="#contact">Contact</a>
+        <div class="menu-extra">
+          <a href="#contact" class="btn">Hire me</a>
+          ${p.cv ? `<a href="${esc(p.cv)}" class="btn btn-ghost" download>Download CV</a>` : ""}
+        </div>
       </nav>
       <div class="nav-actions">
         <button class="icon-btn theme-toggle" type="button" aria-label="Toggle dark and light theme">
@@ -281,6 +285,7 @@ ${list(c.projects.items, (pr) => `          <article class="project reveal" data
             ${pr.link ? `<a class="project-link" href="${esc(pr.link)}"${ext(pr.link)}>View project ${icon("arrow")}</a>` : ""}
           </article>`)}
         </div>
+        <div class="swipe-hint" aria-hidden="true"><span>Swipe to see more →</span><span class="swipe-dots"></span></div>
         <div class="center reveal">
           <a href="${esc(p.github)}?tab=repositories" target="_blank" rel="noopener" class="btn btn-ghost">${icon("github")} See all repositories</a>
         </div>
