@@ -761,16 +761,29 @@
         "categories": [
           "web"
         ],
-        "description": "Inventory and sales management for a school store, built with Vue (demo account included).",
-        "details": "",
-        "highlights": [],
+        "description": "Point of sale, stock and invoicing for a school store: barcode scanning, client discounts, sales reports and a demo account.",
+        "details": "A **Vue 3** single-page app with a pluggable data layer: the same interface runs on **Supabase**, Firebase, SQLite (sql.js) or browser storage, chosen by one environment variable.",
+        "highlights": [
+          "Point of sale with **barcode scanning** (camera or Datalogic scanner) and thermal receipt printing",
+          "Invoices with partial payments, per-client discounts and outstanding balances",
+          "Sales reports by period, best sellers and **CSV export**",
+          "Bulk import from CSV, JSON, Excel, SQL or Access; manager and agent roles; French, English, Spanish and Arabic"
+        ],
         "tags": [
-          "Vue",
-          "Vite",
-          "JavaScript"
+          "Vue 3",
+          "Pinia",
+          "Supabase",
+          "sql.js",
+          "vue-i18n",
+          "PWA"
         ],
         "image": "assets/projects/school-store.jpg",
-        "gallery": [],
+        "gallery": [
+          "assets/projects/school-store-products.jpg",
+          "assets/projects/school-store-invoices.jpg",
+          "assets/projects/school-store-reports.jpg",
+          "assets/projects/school-store-clients.jpg"
+        ],
         "demo": "https://w2001-rf.github.io/school-store/",
         "repo": "https://github.com/w2001-RF/school-store",
         "role": ""
