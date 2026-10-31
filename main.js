@@ -1,7 +1,7 @@
 const EMAIL = "rifaywassim@gmail.com";
 const WHATSAPP = "212631367496";
 // Web3Forms access key (public by design, safe to keep in the page). Create one at https://web3forms.com
-const WEB3FORMS_KEY = "YOUR_WEB3FORMS_ACCESS_KEY";
+const WEB3FORMS_KEY = "25ae6517-5af4-4602-92ca-dad5e70ff928";
 
 document.getElementById("year").textContent = new Date().getFullYear();
 
