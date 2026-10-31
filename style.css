@@ -393,6 +393,82 @@ code { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
   .fc-1 { left: -30px; }
   .fc-2 { right: -30px; }
 }
+/* ============ 3D (Three.js) ============ */
+.hero { isolation: isolate; }
+.hero-canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none;
+  opacity: 0; transition: opacity 1.4s ease;
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 28%, #000 82%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 28%, #000 82%, transparent 100%);
+}
+.has-3d .hero-canvas { opacity: 1; }
+
+.universe {
+  margin-top: 28px; border-radius: var(--radius); overflow: hidden; color: #f5f5f7;
+  background: radial-gradient(120% 90% at 50% 0%, #1b1f3a 0%, #0a0b14 55%, #000 100%);
+  box-shadow: 0 30px 70px -30px rgba(0, 0, 0, .55);
+}
+.no-webgl .universe { display: none; }
+.universe-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; padding: 30px 34px 0; }
+.universe-kicker { font-size: 13px; font-weight: 600; letter-spacing: .02em; color: #a1a1a6; }
+.universe-head h3 { font-size: clamp(26px, 3.4vw, 34px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+.universe-help { display: grid; justify-items: end; gap: 2px; font-size: 13px; color: #a1a1a6; text-align: right; }
+.universe-count { color: #f5f5f7; font-weight: 600; font-size: 15px; }
+.universe-count:empty { display: none; }
+
+.universe-stage { position: relative; height: clamp(420px, 56vw, 560px); cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+.universe-stage.grabbing { cursor: grabbing; }
+.universe-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; transition: opacity 1s ease; }
+.universe-stage.ready canvas { opacity: 1; }
+.universe-labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.universe-labels span {
+  position: absolute; left: 0; top: 0; white-space: nowrap; font-size: 12.5px; font-weight: 500; letter-spacing: -0.01em;
+  padding: 3px 9px; border-radius: 980px; color: #f5f5f7; opacity: 0; will-change: transform, opacity;
+  background: rgba(20, 22, 40, .55); border: 1px solid color-mix(in srgb, var(--c) 45%, transparent);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: background-color .2s, border-color .2s;
+}
+.universe-labels span.dim { opacity: 0 !important; }
+.universe-labels span.active { background: var(--c); border-color: var(--c); color: #fff; font-weight: 600; }
+.universe-tip {
+  position: absolute; left: 0; top: 0; pointer-events: none; display: grid; gap: 1px; text-align: center;
+  padding: 8px 14px; border-radius: 14px; background: rgba(255, 255, 255, .96); color: #1d1d1f;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .35); opacity: 0; transition: opacity .2s; white-space: nowrap; z-index: 200;
+}
+.universe-tip.show { opacity: 1; }
+.universe-tip strong { font-size: 14px; }
+.universe-tip span { font-size: 12px; color: #6e6e73; }
+.universe-loading { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 12px; color: #a1a1a6; font-size: 14px; transition: opacity .6s; }
+.universe-loading span { width: 34px; height: 34px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .15); border-top-color: #2997ff; animation: spin 1s linear infinite; }
+.universe-stage.ready .universe-loading { opacity: 0; pointer-events: none; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.universe-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding: 4px 24px 30px; }
+.u-chip {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 6px 14px; border-radius: 980px; cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, .14); background: rgba(255, 255, 255, .06); color: #d2d2d7; font-size: 13.5px;
+  transition: background-color .2s, color .2s, border-color .2s;
+}
+.u-chip i { width: 8px; height: 8px; border-radius: 50%; }
+.u-chip:hover { background: rgba(255, 255, 255, .12); color: #fff; }
+.u-chip[aria-pressed="true"] { background: #f5f5f7; color: #1d1d1f; border-color: #f5f5f7; }
+
+/* 3D tilt on hover (set by main.js on devices with a mouse) */
+.tilt { transition: transform .15s ease-out, box-shadow .5s !important; transform-style: preserve-3d; }
+
+@media (max-width: 600px) {
+  .universe { margin-top: 20px; border-radius: 24px; margin-inline: -4px; }
+  .universe-head { padding: 22px 20px 0; flex-direction: column; align-items: flex-start; gap: 6px; }
+  .universe-help { justify-items: start; text-align: left; }
+  .universe-stage { height: 400px; }
+  .universe-labels span { font-size: 11.5px; padding: 2px 8px; }
+  .universe-legend { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; padding: 4px 20px 24px; scrollbar-width: none; }
+  .universe-legend::-webkit-scrollbar { display: none; }
+  .u-chip { flex-shrink: 0; min-height: 40px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .universe-loading span { animation: none; }
+}
+
 /* Elements that only exist on phones */
 .menu-extra, .more-btn, .swipe-hint { display: none; }
 

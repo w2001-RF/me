@@ -162,6 +162,7 @@ ${Object.entries(ICONS).map(([k, v]) => `    <symbol id="i-${k}" viewBox="0 0 24
 
   <main id="main">
     <section class="hero" id="top" aria-labelledby="hero-title">
+      <canvas class="hero-canvas" aria-hidden="true"></canvas>
       <div class="container hero-grid">
         <div class="hero-text reveal">
           ${p.availability ? `<p class="eyebrow"><span class="dot"></span> ${esc(p.availability)}</p>` : ""}
@@ -227,6 +228,22 @@ ${list(c.skills.groups, (g) => `          <article class="card reveal">
             <h3>${esc(g.title)}</h3>
             ${tags(g.items, "tags")}
           </article>`)}
+        </div>
+        <div class="universe reveal">
+          <div class="universe-head">
+            <div>
+              <p class="universe-kicker">Interactive · Built with Three.js</p>
+              <h3>Skill universe</h3>
+            </div>
+            <p class="universe-help"><span class="universe-count"></span><span>Drag to rotate · Hover or tap a skill · Pick a field</span></p>
+          </div>
+          <div class="universe-stage" role="img" aria-label="Interactive 3D network of my skills, grouped by field">
+            <canvas></canvas>
+            <div class="universe-labels" aria-hidden="true"></div>
+            <div class="universe-tip" aria-hidden="true"></div>
+            <div class="universe-loading" aria-hidden="true"><span></span>Loading 3D…</div>
+          </div>
+          <div class="universe-legend" role="group" aria-label="Highlight a field"></div>
         </div>
         <div class="marquee reveal" aria-label="Programming languages">
           <ul class="marquee-track">
@@ -384,6 +401,7 @@ ${list(c.projects.items, (pr) => `          <article class="project reveal" data
   </footer>
 
   <script src="main.js" defer></script>
+  <script type="module" src="scenes.js"></script>
 </body>
 </html>
 `;
