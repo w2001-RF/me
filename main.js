@@ -31,19 +31,54 @@ const onScroll = () => {
 window.addEventListener("scroll", onScroll, { passive: true });
 onScroll();
 
-const closeMenu = () => {
-  nav.classList.remove("open");
-  toggle.setAttribute("aria-expanded", false);
-};
-toggle.addEventListener("click", () => {
-  const open = nav.classList.toggle("open");
+// The phone menu covers the screen, so the page behind it must not scroll
+const setMenu = (open) => {
+  nav.classList.toggle("open", open);
+  root.classList.toggle("menu-open", open);
   toggle.setAttribute("aria-expanded", open);
-});
+  toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+};
+const closeMenu = () => setMenu(false);
+toggle.addEventListener("click", () => setMenu(!nav.classList.contains("open")));
 document.querySelectorAll(".nav-links a").forEach((a) => a.addEventListener("click", closeMenu));
 document.addEventListener("keydown", (e) => e.key === "Escape" && closeMenu());
+matchMedia("(min-width: 861px)").addEventListener("change", (e) => e.matches && closeMenu());
+
+// Phones: show the first two bullets of each job, with a "Show more" toggle
+document.querySelectorAll(".tl-body > ul:not(.tags)").forEach((ul) => {
+  const extra = ul.children.length - 2;
+  if (extra < 1) return;
+  ul.classList.add("collapsible");
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "more-btn";
+  const label = () => (btn.textContent = ul.classList.contains("expanded") ? "Show less" : `Show ${extra} more`);
+  label();
+  btn.setAttribute("aria-expanded", "false");
+  btn.addEventListener("click", () => {
+    const open = ul.classList.toggle("expanded");
+    btn.setAttribute("aria-expanded", open);
+    label();
+  });
+  ul.after(btn);
+});
+
+// Phones: projects carousel dots
+const track = document.querySelector(".projects-grid");
+const dots = document.querySelector(".swipe-dots");
+const updateDots = () => {
+  if (!track || !dots) return;
+  const cards = [...track.querySelectorAll(".project:not(.hidden)")];
+  if (dots.children.length !== cards.length) dots.replaceChildren(...cards.map(() => document.createElement("span")));
+  const step = cards[1] ? cards[1].offsetLeft - cards[0].offsetLeft : 1;
+  const i = Math.min(cards.length - 1, Math.round(track.scrollLeft / step));
+  [...dots.children].forEach((d, j) => d.classList.toggle("on", j === i));
+};
+track?.addEventListener("scroll", updateDots, { passive: true });
+updateDots();
 
 // Highlight the nav link of the section in view
-const navLinks = [...document.querySelectorAll(".nav-links a")];
+const navLinks = [...document.querySelectorAll(".nav-links > a")];
 const sectionObserver = new IntersectionObserver(
   (entries) =>
     entries.forEach((e) => {
@@ -145,6 +180,8 @@ chips.forEach((chip) =>
       p.classList.toggle("hidden", !show);
       if (show) p.classList.add("visible");
     });
+    track.scrollTo({ left: 0 });
+    updateDots();
   })
 );
 
