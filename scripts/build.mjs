@@ -1,36 +1,58 @@
-// Builds the static site into _site/ from data/content.json.
+// Builds the static site into _site/ from data/content.json: one HTML file per page.
 // Usage: node scripts/build.mjs   (no dependencies, Node 18+)
 import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
-import { render } from "../src/template.mjs";
+import { renderPage, PAGES } from "../src/template.mjs";
 
 const OUT = "_site";
 const content = JSON.parse(await readFile("data/content.json", "utf8"));
+const url = content.site.url.replace(/\/?$/, "/");
+const basePath = new URL(url).pathname; // e.g. "/me/" on GitHub Pages
 
 await rm(OUT, { recursive: true, force: true });
 await mkdir(OUT, { recursive: true });
 
-await writeFile(`${OUT}/index.html`, render(content));
+for (const page of PAGES) {
+  const dir = `${OUT}/${page.path}`;
+  await mkdir(dir, { recursive: true });
+  await writeFile(`${dir}index.html`, renderPage(content, page.id, { root: page.path ? "../" : "" }));
+}
+// GitHub Pages serves 404.html for any unknown URL, at any depth, so it uses absolute paths
+await writeFile(`${OUT}/404.html`, renderPage(content, "404", { root: basePath }));
 
-const COPY = ["style.css", "main.js", "scenes.js", "favicon.svg", "site.webmanifest", "404.html", "robots.txt", ".nojekyll", "assets", "admin", "src", "data"];
+const COPY = ["style.css", "main.js", "scenes.js", "favicon.svg", "robots.txt", ".nojekyll", "assets", "admin", "src", "data"];
 for (const path of COPY) {
   if (existsSync(path)) await cp(path, `${OUT}/${path}`, { recursive: true });
 }
 
-const url = content.site.url.replace(/\/?$/, "/");
+const name = `${content.profile.firstName} ${content.profile.lastName}`;
+await writeFile(
+  `${OUT}/site.webmanifest`,
+  JSON.stringify({
+    name: `${name} | ${content.profile.jobTitle}`,
+    short_name: name,
+    start_url: basePath,
+    scope: basePath,
+    display: "standalone",
+    background_color: "#ffffff",
+    theme_color: "#fbfbfd",
+    icons: [{ src: `${basePath}favicon.svg`, sizes: "any", type: "image/svg+xml" }],
+  }, null, 2)
+);
+
 const today = new Date().toISOString().slice(0, 10);
 await writeFile(
   `${OUT}/sitemap.xml`,
   `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>${url}</loc>
+${PAGES.map((pg) => `  <url>
+    <loc>${url}${pg.path}</loc>
     <lastmod>${today}</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
-  </url>
+    <priority>${pg.path ? "0.8" : "1.0"}</priority>
+  </url>`).join("\n")}
 </urlset>
 `
 );
 
-console.log(`Built ${OUT}/ from data/content.json`);
+console.log(`Built ${PAGES.length} pages + 404 into ${OUT}/ from data/content.json`);

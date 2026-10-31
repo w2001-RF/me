@@ -3,7 +3,7 @@
 import { render, ICON_NAMES } from "../src/template.mjs";
 
 const CONTENT_PATH = "data/content.json";
-const DEFAULTS = { owner: "w2001-RF", repo: "w2001-RF.github.io", branch: "main" };
+const DEFAULTS = { owner: "w2001-RF", repo: "me", branch: "main" };
 
 const SECTIONS = {
   profile: "Profile",
@@ -15,6 +15,7 @@ const SECTIONS = {
   experience: "Experience",
   projects: "Projects",
   cta: "Call to action",
+  certifications: "Certifications",
   contact: "Contact",
 };
 // Arrays edited as one comma-separated field
