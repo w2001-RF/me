@@ -1,157 +1,267 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Wassim Rifay — Full Stack Software Engineer &amp; Aspiring AI Researcher</title>
-  <meta name="description" content="Wassim Rifay — passionate Full Stack Software Engineer and aspiring AI researcher based in Kenitra, Morocco, driven by learning, innovation and problem-solving.">
-  <meta property="og:title" content="Wassim Rifay — Full Stack Software Engineer &amp; Aspiring AI Researcher">
+  <script>
+    // Apply saved/system theme before paint to avoid a flash
+    document.documentElement.classList.replace("no-js", "js");
+    try {
+      const t = localStorage.getItem("theme");
+      if (t) document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <title>Wassim Rifay | Full Stack Software Engineer &amp; AI Engineer, Morocco</title>
+  <meta name="description" content="Wassim Rifay is a Full Stack Software Engineer and aspiring AI researcher in Kenitra, Morocco, building AI-powered apps, LLM/RAG assistants, Python APIs and React interfaces.">
+  <meta name="author" content="Wassim Rifay">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://w2001-rf.github.io/">
+
+  <!-- Open Graph / social sharing -->
+  <meta property="og:type" content="profile">
+  <meta property="og:site_name" content="Wassim Rifay">
+  <meta property="og:url" content="https://w2001-rf.github.io/">
+  <meta property="og:title" content="Wassim Rifay | Full Stack Software Engineer &amp; AI Engineer">
   <meta property="og:description" content="Passionate Full Stack Software Engineer and aspiring AI researcher, driven by learning, innovation and problem-solving.">
-  <meta property="og:image" content="assets/wassim.jpg">
-  <meta name="theme-color" content="#0b1020">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%236366f1'/><text x='50%' y='56%' text-anchor='middle' dominant-baseline='middle' font-family='Arial' font-weight='700' font-size='30' fill='white'>WR</text></svg>">
+  <meta property="og:image" content="https://w2001-rf.github.io/assets/wassim.jpg">
+  <meta property="og:image:alt" content="Portrait of Wassim Rifay">
+  <meta property="og:locale" content="en_US">
+  <meta property="profile:first_name" content="Wassim">
+  <meta property="profile:last_name" content="Rifay">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Wassim Rifay | Full Stack Software Engineer &amp; AI Engineer">
+  <meta name="twitter:description" content="Building AI-powered applications, LLM/RAG assistants and production-ready software.">
+  <meta name="twitter:image" content="https://w2001-rf.github.io/assets/wassim.jpg">
+
+  <meta name="theme-color" content="#fbfbfd">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/wassim.jpg">
+  <link rel="manifest" href="site.webmanifest">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Apple devices use SF Pro from the system stack; Inter is the fallback elsewhere -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="assets/wassim.jpg" fetchpriority="high">
   <link rel="stylesheet" href="style.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://w2001-rf.github.io/#person",
+        "name": "Wassim Rifay",
+        "url": "https://w2001-rf.github.io/",
+        "image": "https://w2001-rf.github.io/assets/wassim.jpg",
+        "email": "mailto:rifaywassim@gmail.com",
+        "jobTitle": "Full Stack Software Engineer",
+        "description": "Passionate Full Stack Software Engineer and aspiring AI researcher, driven by learning, innovation and problem-solving.",
+        "worksFor": { "@type": "Organization", "name": "Orange Business" },
+        "alumniOf": { "@type": "CollegeOrUniversity", "name": "ENSA Kénitra" },
+        "address": { "@type": "PostalAddress", "addressLocality": "Kenitra", "addressCountry": "MA" },
+        "knowsLanguage": ["French", "Arabic", "English"],
+        "knowsAbout": ["Python", "Artificial Intelligence", "Machine Learning", "Large Language Models", "Retrieval-Augmented Generation", "LangChain", "PyTorch", "TensorFlow", "FastAPI", "Flask", "React", "Next.js", "Docker", "MLOps", "AWS"],
+        "sameAs": [
+          "https://github.com/w2001-RF",
+          "https://www.linkedin.com/in/wassim-rifay-8a33371a3/"
+        ]
+      },
+      {
+        "@type": "ProfilePage",
+        "@id": "https://w2001-rf.github.io/#webpage",
+        "url": "https://w2001-rf.github.io/",
+        "name": "Wassim Rifay | Full Stack Software Engineer & AI Engineer",
+        "inLanguage": "en",
+        "mainEntity": { "@id": "https://w2001-rf.github.io/#person" }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
-  <header class="nav" id="top">
+  <!-- Icon sprite -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-github" viewBox="0 0 24 24"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .5Z"/></symbol>
+    <symbol id="i-linkedin" viewBox="0 0 24 24"><path d="M20.4 20.5h-3.6v-5.6c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9v5.7H9.3V9h3.4v1.6h.1c.5-.9 1.6-1.8 3.4-1.8 3.6 0 4.3 2.4 4.3 5.5v6.2ZM5.3 7.4a2.1 2.1 0 1 1 0-4.2 2.1 2.1 0 0 1 0 4.2ZM7.1 20.5H3.5V9h3.6v11.5ZM22.2 0H1.8C.8 0 0 .8 0 1.7v20.6c0 .9.8 1.7 1.8 1.7h20.4c1 0 1.8-.8 1.8-1.7V1.7C24 .8 23.2 0 22.2 0Z"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><path d="M2 5.5A2.5 2.5 0 0 1 4.5 3h15A2.5 2.5 0 0 1 22 5.5v13a2.5 2.5 0 0 1-2.5 2.5h-15A2.5 2.5 0 0 1 2 18.5v-13Zm2.4-.5L12 10.7 19.6 5H4.4ZM20 6.6l-7.4 5.6a1 1 0 0 1-1.2 0L4 6.6v11.9c0 .3.2.5.5.5h15c.3 0 .5-.2.5-.5V6.6Z"/></symbol>
+    <symbol id="i-whatsapp" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1 2.7c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3a1 1 0 0 1 1 1v9.6l3.3-3.3a1 1 0 1 1 1.4 1.4l-5 5a1 1 0 0 1-1.4 0l-5-5a1 1 0 1 1 1.4-1.4l3.3 3.3V4a1 1 0 0 1 1-1ZM4 19a1 1 0 0 1 1 1h14a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2 1 1 0 0 1 1-1Z"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M13.3 5.3a1 1 0 0 1 1.4 0l6 6a1 1 0 0 1 0 1.4l-6 6a1 1 0 0 1-1.4-1.4l4.3-4.3H4a1 1 0 1 1 0-2h13.6l-4.3-4.3a1 1 0 0 1 0-1.4Z"/></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24"><path d="M11.3 5.3a1 1 0 0 1 1.4 0l6 6a1 1 0 0 1-1.4 1.4L13 8.4V19a1 1 0 1 1-2 0V8.4l-4.3 4.3a1 1 0 0 1-1.4-1.4l6-6Z"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10Zm0-5a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1Zm0 18a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0v-1a1 1 0 0 1 1-1ZM3 11h1a1 1 0 1 1 0 2H3a1 1 0 1 1 0-2Zm17 0h1a1 1 0 1 1 0 2h-1a1 1 0 1 1 0-2ZM5.6 4.2l.7.7a1 1 0 0 1-1.4 1.4l-.7-.7a1 1 0 0 1 1.4-1.4Zm13.5 13.5.7.7a1 1 0 0 1-1.4 1.4l-.7-.7a1 1 0 0 1 1.4-1.4Zm.7-13.5a1 1 0 0 1 0 1.4l-.7.7a1 1 0 1 1-1.4-1.4l.7-.7a1 1 0 0 1 1.4 0ZM6.3 17.7a1 1 0 0 1 0 1.4l-.7.7a1 1 0 0 1-1.4-1.4l.7-.7a1 1 0 0 1 1.4 0Z"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 14.5A9 9 0 0 1 9.5 3a1 1 0 0 0-1.3-1.2A10.5 10.5 0 1 0 22.2 15.8a1 1 0 0 0-1.2-1.3Z"/></symbol>
+    <symbol id="i-brain" viewBox="0 0 24 24"><path d="M9 2a3 3 0 0 0-3 3v.2A3 3 0 0 0 4 8a3 3 0 0 0 .6 1.8A3.5 3.5 0 0 0 5 16a3 3 0 0 0 4 3.8V20a2 2 0 0 0 2 2V3.2A3 3 0 0 0 9 2Zm6 0a3 3 0 0 0-2 .8V22a2 2 0 0 0 2-2v-.2A3 3 0 0 0 19 16a3.5 3.5 0 0 0 .4-6.2A3 3 0 0 0 20 8a3 3 0 0 0-2-2.8V5a3 3 0 0 0-3-3Z"/></symbol>
+    <symbol id="i-bot" viewBox="0 0 24 24"><path d="M12 2a1.5 1.5 0 0 1 1 2.6V6h4a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3h4V4.6A1.5 1.5 0 0 1 12 2ZM9 11a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Zm6 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3ZM2 11a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1Zm20 0a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1Z"/></symbol>
+    <symbol id="i-server" viewBox="0 0 24 24"><path d="M4 3h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm2 3a1 1 0 1 0 0 2 1 1 0 0 0 0-2ZM4 13h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2Zm2 3a1 1 0 1 0 0 2 1 1 0 0 0 0-2Z"/></symbol>
+    <symbol id="i-layout" viewBox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm0 2v3h14V5H5Zm0 5v9h5v-9H5Zm7 0v9h7v-9h-7Z"/></symbol>
+    <symbol id="i-db" viewBox="0 0 24 24"><path d="M12 2c4.4 0 8 1.6 8 3.5S16.4 9 12 9 4 7.4 4 5.5 7.6 2 12 2ZM4 8.3C5.6 9.6 8.6 10.5 12 10.5s6.4-.9 8-2.2V12c0 1.9-3.6 3.5-8 3.5S4 13.9 4 12V8.3Zm0 6.5c1.6 1.3 4.6 2.2 8 2.2s6.4-.9 8-2.2v3.7C20 20.4 16.4 22 12 22s-8-1.6-8-3.5v-3.7Z"/></symbol>
+    <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M6.5 20A5.5 5.5 0 0 1 5.6 9.1 7 7 0 0 1 19 8.5a5.8 5.8 0 0 1-.8 11.5H6.5Z"/></symbol>
+    <symbol id="i-grad" viewBox="0 0 24 24"><path d="M11.5 3.1a1 1 0 0 1 1 0l10 5a1 1 0 0 1 0 1.8L21 10.6V16a1 1 0 1 1-2 0v-4.4l-6.5 3.3a1 1 0 0 1-1 0l-10-5a1 1 0 0 1 0-1.8l10-5ZM5 13.1l6.1 3a2 2 0 0 0 1.8 0l6.1-3V17c0 1.1-3.1 3-7 3s-7-1.9-7-3v-3.9Z"/></symbol>
+  </svg>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"><span></span></div>
+
+  <header class="nav">
     <div class="container nav-inner">
-      <a href="#top" class="logo">W<span>.</span>Rifay</a>
-      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-      <nav class="nav-links">
+      <a href="#top" class="logo" aria-label="Wassim Rifay, home"><span class="logo-mark">WR</span><span class="logo-text">Wassim Rifay</span></a>
+      <nav class="nav-links" id="nav-links" aria-label="Primary">
         <a href="#about">About</a>
         <a href="#skills">Skills</a>
         <a href="#experience">Experience</a>
         <a href="#projects">Projects</a>
-        <a href="#contact" class="btn btn-sm">Contact</a>
+        <a href="#contact">Contact</a>
       </nav>
+      <div class="nav-actions">
+        <button class="icon-btn theme-toggle" type="button" aria-label="Toggle dark and light theme">
+          <svg class="ic-sun"><use href="#i-sun"/></svg><svg class="ic-moon"><use href="#i-moon"/></svg>
+        </button>
+        <a href="#contact" class="btn btn-sm nav-cta">Hire me</a>
+        <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
     </div>
   </header>
 
-  <main>
+  <main id="main">
     <!-- Hero -->
-    <section class="hero">
+    <section class="hero" id="top" aria-labelledby="hero-title">
       <div class="container hero-grid">
         <div class="hero-text reveal">
-          <p class="eyebrow"><span class="dot"></span> Open to new opportunities</p>
-          <h1>Hi, I'm <span class="grad">Wassim Rifay</span></h1>
-          <h2>Full Stack Software Engineer · Aspiring AI Researcher</h2>
-          <p class="lead">I build AI-powered applications, data pipelines and production-ready backends,
-            from LLM agents and computer vision to the APIs and interfaces that ship them.</p>
+          <p class="eyebrow"><span class="dot"></span> Available for new opportunities</p>
+          <h1 id="hero-title">Hi, I'm <span class="grad">Wassim Rifay</span></h1>
+          <p class="hero-role">
+            <span class="sr-only">Full Stack Software Engineer and aspiring AI researcher.</span>
+            <span aria-hidden="true"><span class="typed" data-words='["Full Stack Software Engineer","Aspiring AI Researcher","LLM & RAG Builder","Python & FastAPI Developer"]'>Full Stack Software Engineer</span><span class="caret"></span></span>
+          </p>
+          <p class="lead">I'm driven by a passion for learning, innovation and problem-solving. I build AI-powered applications,
+            data pipelines and production-ready backends, from LLM agents and computer vision to the APIs and interfaces that ship them.</p>
           <div class="hero-cta">
-            <a href="#contact" class="btn">Get in touch</a>
-            <a href="assets/Wassim-Rifay-CV.pdf" class="btn btn-ghost" download>Download CV</a>
+            <a href="#contact" class="btn">Let's talk <svg><use href="#i-arrow"/></svg></a>
+            <a href="assets/Wassim-Rifay-CV.pdf" class="btn btn-link" download>Download CV <svg><use href="#i-download"/></svg></a>
           </div>
-          <div class="socials">
-            <a href="https://github.com/w2001-RF" target="_blank" rel="noopener" aria-label="GitHub">
-              <svg viewBox="0 0 24 24"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .5Z"/></svg>
-            </a>
-            <a href="https://www.linkedin.com/in/wassim-rifay-8a33371a3/" target="_blank" rel="noopener" aria-label="LinkedIn">
-              <svg viewBox="0 0 24 24"><path d="M20.4 20.5h-3.6v-5.6c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9v5.7H9.3V9h3.4v1.6h.1c.5-.9 1.6-1.8 3.4-1.8 3.6 0 4.3 2.4 4.3 5.5v6.2ZM5.3 7.4a2.1 2.1 0 1 1 0-4.2 2.1 2.1 0 0 1 0 4.2ZM7.1 20.5H3.5V9h3.6v11.5ZM22.2 0H1.8C.8 0 0 .8 0 1.7v20.6c0 .9.8 1.7 1.8 1.7h20.4c1 0 1.8-.8 1.8-1.7V1.7C24 .8 23.2 0 22.2 0Z"/></svg>
-            </a>
-            <a href="mailto:rifaywassim@gmail.com" aria-label="Email">
-              <svg viewBox="0 0 24 24"><path d="M2 5.5A2.5 2.5 0 0 1 4.5 3h15A2.5 2.5 0 0 1 22 5.5v13a2.5 2.5 0 0 1-2.5 2.5h-15A2.5 2.5 0 0 1 2 18.5v-13Zm2.4-.5L12 10.7 19.6 5H4.4ZM20 6.6l-7.4 5.6a1 1 0 0 1-1.2 0L4 6.6v11.9c0 .3.2.5.5.5h15c.3 0 .5-.2.5-.5V6.6Z"/></svg>
-            </a>
-            <a href="https://wa.me/212631367496" target="_blank" rel="noopener" aria-label="WhatsApp">
-              <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1 2.7c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>
-            </a>
-          </div>
+          <ul class="socials" aria-label="Social profiles">
+            <li><a href="https://github.com/w2001-RF" target="_blank" rel="noopener me" aria-label="GitHub"><svg><use href="#i-github"/></svg></a></li>
+            <li><a href="https://www.linkedin.com/in/wassim-rifay-8a33371a3/" target="_blank" rel="noopener me" aria-label="LinkedIn"><svg><use href="#i-linkedin"/></svg></a></li>
+            <li><a href="mailto:rifaywassim@gmail.com" aria-label="Email"><svg><use href="#i-mail"/></svg></a></li>
+            <li><a href="https://wa.me/212631367496" target="_blank" rel="noopener" aria-label="WhatsApp"><svg><use href="#i-whatsapp"/></svg></a></li>
+          </ul>
         </div>
         <div class="hero-photo reveal">
-          <div class="photo-ring">
-            <img src="assets/wassim.jpg" alt="Portrait of Wassim Rifay" width="1138" height="1600">
+          <div class="photo-frame">
+            <img src="assets/wassim.jpg" alt="Wassim Rifay, Full Stack Software Engineer" width="1138" height="1600" fetchpriority="high" decoding="async">
           </div>
-          <div class="float-card fc-1"><strong>2+</strong><span>years of industry experience</span></div>
-          <div class="float-card fc-2"><span class="mono">import torch</span><span>AI · LLM · MLOps</span></div>
+          <div class="float-card fc-1"><strong>2+</strong><span>years building<br>production software</span></div>
+          <div class="float-card fc-2"><code>model.fit()</code><span>AI · LLM · MLOps</span></div>
+          <div class="float-card fc-3"><svg><use href="#i-pin"/></svg><span>Kenitra, Morocco</span></div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="trusted reveal">
+          <p>Experience with</p>
+          <ul>
+            <li>Orange Business</li>
+            <li>Artéka</li>
+            <li>OCP Group</li>
+            <li>Dell Technologies Competition</li>
+          </ul>
         </div>
       </div>
     </section>
 
     <!-- About -->
-    <section id="about" class="section">
+    <section id="about" class="section" aria-labelledby="about-title">
       <div class="container about-grid">
         <div class="reveal">
           <p class="section-tag">About me</p>
-          <h3 class="section-title">Driven by learning, innovation &amp; problem-solving</h3>
+          <h2 class="section-title" id="about-title">Driven by learning, innovation &amp; problem-solving</h2>
+          <ul class="about-facts">
+            <li><svg><use href="#i-pin"/></svg> Kenitra, Morocco (UTC+00:00)</li>
+            <li><svg><use href="#i-grad"/></svg> Engineering degree, ENSA Kénitra</li>
+            <li><svg><use href="#i-brain"/></svg> French · Arabic · English</li>
+          </ul>
         </div>
         <div class="reveal">
-          <p>I’m a passionate <strong>Full Stack Software Engineer</strong> and <strong>aspiring AI researcher</strong>. I’m driven by a passion for learning, innovation, and problem-solving.</p>
-          <p>I hold an Engineering degree in Computer Science from
-            <strong>ENSA Kénitra</strong>. I work across the stack, from machine learning models and LLM agents
+          <p>I'm a passionate <strong>Full Stack Software Engineer</strong> and <strong>aspiring AI researcher</strong>. I'm driven by a passion for learning, innovation, and problem-solving.</p>
+          <p>I hold an Engineering degree in Computer Science from <strong>ENSA Kénitra</strong>. I work across the stack, from machine learning models and LLM agents
             to backend services, web interfaces and the CI/CD pipelines that deliver them.</p>
           <p>I currently work at <strong>Orange Business</strong>, building business web applications and an
             internal AI chatbot. I care about software quality, performance and measurable impact.</p>
-          <div class="stats">
-            <div><strong>30%</strong><span>faster ticket processing</span></div>
-            <div><strong>5+</strong><span>AI &amp; software projects</span></div>
-            <div><strong>3</strong><span>languages spoken</span></div>
-          </div>
+          <dl class="stats">
+            <div><dt>faster ticket processing</dt><dd><span class="count" data-to="30">30</span>%</dd></div>
+            <div><dt>AI &amp; software projects</dt><dd><span class="count" data-to="9">9</span>+</dd></div>
+            <div><dt>internships &amp; roles</dt><dd><span class="count" data-to="5">5</span></dd></div>
+          </dl>
         </div>
       </div>
     </section>
 
     <!-- Skills -->
-    <section id="skills" class="section section-alt">
+    <section id="skills" class="section section-alt" aria-labelledby="skills-title">
       <div class="container">
-        <div class="reveal center">
+        <header class="section-head reveal">
           <p class="section-tag">Tech stack</p>
-          <h3 class="section-title">Skills &amp; tools</h3>
-        </div>
+          <h2 class="section-title" id="skills-title">Skills &amp; tools</h2>
+          <p class="section-sub">From research notebooks to production systems: the tools I use to design, build and ship.</p>
+        </header>
         <div class="skills-grid">
-          <div class="card reveal">
-            <div class="card-icon">🧠</div>
-            <h4>AI &amp; Machine Learning</h4>
-            <div class="tags"><span>PyTorch</span><span>TensorFlow</span><span>Scikit-learn</span><span>Computer Vision</span><span>Deep Learning</span><span>NLP</span><span>YOLOv8</span><span>VGG16</span></div>
-          </div>
-          <div class="card reveal">
-            <div class="card-icon">🤖</div>
-            <h4>AI Agents &amp; LLM</h4>
-            <div class="tags"><span>LangChain</span><span>CrewAI</span><span>LLaMA 3</span><span>RAG</span><span>ChromaDB</span><span>Prompt Engineering</span></div>
-          </div>
-          <div class="card reveal">
-            <div class="card-icon">⚙️</div>
-            <h4>Backend &amp; APIs</h4>
-            <div class="tags"><span>FastAPI</span><span>Flask</span><span>Django</span><span>Spring Boot</span><span>ASP.NET</span><span>REST APIs</span><span>Microservices</span></div>
-          </div>
-          <div class="card reveal">
-            <div class="card-icon">🎨</div>
-            <h4>Frontend</h4>
-            <div class="tags"><span>React.js</span><span>Next.js</span><span>Vue.js</span><span>Angular</span><span>TypeScript</span><span>HTML5</span><span>CSS3</span></div>
-          </div>
-          <div class="card reveal">
-            <div class="card-icon">🗄️</div>
-            <h4>Data &amp; Databases</h4>
-            <div class="tags"><span>PostgreSQL</span><span>MySQL</span><span>MariaDB</span><span>MongoDB</span><span>SQL Server</span><span>Spark</span><span>Hadoop</span><span>Talend</span><span>Power BI</span></div>
-          </div>
-          <div class="card reveal">
-            <div class="card-icon">☁️</div>
-            <h4>MLOps, Cloud &amp; DevOps</h4>
-            <div class="tags"><span>AWS</span><span>Docker</span><span>GitLab CI/CD</span><span>Airflow</span><span>MLflow</span><span>DVC</span><span>Kafka</span><span>Linux</span><span>Nginx</span><span>ELK Stack</span></div>
-          </div>
+          <article class="card reveal">
+            <div class="card-icon"><svg><use href="#i-brain"/></svg></div>
+            <h3>AI &amp; Machine Learning</h3>
+            <ul class="tags"><li>PyTorch</li><li>TensorFlow</li><li>Scikit-learn</li><li>Computer Vision</li><li>Deep Learning</li><li>NLP</li><li>YOLOv8</li><li>VGG16</li></ul>
+          </article>
+          <article class="card reveal">
+            <div class="card-icon"><svg><use href="#i-bot"/></svg></div>
+            <h3>AI Agents &amp; LLM</h3>
+            <ul class="tags"><li>LangChain</li><li>CrewAI</li><li>LLaMA 3</li><li>RAG</li><li>ChromaDB</li><li>Prompt Engineering</li></ul>
+          </article>
+          <article class="card reveal">
+            <div class="card-icon"><svg><use href="#i-server"/></svg></div>
+            <h3>Backend &amp; APIs</h3>
+            <ul class="tags"><li>FastAPI</li><li>Flask</li><li>Django</li><li>Spring Boot</li><li>ASP.NET</li><li>REST APIs</li><li>Microservices</li></ul>
+          </article>
+          <article class="card reveal">
+            <div class="card-icon"><svg><use href="#i-layout"/></svg></div>
+            <h3>Frontend</h3>
+            <ul class="tags"><li>React.js</li><li>Next.js</li><li>Vue.js</li><li>Angular</li><li>TypeScript</li><li>HTML5</li><li>CSS3</li></ul>
+          </article>
+          <article class="card reveal">
+            <div class="card-icon"><svg><use href="#i-db"/></svg></div>
+            <h3>Data &amp; Databases</h3>
+            <ul class="tags"><li>PostgreSQL</li><li>MySQL</li><li>MariaDB</li><li>MongoDB</li><li>SQL Server</li><li>Spark</li><li>Hadoop</li><li>Talend</li><li>Power BI</li></ul>
+          </article>
+          <article class="card reveal">
+            <div class="card-icon"><svg><use href="#i-cloud"/></svg></div>
+            <h3>MLOps, Cloud &amp; DevOps</h3>
+            <ul class="tags"><li>AWS</li><li>Docker</li><li>GitLab CI/CD</li><li>Airflow</li><li>MLflow</li><li>DVC</li><li>Kafka</li><li>Linux</li><li>Nginx</li><li>ELK Stack</li></ul>
+          </article>
         </div>
-        <div class="langs reveal">
-          <span class="mono">languages:</span>
-          <span>Python</span><span>JavaScript</span><span>TypeScript</span><span>PHP</span><span>Java</span><span>SQL</span><span>C/C++</span><span>C#</span>
+        <div class="marquee reveal" aria-label="Programming languages">
+          <ul class="marquee-track">
+            <li>Python</li><li>JavaScript</li><li>TypeScript</li><li>PHP</li><li>Java</li><li>SQL</li><li>C/C++</li><li>C#</li>
+            <li aria-hidden="true">Python</li><li aria-hidden="true">JavaScript</li><li aria-hidden="true">TypeScript</li><li aria-hidden="true">PHP</li><li aria-hidden="true">Java</li><li aria-hidden="true">SQL</li><li aria-hidden="true">C/C++</li><li aria-hidden="true">C#</li>
+          </ul>
         </div>
       </div>
     </section>
 
     <!-- Experience -->
-    <section id="experience" class="section">
+    <section id="experience" class="section" aria-labelledby="exp-title">
       <div class="container">
-        <div class="reveal center">
+        <header class="section-head reveal">
           <p class="section-tag">Career</p>
-          <h3 class="section-title">Professional experience</h3>
-        </div>
+          <h2 class="section-title" id="exp-title">Professional experience</h2>
+        </header>
         <ol class="timeline">
           <li class="reveal">
-            <div class="tl-date">Jan 2025 — Present</div>
-            <div class="tl-body">
-              <h4>Full Stack Engineer <span>@ Orange Business, Morocco</span></h4>
+            <time class="tl-date" datetime="2025-01">Jan 2025 — Present</time>
+            <article class="tl-body">
+              <h3>Full Stack Engineer <span>Orange Business · Morocco</span></h3>
               <ul>
                 <li>Design and develop business web applications using Python, PHP, JavaScript and SQL.</li>
                 <li>Optimized SQL/MariaDB queries and processing, contributing to an estimated <strong>30% reduction in ticket processing time</strong>.</li>
@@ -159,63 +269,63 @@
                 <li>Implemented authentication, role-based access control and permission management.</li>
                 <li>Delivered through Git/GitLab, Docker and CI/CD in an Agile team, with code reviews and technical documentation.</li>
               </ul>
-              <div class="tags sm"><span>Python</span><span>PHP</span><span>JavaScript</span><span>MariaDB</span><span>Docker</span><span>CI/CD</span></div>
-            </div>
+              <ul class="tags sm"><li>Python</li><li>PHP</li><li>JavaScript</li><li>MariaDB</li><li>Docker</li><li>CI/CD</li></ul>
+            </article>
           </li>
           <li class="reveal">
-            <div class="tl-date">Oct 2024 — Jan 2025</div>
-            <div class="tl-body">
-              <h4>Software Engineer / AI Intern <span>@ Artéka, Amiens, France (Remote)</span></h4>
+            <time class="tl-date" datetime="2024-10">Oct 2024 — Jan 2025</time>
+            <article class="tl-body">
+              <h3>Software Engineer / AI Intern <span>Artéka · Amiens, France (Remote)</span></h3>
               <ul>
                 <li>Developed FastAPI services exposing computer vision capabilities through production REST APIs.</li>
                 <li>Contributed to an AI solution for <strong>player re-identification</strong> using computer vision.</li>
                 <li>Implemented a real-time data streaming pipeline with <strong>Apache Kafka</strong>.</li>
                 <li>Set up CI/CD workflows and deployed services on <strong>AWS</strong>.</li>
               </ul>
-              <div class="tags sm"><span>Python</span><span>FastAPI</span><span>Computer Vision</span><span>Kafka</span><span>AWS</span></div>
-            </div>
+              <ul class="tags sm"><li>Python</li><li>FastAPI</li><li>Computer Vision</li><li>Kafka</li><li>AWS</li></ul>
+            </article>
           </li>
           <li class="reveal">
-            <div class="tl-date">Feb 2024 — Oct 2024</div>
-            <div class="tl-body">
-              <h4>PFE Intern, Backend / AI Engineer <span>@ Orange Business, Salé</span></h4>
+            <time class="tl-date" datetime="2024-02">Feb 2024 — Oct 2024</time>
+            <article class="tl-body">
+              <h3>PFE Intern, Backend / AI Engineer <span>Orange Business · Salé</span></h3>
               <ul>
                 <li>Built Python automation scripts for VoIP invoice validation and data processing.</li>
                 <li>Designed REST APIs with Flask for backend services.</li>
                 <li>Contributed to an <strong>MLOps pipeline</strong> for customer detection with Airflow, MLflow and DVC.</li>
                 <li>Implemented monitoring with the ELK Stack and containerized services with Docker.</li>
               </ul>
-              <div class="tags sm"><span>Flask</span><span>Airflow</span><span>MLflow</span><span>DVC</span><span>MongoDB</span><span>ELK</span></div>
-            </div>
+              <ul class="tags sm"><li>Flask</li><li>Airflow</li><li>MLflow</li><li>DVC</li><li>MongoDB</li><li>ELK</li></ul>
+            </article>
           </li>
           <li class="reveal">
-            <div class="tl-date">Jun 2023 — Aug 2023</div>
-            <div class="tl-body">
-              <h4>AI / Machine Learning Intern <span>@ OCP, Morocco</span></h4>
+            <time class="tl-date" datetime="2023-06">Jun 2023 — Aug 2023</time>
+            <article class="tl-body">
+              <h3>AI / Machine Learning Intern <span>OCP · Morocco</span></h3>
               <ul>
                 <li>Developed a predictive maintenance model from infrared thermal images and vibration signals.</li>
                 <li>Built an API and interactive interface to expose model predictions.</li>
               </ul>
-              <div class="tags sm"><span>TensorFlow</span><span>FastAPI</span><span>Streamlit</span></div>
-            </div>
+              <ul class="tags sm"><li>TensorFlow</li><li>FastAPI</li><li>Streamlit</li></ul>
+            </article>
           </li>
           <li class="reveal">
-            <div class="tl-date">Jun 2022 — Aug 2022</div>
-            <div class="tl-body">
-              <h4>Data Science Intern <span>@ Telecom Industry, Morocco</span></h4>
+            <time class="tl-date" datetime="2022-06">Jun 2022 — Aug 2022</time>
+            <article class="tl-body">
+              <h3>Data Science Intern <span>Telecom Industry · Morocco</span></h3>
               <ul>
                 <li>Built sales forecasting models for SIM cards, dealers and scratch cards across three Moroccan telecom operators.</li>
                 <li>Data analysis and visualization with Python, Scikit-learn, R and Power BI.</li>
               </ul>
-              <div class="tags sm"><span>Scikit-learn</span><span>R</span><span>Power BI</span></div>
-            </div>
+              <ul class="tags sm"><li>Scikit-learn</li><li>R</li><li>Power BI</li></ul>
+            </article>
           </li>
         </ol>
 
         <div class="edu reveal">
-          <div class="card-icon">🎓</div>
+          <div class="card-icon"><svg><use href="#i-grad"/></svg></div>
           <div>
-            <h4>Engineering Degree (Master's equivalent), Computer Science</h4>
+            <h3>Engineering Degree (Master's equivalent), Computer Science</h3>
             <p>ENSA Kénitra, Morocco · 2019 — 2024</p>
           </div>
         </div>
@@ -223,125 +333,155 @@
     </section>
 
     <!-- Projects -->
-    <section id="projects" class="section section-alt">
+    <section id="projects" class="section section-alt" aria-labelledby="projects-title">
       <div class="container">
-        <div class="reveal center">
+        <header class="section-head reveal">
           <p class="section-tag">Portfolio</p>
-          <h3 class="section-title">Featured projects</h3>
+          <h2 class="section-title" id="projects-title">Featured projects</h2>
+          <p class="section-sub">A selection of AI, full-stack and 3D web work, from competitions and internships to personal builds.</p>
+        </header>
+        <div class="filters reveal" role="group" aria-label="Filter projects">
+          <button type="button" class="chip active" data-filter="all" aria-pressed="true">All</button>
+          <button type="button" class="chip" data-filter="ai" aria-pressed="false">AI &amp; ML</button>
+          <button type="button" class="chip" data-filter="web" aria-pressed="false">Full Stack</button>
+          <button type="button" class="chip" data-filter="3d" aria-pressed="false">3D &amp; Games</button>
         </div>
         <div class="projects-grid">
-          <article class="project reveal">
+          <article class="project reveal" data-cat="ai">
             <div class="project-head"><span class="badge">AI / LLM</span><span class="year">2024</span></div>
-            <h4>Intelligent Medical Assistant</h4>
+            <h3>Intelligent Medical Assistant</h3>
             <p>Dell Technologies Competition. A medical assistant combining LLaMA 3, Retrieval-Augmented Generation and computer vision for document retrieval and image analysis.</p>
-            <div class="tags sm"><span>LLaMA 3</span><span>LangChain</span><span>RAG</span><span>ChromaDB</span><span>YOLOv8</span><span>Next.js</span></div>
+            <ul class="tags sm"><li>LLaMA 3</li><li>LangChain</li><li>RAG</li><li>ChromaDB</li><li>YOLOv8</li><li>Next.js</li></ul>
           </article>
-          <article class="project reveal">
+          <article class="project reveal" data-cat="web">
             <div class="project-head"><span class="badge">Full Stack</span><span class="year">2025 — 2026</span></div>
-            <h4>Student Records Management Platform</h4>
+            <h3>Student Records Management Platform</h3>
             <p>Web platform managing the full lifecycle of student records, with scheduled processing, SFTP document exchange and notification workflows.</p>
-            <div class="tags sm"><span>Flask</span><span>React</span><span>PostgreSQL</span><span>Docker</span><span>Nginx</span><span>MinIO</span></div>
+            <ul class="tags sm"><li>Flask</li><li>React</li><li>PostgreSQL</li><li>Docker</li><li>Nginx</li><li>MinIO</li></ul>
           </article>
-          <article class="project reveal">
+          <article class="project reveal" data-cat="ai">
             <div class="project-head"><span class="badge">Machine Learning</span><span class="year">2023</span></div>
-            <h4>Predictive Maintenance, OCP</h4>
+            <h3>Predictive Maintenance, OCP</h3>
             <p>Predictive maintenance for industrial stacker machines from infrared thermal data and vibration signals, served through an API and an interactive UI.</p>
-            <div class="tags sm"><span>TensorFlow</span><span>FastAPI</span><span>Streamlit</span></div>
-            <a class="project-link" href="https://github.com/w2001-RF/MotorFaultsStateClassification" target="_blank" rel="noopener">View code →</a>
+            <ul class="tags sm"><li>TensorFlow</li><li>FastAPI</li><li>Streamlit</li></ul>
+            <a class="project-link" href="https://github.com/w2001-RF/MotorFaultsStateClassification" target="_blank" rel="noopener">View code <svg><use href="#i-arrow"/></svg></a>
           </article>
-          <article class="project reveal">
+          <article class="project reveal" data-cat="ai">
             <div class="project-head"><span class="badge">Deep Learning</span><span class="year">2023</span></div>
-            <h4>Emotion Detection Application</h4>
+            <h3>Emotion Detection Application</h3>
             <p>Image-based emotion recognition using deep learning (VGG16 transfer learning) and OpenCV, with a desktop interface.</p>
-            <div class="tags sm"><span>TensorFlow</span><span>Keras</span><span>VGG16</span><span>OpenCV</span></div>
+            <ul class="tags sm"><li>TensorFlow</li><li>Keras</li><li>VGG16</li><li>OpenCV</li></ul>
           </article>
-          <article class="project reveal">
-            <div class="project-head"><span class="badge">3D / Web</span><span class="year">GitHub</span></div>
-            <h4>Wood Depot, 3D Catalogue</h4>
+          <article class="project reveal" data-cat="3d web">
+            <div class="project-head"><span class="badge">3D / Web</span><span class="year">Open source</span></div>
+            <h3>Wood Depot, 3D Catalogue</h3>
             <p>Interactive SPA where a procedural 3D timber yard is the catalogue. Visitors inspect products, build a cart and send a quote on WhatsApp.</p>
-            <div class="tags sm"><span>TypeScript</span><span>Three.js</span><span>SPA</span></div>
-            <a class="project-link" href="https://github.com/w2001-RF/wood-depot" target="_blank" rel="noopener">View code →</a>
+            <ul class="tags sm"><li>TypeScript</li><li>Three.js</li><li>SPA</li></ul>
+            <a class="project-link" href="https://github.com/w2001-RF/wood-depot" target="_blank" rel="noopener">View code <svg><use href="#i-arrow"/></svg></a>
           </article>
-          <article class="project reveal">
-            <div class="project-head"><span class="badge">GIS</span><span class="year">GitHub</span></div>
-            <h4>TopoGIS 3D</h4>
+          <article class="project reveal" data-cat="3d web">
+            <div class="project-head"><span class="badge">GIS</span><span class="year">Open source</span></div>
+            <h3>TopoGIS 3D</h3>
             <p>Topographic survey and analysis tool: GPS, OpenStreetMap buildings, parcels, measurements, contour lines and elevation profiles, all in a single file.</p>
-            <div class="tags sm"><span>JavaScript</span><span>OSM</span><span>3D</span></div>
-            <a class="project-link" href="https://github.com/w2001-RF/topoGIS-3D" target="_blank" rel="noopener">View code →</a>
+            <ul class="tags sm"><li>JavaScript</li><li>OpenStreetMap</li><li>3D</li></ul>
+            <a class="project-link" href="https://github.com/w2001-RF/topoGIS-3D" target="_blank" rel="noopener">View code <svg><use href="#i-arrow"/></svg></a>
           </article>
-          <article class="project reveal">
-            <div class="project-head"><span class="badge">Automation</span><span class="year">GitHub</span></div>
-            <h4>Katib Oumoumi</h4>
+          <article class="project reveal" data-cat="web">
+            <div class="project-head"><span class="badge">Automation</span><span class="year">Open source</span></div>
+            <h3>Katib Oumoumi</h3>
             <p>Generates Moroccan administrative documents (complaints, powers of attorney, contracts) in Word and PDF from admin templates and dynamic forms.</p>
-            <div class="tags sm"><span>TypeScript</span><span>Document Gen</span></div>
-            <a class="project-link" href="https://github.com/w2001-RF/katib-oumoumi" target="_blank" rel="noopener">View code →</a>
+            <ul class="tags sm"><li>TypeScript</li><li>Document generation</li></ul>
+            <a class="project-link" href="https://github.com/w2001-RF/katib-oumoumi" target="_blank" rel="noopener">View code <svg><use href="#i-arrow"/></svg></a>
           </article>
-          <article class="project reveal">
-            <div class="project-head"><span class="badge">Game / 3D</span><span class="year">GitHub</span></div>
-            <h4>Fidaa</h4>
+          <article class="project reveal" data-cat="3d">
+            <div class="project-head"><span class="badge">Game / 3D</span><span class="year">Open source</span></div>
+            <h3>Fidaa</h3>
             <p>A third-person survival open-world RPG built in Three.js, set in Morocco in autumn 1945.</p>
-            <div class="tags sm"><span>TypeScript</span><span>Three.js</span><span>WebGL</span></div>
-            <a class="project-link" href="https://github.com/w2001-RF/Fidaa" target="_blank" rel="noopener">View code →</a>
+            <ul class="tags sm"><li>TypeScript</li><li>Three.js</li><li>WebGL</li></ul>
+            <a class="project-link" href="https://github.com/w2001-RF/Fidaa" target="_blank" rel="noopener">View code <svg><use href="#i-arrow"/></svg></a>
           </article>
-          <article class="project reveal">
-            <div class="project-head"><span class="badge">Chatbot</span><span class="year">GitHub</span></div>
-            <h4>Telegram ChatGPT Bot</h4>
+          <article class="project reveal" data-cat="ai">
+            <div class="project-head"><span class="badge">Chatbot</span><span class="year">Open source</span></div>
+            <h3>Telegram ChatGPT Bot</h3>
             <p>A Python Telegram chat bot powered by OpenAI's ChatGPT language model.</p>
-            <div class="tags sm"><span>Python</span><span>OpenAI</span><span>Telegram API</span></div>
-            <a class="project-link" href="https://github.com/w2001-RF/TelegramChatBotWithChatGPT" target="_blank" rel="noopener">View code →</a>
+            <ul class="tags sm"><li>Python</li><li>OpenAI</li><li>Telegram API</li></ul>
+            <a class="project-link" href="https://github.com/w2001-RF/TelegramChatBotWithChatGPT" target="_blank" rel="noopener">View code <svg><use href="#i-arrow"/></svg></a>
           </article>
         </div>
         <div class="center reveal">
-          <a href="https://github.com/w2001-RF?tab=repositories" target="_blank" rel="noopener" class="btn btn-ghost">See all repositories on GitHub</a>
+          <a href="https://github.com/w2001-RF?tab=repositories" target="_blank" rel="noopener" class="btn btn-ghost"><svg><use href="#i-github"/></svg> See all repositories</a>
         </div>
       </div>
     </section>
 
-    <!-- Contact -->
-    <section id="contact" class="section">
-      <div class="container">
-        <div class="reveal center">
-          <p class="section-tag">Contact</p>
-          <h3 class="section-title">Let's work together</h3>
-          <p class="muted narrow">Have a project, a role or a question? Send me a message by email or WhatsApp and I'll get back to you quickly.</p>
+    <!-- CTA band -->
+    <section class="cta-band" aria-label="Call to action">
+      <div class="container cta-inner reveal">
+        <div>
+          <h2>Have a project or a role in mind?</h2>
+          <p>I'm open to full-time roles, freelance missions and AI collaborations.</p>
         </div>
+        <a href="#contact" class="btn btn-light">Start a conversation <svg><use href="#i-arrow"/></svg></a>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="section" aria-labelledby="contact-title">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="section-tag">Contact</p>
+          <h2 class="section-title" id="contact-title">Let's work together</h2>
+          <p class="section-sub">Send me a message by email or WhatsApp and I'll get back to you quickly.</p>
+        </header>
         <div class="contact-grid">
-          <div class="contact-cards reveal">
+          <address class="contact-cards reveal">
             <a class="contact-card" href="mailto:rifaywassim@gmail.com">
-              <span class="ci ci-mail"><svg viewBox="0 0 24 24"><path d="M2 5.5A2.5 2.5 0 0 1 4.5 3h15A2.5 2.5 0 0 1 22 5.5v13a2.5 2.5 0 0 1-2.5 2.5h-15A2.5 2.5 0 0 1 2 18.5v-13Zm2.4-.5L12 10.7 19.6 5H4.4ZM20 6.6l-7.4 5.6a1 1 0 0 1-1.2 0L4 6.6v11.9c0 .3.2.5.5.5h15c.3 0 .5-.2.5-.5V6.6Z"/></svg></span>
+              <span class="ci ci-mail"><svg><use href="#i-mail"/></svg></span>
               <span><strong>Email</strong><small>rifaywassim@gmail.com</small></span>
             </a>
             <a class="contact-card" href="https://wa.me/212631367496" target="_blank" rel="noopener">
-              <span class="ci ci-wa"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1 2.7c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg></span>
+              <span class="ci ci-wa"><svg><use href="#i-whatsapp"/></svg></span>
               <span><strong>WhatsApp</strong><small>+212 631 367 496</small></span>
             </a>
             <a class="contact-card" href="https://www.linkedin.com/in/wassim-rifay-8a33371a3/" target="_blank" rel="noopener">
-              <span class="ci ci-li"><svg viewBox="0 0 24 24"><path d="M20.4 20.5h-3.6v-5.6c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9v5.7H9.3V9h3.4v1.6h.1c.5-.9 1.6-1.8 3.4-1.8 3.6 0 4.3 2.4 4.3 5.5v6.2ZM5.3 7.4a2.1 2.1 0 1 1 0-4.2 2.1 2.1 0 0 1 0 4.2ZM7.1 20.5H3.5V9h3.6v11.5ZM22.2 0H1.8C.8 0 0 .8 0 1.7v20.6c0 .9.8 1.7 1.8 1.7h20.4c1 0 1.8-.8 1.8-1.7V1.7C24 .8 23.2 0 22.2 0Z"/></svg></span>
+              <span class="ci ci-li"><svg><use href="#i-linkedin"/></svg></span>
               <span><strong>LinkedIn</strong><small>in/wassim-rifay-8a33371a3</small></span>
             </a>
             <div class="contact-card static">
-              <span class="ci ci-loc"><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg></span>
+              <span class="ci ci-loc"><svg><use href="#i-pin"/></svg></span>
               <span><strong>Location</strong><small>Kenitra, Morocco (UTC +00:00)</small></span>
             </div>
-          </div>
+          </address>
 
           <form class="contact-form reveal" id="contact-form" novalidate>
             <div class="row">
-              <label>Your name<input type="text" name="name" required placeholder="John Doe"></label>
-              <label>Your email<input type="email" name="email" placeholder="john@company.com"></label>
+              <div class="field">
+                <input type="text" id="f-name" name="name" required autocomplete="name" placeholder=" ">
+                <label for="f-name">Your name</label>
+              </div>
+              <div class="field">
+                <input type="email" id="f-email" name="email" autocomplete="email" placeholder=" ">
+                <label for="f-email">Your email</label>
+              </div>
             </div>
-            <label>Subject<input type="text" name="subject" placeholder="Job opportunity, project, collaboration…"></label>
-            <label>Message<textarea name="message" rows="5" required maxlength="5000" placeholder="Hi Wassim, …"></textarea></label>
+            <div class="field">
+              <input type="text" id="f-subject" name="subject" placeholder=" ">
+              <label for="f-subject">Subject (job, project, collaboration…)</label>
+            </div>
+            <div class="field">
+              <textarea id="f-message" name="message" rows="5" required maxlength="5000" placeholder=" "></textarea>
+              <label for="f-message">Your message</label>
+            </div>
             <label class="hp" aria-hidden="true">Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
             <p class="form-error" id="form-error" role="alert"></p>
             <p class="form-success" id="form-success" role="status"></p>
             <div class="form-actions">
               <button type="submit" class="btn" data-channel="email" id="send-email">
-                <svg viewBox="0 0 24 24"><path d="M2 5.5A2.5 2.5 0 0 1 4.5 3h15A2.5 2.5 0 0 1 22 5.5v13a2.5 2.5 0 0 1-2.5 2.5h-15A2.5 2.5 0 0 1 2 18.5v-13Zm2.4-.5L12 10.7 19.6 5H4.4ZM20 6.6l-7.4 5.6a1 1 0 0 1-1.2 0L4 6.6v11.9c0 .3.2.5.5.5h15c.3 0 .5-.2.5-.5V6.6Z"/></svg>
+                <svg><use href="#i-mail"/></svg>
                 <span>Send message</span>
               </button>
               <button type="submit" class="btn btn-wa" data-channel="whatsapp">
-                <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1 2.7c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>
+                <svg><use href="#i-whatsapp"/></svg>
                 Send via WhatsApp
               </button>
             </div>
@@ -351,17 +491,31 @@
     </section>
   </main>
 
-  <a class="wa-float" href="https://wa.me/212631367496" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
-    <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1 2.7c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>
-  </a>
+  <div class="floating">
+    <a class="to-top" href="#top" aria-label="Back to top"><svg><use href="#i-up"/></svg></a>
+    <a class="wa-float" href="https://wa.me/212631367496" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><svg><use href="#i-whatsapp"/></svg></a>
+  </div>
 
   <footer class="footer">
     <div class="container footer-inner">
-      <p>© <span id="year"></span> Wassim Rifay · Full Stack Software Engineer</p>
-      <a href="#top">Back to top ↑</a>
+      <div>
+        <a href="#top" class="logo"><span class="logo-mark">WR</span><span class="logo-text">Wassim Rifay</span></a>
+        <p>Full Stack Software Engineer &amp; aspiring AI researcher, based in Kenitra, Morocco.</p>
+      </div>
+      <nav aria-label="Footer">
+        <a href="#about">About</a><a href="#skills">Skills</a><a href="#experience">Experience</a><a href="#projects">Projects</a><a href="#contact">Contact</a>
+      </nav>
+      <ul class="socials">
+        <li><a href="https://github.com/w2001-RF" target="_blank" rel="noopener" aria-label="GitHub"><svg><use href="#i-github"/></svg></a></li>
+        <li><a href="https://www.linkedin.com/in/wassim-rifay-8a33371a3/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg><use href="#i-linkedin"/></svg></a></li>
+        <li><a href="mailto:rifaywassim@gmail.com" aria-label="Email"><svg><use href="#i-mail"/></svg></a></li>
+      </ul>
+    </div>
+    <div class="container footer-bottom">
+      <p>© <span id="year">2026</span> Wassim Rifay. All rights reserved.</p>
     </div>
   </footer>
 
-  <script src="main.js"></script>
+  <script src="main.js" defer></script>
 </body>
 </html>

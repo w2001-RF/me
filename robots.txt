@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://w2001-rf.github.io/sitemap.xml
