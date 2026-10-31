@@ -10,6 +10,7 @@
   "profile": {
     "firstName": "Wassim",
     "lastName": "Rifay",
+    "headline": "AI-powered software, *built end to end.*",
     "jobTitle": "Full Stack Software Engineer",
     "description": "Passionate Full Stack Software Engineer and aspiring AI researcher, driven by learning, innovation and problem-solving.",
     "availability": "Available for new opportunities",
@@ -69,7 +70,7 @@
     "Dell Technologies Competition"
   ],
   "about": {
-    "title": "Driven by learning, innovation & problem-solving",
+    "title": "Driven by learning, *innovation & problem-solving.*",
     "facts": [
       "Kenitra, Morocco (UTC+00:00)",
       "Engineering degree, ENSA Kénitra",
@@ -79,6 +80,28 @@
       "I'm a passionate **Full Stack Software Engineer** and **aspiring AI researcher**. I'm driven by a passion for learning, innovation, and problem-solving.",
       "I hold an Engineering degree in Computer Science from **ENSA Kénitra**. I work across the stack, from machine learning models and LLM agents to backend services, web interfaces and the CI/CD pipelines that deliver them.",
       "I currently work at **Orange Business**, building business web applications and an internal AI chatbot. I care about software quality, performance and measurable impact."
+    ],
+    "services": [
+      {
+        "icon": "bot",
+        "title": "LLM & RAG apps",
+        "text": "Assistants and agents grounded in your own data, with LangChain, LlamaIndex and local or hosted models."
+      },
+      {
+        "icon": "brain",
+        "title": "Machine learning & vision",
+        "text": "Models that go from notebook to production: forecasting, classification and YOLO-based computer vision."
+      },
+      {
+        "icon": "server",
+        "title": "Backends & APIs",
+        "text": "FastAPI, Flask and Django services with authentication, roles and clean, documented REST APIs."
+      },
+      {
+        "icon": "layout",
+        "title": "Full-stack web",
+        "text": "React, Next.js and Vue interfaces, from dashboards to interactive 3D experiences in the browser."
+      }
     ],
     "stats": [
       {
@@ -99,7 +122,7 @@
     ]
   },
   "skills": {
-    "title": "Skills & tools",
+    "title": "The stack I *build with.*",
     "subtitle": "From research notebooks to production systems: the tools I use to design, build and ship.",
     "groups": [
       {
@@ -198,7 +221,7 @@
     ]
   },
   "experience": {
-    "title": "Professional experience",
+    "title": "Experience shaped by *real products.*",
     "items": [
       {
         "role": "Full Stack Engineer",
@@ -320,7 +343,7 @@
     ]
   },
   "projects": {
-    "title": "Projects",
+    "title": "Projects that *ship.*",
     "subtitle": "AI systems, full-stack platforms and interactive 3D web apps, most of them live: open the demo, read the code.",
     "filters": [
       {
@@ -527,7 +550,7 @@
         "title": "Personal Finance Tracker",
         "badge": "Full Stack + AI",
         "year": "2026",
-        "featured": false,
+        "featured": true,
         "categories": [
           "web",
           "ai"
@@ -887,19 +910,20 @@
         "repo": "https://github.com/zakaria-narjis/Diet-Recommendation-System",
         "role": "Original author: Zakaria Narjis"
       }
-    ]
+    ],
+    "featuredTitle": "Featured *work.*"
   },
   "cta": {
-    "title": "Have a project or a role in mind?",
+    "title": "Have a project or a role *in mind?*",
     "text": "I'm open to full-time roles, freelance missions and AI collaborations.",
     "button": "Start a conversation"
   },
   "contact": {
-    "title": "Let's work together",
+    "title": "Let's *work together.*",
     "subtitle": "Send me a message by email or WhatsApp and I'll get back to you quickly."
   },
   "certifications": {
-    "title": "Certifications",
+    "title": "Always *learning.*",
     "subtitle": "Courses completed on Kaggle Learn, verifiable online.",
     "items": [
       {
