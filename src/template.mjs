@@ -105,6 +105,11 @@ export function renderPage(c, pageId = "home", { base = "", root = "" } = {}) {
       recognizedBy: { "@type": "Organization", name: ct.issuer },
       ...(ct.url ? { url: ct.url } : {}),
     })),
+    makesOffer: c.hire && c.hire.rate ? {
+      "@type": "Offer",
+      name: c.hire.rate.label || "Freelance development",
+      priceSpecification: { "@type": "UnitPriceSpecification", price: c.hire.rate.price, priceCurrency: c.hire.rate.currency || "EUR", unitCode: "HUR" },
+    } : undefined,
   };
   const graph = [person, {
     "@type": page.id === "home" || page.id === "about" ? "ProfilePage" : "WebPage",
@@ -349,13 +354,19 @@ ${education()}
       <form method="dialog"><button class="pd-close" aria-label="Close">✕</button></form>
       <div class="pd-media"></div>
       <div class="pd-body">
-        <div class="project-head"><span class="badge pd-badge"></span><span class="year pd-year"></span></div>
-        <h2 id="pd-title"></h2>
-        <p class="pd-desc"></p>
-        <ul class="pd-highlights"></ul>
-        <ul class="tags sm pd-tags"></ul>
-        <p class="pd-meta"></p>
-        <div class="pd-actions"></div>
+        <div class="pd-main">
+          <div class="project-head"><span class="badge pd-badge"></span><span class="year pd-year"></span></div>
+          <h2 id="pd-title"></h2>
+          <p class="pd-desc"></p>
+          <ul class="pd-highlights"></ul>
+          <p class="pd-meta"></p>
+          <div class="pd-actions"></div>
+        </div>
+        <aside class="pd-stack" aria-label="Tech stack">
+          <p class="pd-stack-title">Tech stack</p>
+          <ul class="tags sm pd-tags"></ul>
+          <p class="pd-stack-hint" aria-hidden="true">Drag to spin</p>
+        </aside>
       </div>
     </dialog>`;
 
@@ -400,6 +411,37 @@ ${items.map((pr, i) => projectCard(pr, i, featured ? 3 : 2)).join("\n")}
       </div>
     </section>`;
 
+  // Hourly rate card (Home "Work with me" section and the Contact page)
+  const rate = c.hire && c.hire.rate;
+  const price = rate ? new Intl.NumberFormat("en", { style: "currency", currency: rate.currency || "EUR", maximumFractionDigits: 0 }).format(rate.price) : "";
+  const rateCard = (cls = "") => rate ? `<aside class="rate-card reveal${cls}" aria-label="Hourly rate">
+            <p class="rate-label">${esc(rate.label || "Hourly rate")}</p>
+            <p class="rate-price"><strong>${esc(price)}</strong><span>/ ${esc(rate.unit || "hour")}</span></p>
+            ${rate.note ? `<p class="rate-note">${esc(rate.note)}</p>` : ""}
+            ${(rate.includes || []).length ? `<ul class="rate-list">${rate.includes.map((it) => `<li>${esc(it)}</li>`).join("")}</ul>` : ""}
+            <a href="${to("contact")}" class="btn">${esc(rate.button || "Discuss your project")} ${icon("arrow")}</a>
+          </aside>` : "";
+  const hire = () => c.hire ? `
+    <section class="section" aria-labelledby="hire-title">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="section-tag">${esc(c.hire.tag || "Work with me")}</p>
+          ${H(2, "hire-title", tt(c.hire.title))}
+          ${c.hire.subtitle ? `<p class="section-sub">${esc(c.hire.subtitle)}</p>` : ""}
+        </header>
+        <div class="hire-grid">
+          <div class="hire-offers">
+${list(c.hire.offers || [], (o) => `            <article class="service reveal">
+              <div class="card-icon">${icon(o.icon)}</div>
+              <h3>${esc(o.title)}</h3>
+              <p>${esc(o.text)}</p>
+            </article>`)}
+          </div>
+          ${rateCard()}
+        </div>
+      </div>
+    </section>` : "";
+
   const contact = () => `
     <section class="section page-first" aria-labelledby="contact-title">
       <div class="container">
@@ -409,6 +451,7 @@ ${items.map((pr, i) => projectCard(pr, i, featured ? 3 : 2)).join("\n")}
           <p class="section-sub">${esc(c.contact.subtitle)}</p>
         </header>
         <div class="contact-grid">
+          <div class="contact-side">
           <address class="contact-cards reveal">
             <a class="contact-card" href="mailto:${esc(p.email)}">
               <span class="ci ci-mail">${icon("mail")}</span>
@@ -427,6 +470,8 @@ ${items.map((pr, i) => projectCard(pr, i, featured ? 3 : 2)).join("\n")}
               <span><strong>Location</strong><small>${esc(p.city)}, ${esc(p.country)}${p.timezone ? ` (${esc(p.timezone)})` : ""}</small></span>
             </div>
           </address>
+          ${rateCard(" rate-compact")}
+          </div>
 
           <form class="contact-form reveal" id="contact-form" novalidate>
             <div class="row">
@@ -486,7 +531,7 @@ ${list(c.skills.groups, (g, i) => `            <li style="--i:${i};--n:${c.skill
         </a>
         ${languages()}
       </div>
-    </section>` + projects(true) + cta(),
+    </section>` + projects(true) + hire() + cta(),
     about: () => about() + `
     <section class="section section-alt" aria-label="Education">
       <div class="container">

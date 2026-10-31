@@ -221,71 +221,302 @@ function initLightbox() {
       root.classList.add("dialog-open");
     })
   );
-  box.addEventListener("close", () => root.classList.remove("dialog-open"));
+  box.addEventListener("close", () => document.querySelector("dialog[open]") || root.classList.remove("dialog-open"));
   box.addEventListener("click", (e) => e.target !== img && box.close());
   onCleanup(() => box.open && box.close());
 }
 
-// Project details dialog (screenshot gallery, highlights, links)
+const make = (tag, props = {}, ...kids) => {
+  const el = Object.assign(document.createElement(tag), props);
+  el.append(...kids);
+  return el;
+};
+
+// Project details dialog: flies out of its card in 3D, with a coverflow gallery and a tech-stack sphere
 function initProjectDialog() {
   const dialog = document.querySelector(".project-dialog");
   const dataEl = document.getElementById("projects-data");
   if (!dialog || !dataEl) return;
   const items = JSON.parse(dataEl.textContent);
   const $ = (sel) => dialog.querySelector(sel);
-  const make = (tag, props = {}, ...kids) => {
-    const el = Object.assign(document.createElement(tag), props);
-    el.append(...kids);
-    return el;
-  };
+  let stopFx = () => {};
+  let fromCard = null;
+  let closing = false;
 
-  const open = (i) => {
+  const open = (i, card) => {
     const x = items[i];
     if (!x) return;
+    stopFx();
     const shots = [x.image, ...(x.gallery || [])].filter(Boolean);
-    const media = $(".pd-media");
-    media.replaceChildren();
-    media.hidden = !shots.length;
-    if (shots.length) {
-      const main = make("img", { src: shots[0], alt: `Screenshot of ${x.title}`, decoding: "async" });
-      media.append(main);
-      if (shots.length > 1) {
-        const thumbs = make("div", { className: "pd-thumbs" });
-        shots.forEach((src, j) => {
-          const b = make("button", { type: "button", className: j ? "" : "on", ariaLabel: `Screenshot ${j + 1}` }, make("img", { src, alt: "", loading: "lazy" }));
-          b.addEventListener("click", () => {
-            main.src = src;
-            thumbs.querySelectorAll("button").forEach((t) => t.classList.toggle("on", t === b));
-          });
-          thumbs.append(b);
-        });
-        media.append(thumbs);
-      }
-    }
+    const stops = [coverflow(dialog, $(".pd-media"), shots, x.title), tagSphere($(".pd-tags"), x.tags || [])];
+    stopFx = () => stops.forEach((stop) => stop && stop());
     $(".pd-badge").textContent = x.badge || "";
     $(".pd-year").textContent = x.year || "";
     $("#pd-title").textContent = x.title;
     $(".pd-desc").innerHTML = "";
     $(".pd-desc").append(...richNodes(x.details || x.description || ""));
-    $(".pd-highlights").replaceChildren(...(x.highlights || []).map((h) => make("li", {}, ...richNodes(h))));
-    $(".pd-tags").replaceChildren(...(x.tags || []).map((t) => make("li", { textContent: t })));
+    $(".pd-highlights").replaceChildren(...(x.highlights || []).map((h, k) => {
+      const li = make("li", {}, ...richNodes(h));
+      li.style.setProperty("--delay", `${300 + k * 90}ms`);
+      return li;
+    }));
     const metaBits = [x.role, x.language, x.stars ? `★ ${x.stars}` : "", x.updated ? `Updated ${x.updated}` : ""].filter(Boolean);
     $(".pd-meta").textContent = metaBits.join(" · ");
     const actions = $(".pd-actions");
     actions.replaceChildren();
     if (x.demo) actions.append(make("a", { className: "btn", href: x.demo, target: "_blank", rel: "noopener", textContent: "Open live demo ↗" }));
     if (x.repo || x.link) actions.append(make("a", { className: "btn btn-ghost", href: x.repo || x.link, target: "_blank", rel: "noopener", textContent: "View the code on GitHub" }));
+    fromCard = card;
     dialog.showModal();
+    dialog.scrollTop = 0;
     root.classList.add("dialog-open");
+    if (!reduceMotion && card) fly(dialog, card, false);
   };
-  dialog.addEventListener("close", () => root.classList.remove("dialog-open"));
-  dialog.addEventListener("click", (e) => e.target === dialog && dialog.close()); // click on backdrop
+
+  // Closing flies the dialog back into the card it came from
+  const close = async () => {
+    if (closing || !dialog.open) return;
+    closing = true;
+    let anim = null;
+    if (!reduceMotion && fromCard?.isConnected && fromCard.offsetParent) {
+      anim = fly(dialog, fromCard, true);
+      await anim.finished.catch(() => {});
+    }
+    dialog.close();
+    anim?.cancel();
+    closing = false;
+  };
+  $(".pd-close").addEventListener("click", (e) => {
+    e.preventDefault();
+    close();
+  });
+  dialog.addEventListener("cancel", (e) => {
+    e.preventDefault();
+    close();
+  });
+  dialog.addEventListener("close", () => {
+    if (!document.querySelector("dialog[open]")) root.classList.remove("dialog-open");
+    stopFx();
+    stopFx = () => {};
+  });
+  dialog.addEventListener("click", (e) => e.target === dialog && close()); // click on backdrop
   document.querySelectorAll(".project").forEach((card) => {
     const i = Number(card.dataset.index);
-    card.querySelector(".project-open")?.addEventListener("click", () => open(i));
-    card.querySelector(".project-media")?.addEventListener("click", () => open(i));
+    card.querySelector(".project-open")?.addEventListener("click", () => open(i, card));
+    card.querySelector(".project-media")?.addEventListener("click", () => open(i, card));
   });
-  onCleanup(() => dialog.open && dialog.close());
+  onCleanup(() => {
+    stopFx();
+    if (dialog.open) dialog.close();
+  });
+}
+
+// Moves the dialog between its own position and the card's, turning it in 3D on the way
+function fly(el, card, reverse) {
+  const a = card.getBoundingClientRect();
+  const b = el.getBoundingClientRect();
+  const dx = a.left + a.width / 2 - (b.left + b.width / 2);
+  const dy = a.top + a.height / 2 - (b.top + b.height / 2);
+  const s = Math.max(Math.min(a.width / b.width, 1), 0.2);
+  const turn = dx > 0 ? -32 : 32;
+  const away = { transform: `translate(${dx}px, ${dy}px) perspective(1400px) rotateY(${turn}deg) rotateX(12deg) scale(${s})`, opacity: 0 };
+  const home = { transform: "none", opacity: 1 };
+  return el.animate(reverse ? [home, away] : [away, home], {
+    duration: reverse ? 420 : 720,
+    easing: reverse ? "cubic-bezier(.55, 0, .75, .2)" : "cubic-bezier(.16, .9, .22, 1)",
+    fill: reverse ? "forwards" : "none",
+  });
+}
+
+// 3D coverflow of screenshots: drag or swipe, arrow keys, click a side shot to bring it forward,
+// click the front shot to zoom. The front shot tilts toward the pointer with a moving glare.
+function coverflow(dialog, media, shots, title) {
+  media.replaceChildren();
+  media.hidden = !shots.length;
+  if (!shots.length) return null;
+  const n = shots.length;
+  const stage = make("div", { className: "pd-stage" });
+  const slides = shots.map((src, j) => {
+    const slide = make("button", { type: "button", className: "pd-slide", ariaLabel: `Screenshot ${j + 1} of ${n}, open full size` },
+      make("img", { src, alt: `${title}, screenshot ${j + 1}`, decoding: "async", loading: j < 3 ? "eager" : "lazy", draggable: false }),
+      make("span", { className: "pd-glare" }));
+    stage.append(slide);
+    return slide;
+  });
+  const counter = make("p", { className: "pd-count", ariaLive: "polite" });
+  const dots = make("div", { className: "pd-dots" });
+  const prev = make("button", { type: "button", className: "pd-nav pd-prev", ariaLabel: "Previous screenshot", textContent: "‹" });
+  const next = make("button", { type: "button", className: "pd-nav pd-next", ariaLabel: "Next screenshot", textContent: "›" });
+  media.append(stage);
+  if (n > 1) media.append(counter, prev, next, dots);
+
+  let active = 0;
+  const place = (shift = 0) =>
+    slides.forEach((slide, k) => {
+      const d = k - active + shift;
+      slide.style.setProperty("--d", d.toFixed(3));
+      slide.style.setProperty("--ad", Math.abs(d).toFixed(3));
+      slide.style.zIndex = String(100 - Math.round(Math.abs(d) * 10));
+    });
+  const go = (j) => {
+    active = (j + n) % n;
+    place();
+    slides.forEach((slide, k) => {
+      slide.classList.toggle("on", k === active);
+      slide.tabIndex = k === active ? 0 : -1;
+    });
+    [...dots.children].forEach((dot, k) => dot.classList.toggle("on", k === active));
+    counter.textContent = `${active + 1} / ${n}`;
+  };
+  shots.forEach((_, j) => {
+    const dot = make("button", { type: "button", ariaLabel: `Show screenshot ${j + 1}` });
+    dot.addEventListener("click", () => go(j));
+    dots.append(dot);
+  });
+  prev.addEventListener("click", () => go(active - 1));
+  next.addEventListener("click", () => go(active + 1));
+
+  // Drag / swipe: the whole carousel follows the finger, then snaps to the nearest shot
+  let startX = null;
+  let moved = 0;
+  stage.addEventListener("pointerdown", (e) => {
+    if (n < 2 || e.button > 0) return;
+    startX = e.clientX;
+    moved = 0;
+  });
+  stage.addEventListener("pointermove", (e) => {
+    if (startX !== null) {
+      moved = e.clientX - startX;
+      if (Math.abs(moved) > 6) {
+        if (!stage.classList.contains("dragging")) {
+          stage.classList.add("dragging");
+          stage.setPointerCapture(e.pointerId);
+        }
+        place(Math.max(-1.5, Math.min(1.5, moved / (stage.clientWidth * 0.45))));
+      }
+      return;
+    }
+    if (!finePointer || reduceMotion) return;
+    const slide = slides[active];
+    const r = slide.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width;
+    const py = (e.clientY - r.top) / r.height;
+    if (px < 0 || px > 1 || py < 0 || py > 1) return untilt();
+    slide.classList.add("tilting");
+    slide.style.setProperty("--ry", `${(px - 0.5) * 14}deg`);
+    slide.style.setProperty("--rx", `${(0.5 - py) * 10}deg`);
+    slide.style.setProperty("--gx", `${px * 100}%`);
+    slide.style.setProperty("--gy", `${py * 100}%`);
+  });
+  const untilt = () => slides.forEach((slide) => {
+    slide.classList.remove("tilting");
+    slide.style.removeProperty("--rx");
+    slide.style.removeProperty("--ry");
+  });
+  const release = () => {
+    if (startX === null) return;
+    stage.classList.remove("dragging");
+    const steps = Math.round(-moved / (stage.clientWidth * 0.45));
+    startX = null;
+    go(active + (Math.abs(moved) > 40 && !steps ? -Math.sign(moved) : steps));
+  };
+  stage.addEventListener("pointerup", release);
+  stage.addEventListener("pointercancel", release);
+  stage.addEventListener("pointerleave", untilt);
+
+  slides.forEach((slide, k) =>
+    slide.addEventListener("click", () => {
+      if (Math.abs(moved) > 6) return; // that was a drag
+      if (k !== active) return go(k);
+      const box = document.querySelector(".lightbox");
+      if (!box) return;
+      box.querySelector("img").src = shots[k];
+      box.querySelector("img").alt = `${title}, screenshot ${k + 1}`;
+      box.querySelector("p").textContent = `${title} · ${k + 1} / ${n}`;
+      box.showModal();
+    })
+  );
+  const onKey = (e) => {
+    if (n < 2 || e.target.closest("input, textarea")) return;
+    if (e.key === "ArrowLeft") go(active - 1);
+    else if (e.key === "ArrowRight") go(active + 1);
+  };
+  dialog.addEventListener("keydown", onKey);
+  go(0);
+  return () => dialog.removeEventListener("keydown", onKey);
+}
+
+// Tech-stack tags spread over a slowly spinning sphere; drag to spin it, release and it coasts
+function tagSphere(list, tags) {
+  list.replaceChildren(...tags.map((t) => make("li", { textContent: t })));
+  const box = list.closest(".pd-stack");
+  if (box) box.hidden = !tags.length;
+  list.classList.remove("sphere");
+  if (reduceMotion || tags.length < 3) return null;
+  list.classList.add("sphere");
+
+  // Even spread on the sphere (golden-angle spiral)
+  const pts = [...list.children].map((li, i) => {
+    const y = 1 - ((i + 0.5) / tags.length) * 2;
+    const r = Math.sqrt(1 - y * y);
+    const th = i * 2.39996;
+    return { li, x: Math.cos(th) * r, y, z: Math.sin(th) * r };
+  });
+  const BASE = 0.006;
+  let vx = 0.002;
+  let vy = BASE;
+  let hover = false;
+  let drag = null;
+  let frame = 0;
+  const spin = (ax, ay) => {
+    const [cx, sx, cy, sy] = [Math.cos(ax), Math.sin(ax), Math.cos(ay), Math.sin(ay)];
+    pts.forEach((p) => {
+      const x = p.x * cy + p.z * sy;
+      const z1 = -p.x * sy + p.z * cy;
+      const y = p.y * cx - z1 * sx;
+      p.z = p.y * sx + z1 * cx;
+      p.x = x;
+      p.y = y;
+    });
+  };
+  const draw = () => {
+    const R = Math.min(list.clientWidth, list.clientHeight) / 2 - 26;
+    pts.forEach(({ li, x, y, z }) => {
+      const depth = (z + 1) / 2; // 0 = back, 1 = front
+      li.style.transform = `translate(-50%, -50%) translate3d(${(x * R).toFixed(1)}px, ${(y * R).toFixed(1)}px, 0) scale(${(0.68 + depth * 0.42).toFixed(3)})`;
+      li.style.opacity = (0.28 + depth * 0.72).toFixed(2);
+      li.style.zIndex = String(Math.round(depth * 100));
+    });
+  };
+  const tick = () => {
+    if (!drag) {
+      const target = hover ? BASE * 0.25 : BASE;
+      vy += (target - vy) * 0.03;
+      vx += (0.0015 - vx) * 0.03;
+    }
+    spin(vx, vy);
+    draw();
+    frame = requestAnimationFrame(tick);
+  };
+  list.onpointerenter = () => (hover = true);
+  list.onpointerleave = () => (hover = false);
+  list.onpointerdown = (e) => {
+    drag = { x: e.clientX, y: e.clientY };
+    list.setPointerCapture(e.pointerId);
+    list.classList.add("grabbing");
+  };
+  list.onpointermove = (e) => {
+    if (!drag) return;
+    vy = (e.clientX - drag.x) * 0.006;
+    vx = -(e.clientY - drag.y) * 0.006;
+    drag = { x: e.clientX, y: e.clientY };
+  };
+  list.onpointerup = list.onpointercancel = () => {
+    drag = null;
+    list.classList.remove("grabbing");
+  };
+  frame = requestAnimationFrame(tick);
+  return () => cancelAnimationFrame(frame);
 }
 
 // Escaped text with **bold** as DOM nodes
