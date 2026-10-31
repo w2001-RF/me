@@ -548,7 +548,12 @@
           "LLM API"
         ],
         "image": "assets/projects/finance-tracker.jpg",
-        "gallery": [],
+        "gallery": [
+          "assets/projects/finance-tracker-charts.jpg",
+          "assets/projects/finance-tracker-cashflow.jpg",
+          "assets/projects/finance-tracker-rental.jpg",
+          "assets/projects/finance-tracker-savings.jpg"
+        ],
         "demo": "https://w2001-rf.github.io/myFinanceTracker/",
         "repo": "https://github.com/w2001-RF/myFinanceTracker",
         "role": ""
