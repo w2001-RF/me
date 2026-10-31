@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Portfolio Admin</title>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand"><span class="mark">WR</span> Portfolio Admin</div>
+      <div class="status" id="status" role="status">Loading…</div>
+      <div class="actions">
+        <button type="button" class="btn btn-ghost" id="btn-download" title="Download content.json as a backup">Backup</button>
+        <button type="button" class="btn btn-ghost" id="btn-preview">Preview</button>
+        <button type="button" class="btn" id="btn-save" disabled>Save &amp; publish</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <nav id="section-nav" aria-label="Sections"></nav>
+      <a class="view-site" href="../" target="_blank" rel="noopener">View live site ↗</a>
+    </aside>
+
+    <main class="main">
+      <section class="panel" id="connect-panel">
+        <h2>GitHub connection</h2>
+        <p class="hint">Saving commits your changes to the repository, and GitHub rebuilds the site in about a minute.
+          Create a <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">fine-grained token</a>
+          with access to <strong>only this repository</strong> and the permission <strong>Contents: Read and write</strong>.</p>
+        <div class="grid-3">
+          <label>Owner<input id="cfg-owner" autocomplete="off"></label>
+          <label>Repository<input id="cfg-repo" autocomplete="off"></label>
+          <label>Branch<input id="cfg-branch" autocomplete="off"></label>
+        </div>
+        <label>Access token<input id="cfg-token" type="password" autocomplete="off" placeholder="github_pat_…"></label>
+        <div class="row-between">
+          <label class="check"><input type="checkbox" id="cfg-remember"> Remember on this device</label>
+          <div class="btn-row">
+            <button type="button" class="btn btn-ghost" id="btn-logout">Forget token</button>
+            <button type="button" class="btn" id="btn-connect">Connect</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" id="files-panel">
+        <h2>Photo &amp; CV</h2>
+        <div class="files">
+          <div class="file-card">
+            <img id="photo-preview" alt="Profile photo preview">
+            <div>
+              <h3>Profile photo</h3>
+              <p class="hint" id="photo-path"></p>
+              <label class="btn btn-ghost file-btn">Choose a new photo<input type="file" id="photo-input" accept="image/jpeg,image/png,image/webp"></label>
+              <p class="staged" id="photo-staged"></p>
+            </div>
+          </div>
+          <div class="file-card">
+            <div class="pdf-icon">PDF</div>
+            <div>
+              <h3>CV</h3>
+              <p class="hint"><a id="cv-link" target="_blank" rel="noopener"></a></p>
+              <label class="btn btn-ghost file-btn">Choose a new CV<input type="file" id="cv-input" accept="application/pdf"></label>
+              <p class="staged" id="cv-staged"></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div id="editor"></div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="alert"></div>
+  <script type="module" src="admin.js"></script>
+</body>
+</html>
