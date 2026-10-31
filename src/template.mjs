@@ -6,6 +6,8 @@ const esc = (v = "") =>
 
 // Escaped text with **bold** support
 const rich = (v = "") => esc(v).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+// Titles: *words* become the italic serif accent
+const tt = (v = "") => esc(v).replace(/\*(.+?)\*/g, "<em>$1</em>");
 
 const list = (items = [], fn) => items.map(fn).join("\n");
 const tags = (items = [], cls = "tags sm") =>
@@ -48,7 +50,7 @@ export const PAGES = [
   { id: "contact", path: "contact/", label: "Contact" },
 ];
 const NAV = PAGES.filter((pg) => pg.id !== "home");
-const plain = (v = "") => String(v).replace(/\*\*(.+?)\*\*/g, "$1");
+const plain = (v = "") => String(v).replace(/\*\*?(.+?)\*\*?/g, "$1");
 const clip = (v, n = 158) => (v.length > n ? `${v.slice(0, n - 1).replace(/\s+\S*$/, "")}…` : v);
 
 // root: relative path from the page to the site root ("" for home, "../" for subpages,
@@ -142,8 +144,8 @@ export function renderPage(c, pageId = "home", { base = "", root = "" } = {}) {
       <canvas class="hero-canvas" aria-hidden="true"></canvas>
       <div class="container hero-grid">
         <div class="hero-text reveal">
-          ${p.availability ? `<p class="eyebrow"><span class="dot"></span> ${esc(p.availability)}</p>` : ""}
-          <h1 id="hero-title"><span class="hero-hi">Hi, I'm</span> <span class="grad hero-name">${esc(name)}</span></h1>
+          <p class="eyebrow"><span class="dot"></span> ${p.roles.slice(0, 3).map((r, i) => `<span${i ? ' class="eb-alt"' : ""}>${esc(r)}</span>`).join("")}</p>
+          <h1 id="hero-title"><span class="hero-hi">Hi, I'm <span class="grad hero-name">${esc(name)}</span></span>${p.headline ? ` <span class="hero-statement">${tt(p.headline)}</span>` : ""}</h1>
           <p class="hero-role">
             <span class="sr-only">${esc(p.roles.join(", "))}.</span>
             <span aria-hidden="true"><span class="typed" data-words="${esc(JSON.stringify(p.roles))}">${esc(p.roles[0] || "")}</span><span class="caret"></span></span>
@@ -164,14 +166,22 @@ export function renderPage(c, pageId = "home", { base = "", root = "" } = {}) {
           </ul>
         </div>
         <div class="hero-photo reveal">
-          <div class="photo-frame">
-            <img src="${esc(u(p.photo))}" alt="${esc(name)}, ${esc(p.jobTitle)}" width="1138" height="1600" fetchpriority="high" decoding="async">
+          <div class="photo-ring">
+            <div class="photo-frame">
+              <img src="${esc(u(p.photo))}" alt="${esc(name)}, ${esc(p.jobTitle)}" width="1138" height="1600" fetchpriority="high" decoding="async">
+            </div>
           </div>
           <div class="float-card fc-1"><strong>${esc(c.heroCards.statValue)}</strong><span>${esc(c.heroCards.statLabel)}</span></div>
           <div class="float-card fc-2"><code>${esc(c.heroCards.code)}</code><span>${esc(c.heroCards.codeLabel)}</span></div>
-          <div class="float-card fc-3">${icon("pin")}<span>${esc(p.city)}, ${esc(p.country)}</span></div>
+          ${p.availability ? `<p class="avail"><span class="dot"></span> ${esc(p.availability)}</p>` : ""}
         </div>
       </div>
+      ${(p.keywords || []).length ? `<div class="tech-strip" aria-label="Core technologies">
+        <ul class="marquee-track">
+          ${p.keywords.map((k) => `<li>${esc(k)}</li>`).join("")}
+          ${p.keywords.map((k) => `<li aria-hidden="true">${esc(k)}</li>`).join("")}
+        </ul>
+      </div>` : ""}
       ${c.trusted.length ? `<div class="container">
         <div class="trusted reveal">
           <p>Experience with</p>
@@ -188,17 +198,24 @@ ${list(c.about.stats, (st) => `            <div><dt>${esc(st.label)}</dt><dd><sp
   const about = (teaser = false) => `
     <section class="section${teaser ? " section-alt" : " page-first"}" aria-labelledby="about-title">
       <div class="container about-grid">
-        <div class="reveal">
+        <div class="reveal about-text">
           <p class="section-tag">About me</p>
-          ${H(first("about"), "about-title", esc(c.about.title))}
+          ${H(first("about"), "about-title", tt(c.about.title))}
+${list(teaser ? c.about.paragraphs.slice(0, 1) : c.about.paragraphs, (t) => `          <p>${rich(t)}</p>`)}
           <ul class="about-facts">
 ${list(c.about.facts, (f, i) => `            <li>${icon(FACT_ICONS[i] || "pin")} ${esc(f)}</li>`)}
           </ul>
-        </div>
-        <div class="reveal">
-${list(teaser ? c.about.paragraphs.slice(0, 1) : c.about.paragraphs, (t) => `          <p>${rich(t)}</p>`)}
-          ${stats()}
           ${teaser ? `<a class="more-link" href="${to("about")}">More about me ${icon("arrow")}</a>` : ""}
+        </div>
+        <div class="about-side">
+          ${(c.about.services || []).length ? `<div class="services">
+${list(c.about.services, (sv) => `            <article class="service reveal">
+              <div class="card-icon">${icon(sv.icon)}</div>
+              <h3>${esc(sv.title)}</h3>
+              <p>${esc(sv.text)}</p>
+            </article>`)}
+          </div>` : ""}
+          <div class="reveal">${stats()}</div>
         </div>
       </div>
     </section>`;
@@ -216,7 +233,7 @@ ${list(teaser ? c.about.paragraphs.slice(0, 1) : c.about.paragraphs, (t) => `   
       <div class="container">
         <header class="section-head reveal">
           <p class="section-tag">Learning</p>
-          ${H(2, "certs-title", esc(c.certifications.title))}
+          ${H(2, "certs-title", tt(c.certifications.title))}
           <p class="section-sub">${esc(c.certifications.subtitle)}</p>
         </header>
         <div class="certs-grid">
@@ -246,7 +263,7 @@ ${list(c.certifications.items, (ct) => `          <article class="cert reveal">
       <div class="container">
         <header class="section-head reveal">
           <p class="section-tag">Tech stack</p>
-          ${H(1, "skills-title", esc(c.skills.title))}
+          ${H(1, "skills-title", tt(c.skills.title))}
           <p class="section-sub">${esc(c.skills.subtitle)}</p>
         </header>
         <div class="universe reveal">
@@ -281,7 +298,7 @@ ${list(c.skills.groups, (g) => `          <article class="card reveal">
       <div class="container">
         <header class="section-head reveal">
           <p class="section-tag">Career</p>
-          ${H(1, "exp-title", esc(c.experience.title))}
+          ${H(1, "exp-title", tt(c.experience.title))}
         </header>
         <ol class="timeline">
 ${list(c.experience.items, (x) => `          <li class="reveal">
@@ -344,20 +361,20 @@ ${education()}
 
   const projects = (featured = false) => {
     const flagged = c.projects.items.filter((x) => x.featured);
-    const items = featured ? (flagged.length ? flagged : c.projects.items).slice(0, 3) : c.projects.items;
+    const items = featured ? (flagged.length ? flagged : c.projects.items).slice(0, 4) : c.projects.items;
     return `
     <section class="section section-alt${featured ? "" : " page-first"}" aria-labelledby="projects-title">
       <div class="container">
         <header class="section-head reveal">
           <p class="section-tag">Portfolio</p>
-          ${H(featured ? 2 : 1, "projects-title", esc(featured ? "Featured projects" : c.projects.title))}
+          ${H(featured ? 2 : 1, "projects-title", tt(featured ? c.projects.featuredTitle || "Featured *work.*" : c.projects.title))}
           <p class="section-sub">${esc(c.projects.subtitle)}</p>
         </header>
         ${featured ? "" : `<div class="filters reveal" role="group" aria-label="Filter projects">
           <button type="button" class="chip active" data-filter="all" aria-pressed="true">All</button>
 ${list(c.projects.filters, (f) => `          <button type="button" class="chip" data-filter="${esc(f.id)}" aria-pressed="false">${esc(f.label)}</button>`)}
         </div>`}
-        <div class="projects-grid">
+        <div class="projects-grid${featured ? " featured-grid" : ""}">
 ${items.map((pr, i) => projectCard(pr, i, featured ? 3 : 2)).join("\n")}
         </div>
         <div class="swipe-hint" aria-hidden="true"><span>Swipe to see more →</span><span class="swipe-dots"></span></div>
@@ -376,7 +393,7 @@ ${items.map((pr, i) => projectCard(pr, i, featured ? 3 : 2)).join("\n")}
     <section class="cta-band" aria-label="Call to action">
       <div class="container cta-inner reveal">
         <div>
-          <h2>${esc(c.cta.title)}</h2>
+          <h2>${tt(c.cta.title)}</h2>
           <p>${esc(c.cta.text)}</p>
         </div>
         <a href="${to("contact")}" class="btn btn-light">${esc(c.cta.button)} ${icon("arrow")}</a>
@@ -388,7 +405,7 @@ ${items.map((pr, i) => projectCard(pr, i, featured ? 3 : 2)).join("\n")}
       <div class="container">
         <header class="section-head reveal">
           <p class="section-tag">Contact</p>
-          ${H(1, "contact-title", esc(c.contact.title))}
+          ${H(1, "contact-title", tt(c.contact.title))}
           <p class="section-sub">${esc(c.contact.subtitle)}</p>
         </header>
         <div class="contact-grid">
@@ -454,8 +471,20 @@ ${items.map((pr, i) => projectCard(pr, i, featured ? 3 : 2)).join("\n")}
 
   const body = {
     home: () => hero() + about(true) + `
-    <section class="section" aria-label="Programming languages">
-      <div class="container">${languages(true)}
+    <section class="section" aria-labelledby="teaser-title">
+      <div class="container">
+        <a class="universe-teaser reveal" href="${to("skills")}">
+          <div>
+            <p class="universe-kicker">Interactive · Built with Three.js</p>
+            <h2 class="section-title" id="teaser-title">Explore my skills <em>in 3D.</em></h2>
+            <p>${c.skills.groups.reduce((n, g) => n + g.items.length, 0)} skills across ${c.skills.groups.length} fields, laid out as a network you can rotate, hover and filter.</p>
+            <span class="btn">Open the skill universe ${icon("arrow")}</span>
+          </div>
+          <ul class="teaser-orbit" aria-hidden="true">
+${list(c.skills.groups, (g, i) => `            <li style="--i:${i};--n:${c.skills.groups.length}">${icon(g.icon)}<span>${esc(g.title)}</span></li>`)}
+          </ul>
+        </a>
+        ${languages()}
       </div>
     </section>` + projects(true) + cta(),
     about: () => about() + `
@@ -480,7 +509,7 @@ ${education()}
   ${base ? `<base href="${esc(base)}">` : ""}
   <script>
     document.documentElement.classList.replace("no-js", "js");
-    try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+    let t = null; try { t = localStorage.getItem("theme"); } catch (e) {} document.documentElement.dataset.theme = t || "dark";
   </script>
 
   <title>${esc(meta.title)}</title>
@@ -502,7 +531,7 @@ ${education()}
   <meta name="twitter:description" content="${esc(ogDesc)}">
   <meta name="twitter:image" content="${esc(absUrl(p.photo))}">
 
-  <meta name="theme-color" content="#fbfbfd">
+  <meta name="theme-color" content="#07070b">
   <link rel="icon" href="${u("favicon.svg")}" type="image/svg+xml">
   <link rel="apple-touch-icon" href="${esc(u(p.photo))}">
   <link rel="manifest" href="${u("site.webmanifest")}">
@@ -510,7 +539,7 @@ ${education()}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <!-- Apple devices use SF Pro from the system stack; Inter is the fallback elsewhere -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
   ${page.id === "home" ? `<link rel="preload" as="image" href="${esc(u(p.photo))}" fetchpriority="high">` : ""}
   <link rel="stylesheet" href="${u("style.css")}">
 
