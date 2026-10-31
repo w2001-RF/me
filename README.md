@@ -2,7 +2,7 @@
 
 Personal portfolio of **Wassim Rifay**, Full Stack Software Engineer & aspiring AI researcher.
 
-Live: https://w2001-rf.github.io/
+Live: https://w2001-rf.github.io/me/
 
 ## How it works
 
@@ -12,7 +12,7 @@ Live: https://w2001-rf.github.io/
 
 ## Editing content: `/admin`
 
-Open https://w2001-rf.github.io/admin/ (not linked from the site, `noindex`).
+Open https://w2001-rf.github.io/me/admin/ (not linked from the site, `noindex`).
 
 1. Create a [fine-grained GitHub token](https://github.com/settings/personal-access-tokens/new) with access to **only this repository** and **Contents: Read and write**.
 2. Paste it in the admin page and click **Connect**. The token stays in your browser.

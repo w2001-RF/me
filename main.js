@@ -1,5 +1,5 @@
 // Contact details come from data/content.json (rendered into <body data-*> at build time)
-const { email: EMAIL, whatsapp: WHATSAPP, formKey: WEB3FORMS_KEY = "" } = document.body.dataset;
+const { email: EMAIL, whatsapp: WHATSAPP, formKey: WEB3FORMS_KEY = "25ae6517-5af4-4602-92ca-dad5e70ff928" } = document.body.dataset;
 
 const root = document.documentElement;
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
