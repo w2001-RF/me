@@ -935,8 +935,8 @@
       }
     ],
     "rate": {
-      "price": 25,
-      "currency": "EUR",
+      "price": 100,
+      "currency": "MAD",
       "unit": "hour",
       "label": "Standard hourly rate",
       "note": "For development, integration and technical advice. The final quote depends on the scope of the project.",
