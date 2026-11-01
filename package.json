@@ -1,0 +1,15 @@
+{
+  "name": "wassim-rifay-portfolio",
+  "private": true,
+  "description": "Static portfolio for GitHub Pages, built from data/content.json",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "optimize": "node scripts/optimize-images.mjs && node scripts/manifest.mjs",
+    "test": "node --test \"test/*.test.mjs\"",
+    "audit": "node scripts/perf-audit.mjs"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^25.16.0",
+    "sharp": "^0.35.5"
+  }
+}

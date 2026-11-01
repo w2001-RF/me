@@ -1,0 +1,17 @@
+{
+  "name": "Wassim Rifay | Full Stack Software Engineer",
+  "short_name": "Wassim Rifay",
+  "id": "https://w2001-rf.github.io/me/",
+  "start_url": "https://w2001-rf.github.io/me/",
+  "scope": "https://w2001-rf.github.io/me/",
+  "display": "standalone",
+  "background_color": "#07070b",
+  "theme_color": "#07070b",
+  "icons": [
+    {
+      "src": "https://w2001-rf.github.io/me/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
