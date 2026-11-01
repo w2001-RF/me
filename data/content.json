@@ -361,66 +361,31 @@
     ],
     "items": [
       {
-        "title": "Intelligent Medical Assistant",
-        "badge": "AI / LLM",
-        "year": "2024",
-        "featured": true,
+        "title": "Katib Oumoumi",
+        "badge": "Automation",
+        "year": "2026",
+        "featured": false,
         "categories": [
-          "ai",
           "web"
         ],
-        "description": "Dell Technologies competition: an assistant for healthcare professionals that answers questions from medical documents (RAG) and analyses medical images.",
-        "details": "Built for the **Dell Technologies competition**. Doctors chat with an assistant that retrieves answers from the knowledge base and patient files, and upload medical images that **YOLOv8** models detect and segment. Patients, history, medications, lab results and visit notes are managed in the same app.",
+        "description": "Generates Moroccan administrative documents (complaints, powers of attorney, contracts) in Word and PDF from admin templates and a dynamic form.",
+        "details": "A vanilla JavaScript SPA with no framework and no build step, backed by **Supabase**. Users fill a dynamic form and download or share the document; an admin manages categories, document types and template fields.",
         "highlights": [
-          "**RAG pipeline**: LlamaIndex + Ollama (LLaMA) with nomic-embed-text embeddings and a ChromaDB vector store, streaming answers",
-          "**Medical imaging**: YOLOv8 detection and segmentation models (e.g. blood cells, COVID detection) served through the API",
-          "**Next.js** web app (chat, patients, dashboard, image analysis, files) + React Native mobile app",
-          "Flask / FastAPI backend with JWT auth, MongoDB, Docker Compose and GitLab CI"
+          "Word and PDF generation from templates with typed placeholders",
+          "Admin dashboard: categories, document types, field types (ID card, dates, lists…)",
+          "Row Level Security: public read, admin-only write",
+          "Arabic right-to-left interface"
         ],
         "tags": [
-          "LLaMA",
-          "RAG",
-          "LlamaIndex",
-          "ChromaDB",
-          "YOLOv8",
-          "Next.js",
-          "Flask",
-          "MongoDB",
-          "Docker"
+          "JavaScript",
+          "Supabase",
+          "PDF / DOCX",
+          "RTL"
         ],
-        "image": "assets/projects/medical-assistant.jpg",
+        "image": "assets/projects/katib-oumoumi.jpg",
         "gallery": [],
-        "demo": "",
-        "repo": "",
-        "role": "Full-stack & AI engineer · 237 commits"
-      },
-      {
-        "title": "Fidāʾī — Morocco 1945",
-        "badge": "3D Game",
-        "year": "2026",
-        "featured": true,
-        "categories": [
-          "3d"
-        ],
-        "description": "A third-person survival open-world RPG in the browser, set in Morocco in 1945 under the French Protectorate. Playable in English and Moroccan Darija.",
-        "details": "You play Driss, a young resistance fighter. Survive (hunger, thirst), loot and craft, fight with five weapons, stay unseen from guards with vision cones, hunt, trade, camp and grow six skills, all in a procedural open world rendered with **Three.js**.",
-        "highlights": [
-          "Stealth AI with vision cones and detection meters; daylight changes guard sight",
-          "Survival, crafting, trading, hunting and camping systems",
-          "Bilingual: English and Moroccan Darija (Arabic script, right-to-left)",
-          "TypeScript + Vite, deployed on GitHub Pages"
-        ],
-        "tags": [
-          "Three.js",
-          "TypeScript",
-          "WebGL",
-          "Game AI",
-          "Vite"
-        ],
-        "image": "assets/projects/fidaa.jpg",
-        "gallery": [],
-        "demo": "https://w2001-rf.github.io/Fidaa/",
-        "repo": "https://github.com/w2001-RF/Fidaa",
+        "demo": "https://w2001-rf.github.io/katib-oumoumi/",
+        "repo": "https://github.com/w2001-RF/katib-oumoumi",
         "role": ""
       },
       {
@@ -454,6 +419,35 @@
         ],
         "demo": "https://w2001-rf.github.io/wood-depot/",
         "repo": "https://github.com/w2001-RF/wood-depot",
+        "role": ""
+      },
+      {
+        "title": "Fidāʾī — Morocco 1945",
+        "badge": "3D Game",
+        "year": "2026",
+        "featured": true,
+        "categories": [
+          "3d"
+        ],
+        "description": "A third-person survival open-world RPG in the browser, set in Morocco in 1945 under the French Protectorate. Playable in English and Moroccan Darija.",
+        "details": "You play Driss, a young resistance fighter. Survive (hunger, thirst), loot and craft, fight with five weapons, stay unseen from guards with vision cones, hunt, trade, camp and grow six skills, all in a procedural open world rendered with **Three.js**.",
+        "highlights": [
+          "Stealth AI with vision cones and detection meters; daylight changes guard sight",
+          "Survival, crafting, trading, hunting and camping systems",
+          "Bilingual: English and Moroccan Darija (Arabic script, right-to-left)",
+          "TypeScript + Vite, deployed on GitHub Pages"
+        ],
+        "tags": [
+          "Three.js",
+          "TypeScript",
+          "WebGL",
+          "Game AI",
+          "Vite"
+        ],
+        "image": "assets/projects/fidaa.jpg",
+        "gallery": [],
+        "demo": "https://w2001-rf.github.io/Fidaa/",
+        "repo": "https://github.com/w2001-RF/Fidaa",
         "role": ""
       },
       {
@@ -582,34 +576,6 @@
         "role": ""
       },
       {
-        "title": "Katib Oumoumi",
-        "badge": "Automation",
-        "year": "2026",
-        "featured": false,
-        "categories": [
-          "web"
-        ],
-        "description": "Generates Moroccan administrative documents (complaints, powers of attorney, contracts) in Word and PDF from admin templates and a dynamic form.",
-        "details": "A vanilla JavaScript SPA with no framework and no build step, backed by **Supabase**. Users fill a dynamic form and download or share the document; an admin manages categories, document types and template fields.",
-        "highlights": [
-          "Word and PDF generation from templates with typed placeholders",
-          "Admin dashboard: categories, document types, field types (ID card, dates, lists…)",
-          "Row Level Security: public read, admin-only write",
-          "Arabic right-to-left interface"
-        ],
-        "tags": [
-          "JavaScript",
-          "Supabase",
-          "PDF / DOCX",
-          "RTL"
-        ],
-        "image": "assets/projects/katib-oumoumi.jpg",
-        "gallery": [],
-        "demo": "https://w2001-rf.github.io/katib-oumoumi/",
-        "repo": "https://github.com/w2001-RF/katib-oumoumi",
-        "role": ""
-      },
-      {
         "title": "DarnaLux Concierge",
         "badge": "Full Stack",
         "year": "2026",
@@ -636,6 +602,97 @@
         "demo": "https://w2001-rf.github.io/darnalux/",
         "repo": "https://github.com/w2001-RF/darnalux",
         "role": ""
+      },
+      {
+        "title": "School Store Manager",
+        "badge": "Full Stack",
+        "year": "2026",
+        "featured": false,
+        "categories": [
+          "web"
+        ],
+        "description": "Point of sale, stock and invoicing for a school store: barcode scanning, client discounts, sales reports and a demo account.",
+        "details": "A **Vue 3** single-page app with a pluggable data layer: the same interface runs on **Supabase**, Firebase, SQLite (sql.js) or browser storage, chosen by one environment variable.",
+        "highlights": [
+          "Point of sale with **barcode scanning** (camera or Datalogic scanner) and thermal receipt printing",
+          "Invoices with partial payments, per-client discounts and outstanding balances",
+          "Sales reports by period, best sellers and **CSV export**",
+          "Bulk import from CSV, JSON, Excel, SQL or Access; manager and agent roles; French, English, Spanish and Arabic"
+        ],
+        "tags": [
+          "Vue 3",
+          "Pinia",
+          "Supabase",
+          "sql.js",
+          "vue-i18n",
+          "PWA"
+        ],
+        "image": "assets/projects/school-store.jpg",
+        "gallery": [
+          "assets/projects/school-store-products.jpg",
+          "assets/projects/school-store-invoices.jpg",
+          "assets/projects/school-store-reports.jpg",
+          "assets/projects/school-store-clients.jpg"
+        ],
+        "demo": "https://w2001-rf.github.io/school-store/",
+        "repo": "https://github.com/w2001-RF/school-store",
+        "role": ""
+      },
+      {
+        "title": "ThreadLab — T-Shirt Store",
+        "badge": "E-commerce",
+        "year": "2026",
+        "featured": false,
+        "categories": [
+          "web"
+        ],
+        "description": "A premium T-shirt store front with a product picker and WhatsApp ordering.",
+        "details": "",
+        "highlights": [],
+        "tags": [
+          "JavaScript",
+          "HTML",
+          "CSS"
+        ],
+        "image": "assets/projects/threadlab.jpg",
+        "gallery": [],
+        "demo": "https://w2001-rf.github.io/TShirts_store/",
+        "repo": "https://github.com/w2001-RF/TShirts_store",
+        "role": ""
+      },
+      {
+        "title": "Intelligent Medical Assistant",
+        "badge": "AI / LLM",
+        "year": "2024",
+        "featured": true,
+        "categories": [
+          "ai",
+          "web"
+        ],
+        "description": "Dell Technologies competition: an assistant for healthcare professionals that answers questions from medical documents (RAG) and analyses medical images.",
+        "details": "Built for the **Dell Technologies competition**. Doctors chat with an assistant that retrieves answers from the knowledge base and patient files, and upload medical images that **YOLOv8** models detect and segment. Patients, history, medications, lab results and visit notes are managed in the same app.",
+        "highlights": [
+          "**RAG pipeline**: LlamaIndex + Ollama (LLaMA) with nomic-embed-text embeddings and a ChromaDB vector store, streaming answers",
+          "**Medical imaging**: YOLOv8 detection and segmentation models (e.g. blood cells, COVID detection) served through the API",
+          "**Next.js** web app (chat, patients, dashboard, image analysis, files) + React Native mobile app",
+          "Flask / FastAPI backend with JWT auth, MongoDB, Docker Compose and GitLab CI"
+        ],
+        "tags": [
+          "LLaMA",
+          "RAG",
+          "LlamaIndex",
+          "ChromaDB",
+          "YOLOv8",
+          "Next.js",
+          "Flask",
+          "MongoDB",
+          "Docker"
+        ],
+        "image": "assets/projects/medical-assistant.jpg",
+        "gallery": [],
+        "demo": "",
+        "repo": "",
+        "role": "Full-stack & AI engineer · 237 commits"
       },
       {
         "title": "AI-Driven Cache Benchmark",
@@ -774,63 +831,6 @@
         "gallery": [],
         "demo": "",
         "repo": "https://github.com/w2001-RF/Ticketus",
-        "role": ""
-      },
-      {
-        "title": "School Store Manager",
-        "badge": "Full Stack",
-        "year": "2026",
-        "featured": false,
-        "categories": [
-          "web"
-        ],
-        "description": "Point of sale, stock and invoicing for a school store: barcode scanning, client discounts, sales reports and a demo account.",
-        "details": "A **Vue 3** single-page app with a pluggable data layer: the same interface runs on **Supabase**, Firebase, SQLite (sql.js) or browser storage, chosen by one environment variable.",
-        "highlights": [
-          "Point of sale with **barcode scanning** (camera or Datalogic scanner) and thermal receipt printing",
-          "Invoices with partial payments, per-client discounts and outstanding balances",
-          "Sales reports by period, best sellers and **CSV export**",
-          "Bulk import from CSV, JSON, Excel, SQL or Access; manager and agent roles; French, English, Spanish and Arabic"
-        ],
-        "tags": [
-          "Vue 3",
-          "Pinia",
-          "Supabase",
-          "sql.js",
-          "vue-i18n",
-          "PWA"
-        ],
-        "image": "assets/projects/school-store.jpg",
-        "gallery": [
-          "assets/projects/school-store-products.jpg",
-          "assets/projects/school-store-invoices.jpg",
-          "assets/projects/school-store-reports.jpg",
-          "assets/projects/school-store-clients.jpg"
-        ],
-        "demo": "https://w2001-rf.github.io/school-store/",
-        "repo": "https://github.com/w2001-RF/school-store",
-        "role": ""
-      },
-      {
-        "title": "ThreadLab — T-Shirt Store",
-        "badge": "E-commerce",
-        "year": "2026",
-        "featured": false,
-        "categories": [
-          "web"
-        ],
-        "description": "A premium T-shirt store front with a product picker and WhatsApp ordering.",
-        "details": "",
-        "highlights": [],
-        "tags": [
-          "JavaScript",
-          "HTML",
-          "CSS"
-        ],
-        "image": "assets/projects/threadlab.jpg",
-        "gallery": [],
-        "demo": "https://w2001-rf.github.io/TShirts_store/",
-        "repo": "https://github.com/w2001-RF/TShirts_store",
         "role": ""
       },
       {
