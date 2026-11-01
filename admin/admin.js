@@ -14,6 +14,7 @@ const SECTIONS = {
   skills: "Skills",
   experience: "Experience",
   projects: "Projects",
+  hire: "Work with me & rate",
   cta: "Call to action",
   certifications: "Certifications",
   contact: "Contact",
@@ -33,6 +34,10 @@ const HELP = {
   web3formsKey: "Public key from web3forms.com for the contact form.",
   roles: "Rotating titles shown under your name.",
   link: "Optional URL (GitHub, demo…).",
+  price: "Hourly rate as a number, e.g. 25.",
+  currency: "Currency code: EUR, USD, MAD…",
+  title: "Wrap words in *single asterisks* for the italic accent.",
+  headline: "Wrap words in *single asterisks* for the italic accent.",
 };
 
 const $ = (id) => document.getElementById(id);

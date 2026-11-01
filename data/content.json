@@ -913,6 +913,40 @@
     ],
     "featuredTitle": "Featured *work.*"
   },
+  "hire": {
+    "tag": "Work with me",
+    "title": "Freelance help for your *AI or web project.*",
+    "subtitle": "Bring an idea, a prototype or an existing codebase. I can build it with you, extend it or review it.",
+    "offers": [
+      {
+        "icon": "bot",
+        "title": "AI & LLM integration",
+        "text": "Chatbots, RAG over your documents and AI features added to an existing product."
+      },
+      {
+        "icon": "layout",
+        "title": "Full-stack development",
+        "text": "Web apps, dashboards and APIs, from the first prototype to a deployed product."
+      },
+      {
+        "icon": "code",
+        "title": "Code & architecture review",
+        "text": "A second pair of eyes on your models, backend, data pipeline or deployment."
+      }
+    ],
+    "rate": {
+      "price": 25,
+      "currency": "EUR",
+      "unit": "hour",
+      "label": "Standard hourly rate",
+      "note": "For development, integration and technical advice. The final quote depends on the scope of the project.",
+      "includes": [
+        "Remote, with clients in any time zone",
+        "French, Arabic or English"
+      ],
+      "button": "Discuss your project"
+    }
+  },
   "cta": {
     "title": "Have a project or a role *in mind?*",
     "text": "I'm open to full-time roles, freelance missions and AI collaborations.",
