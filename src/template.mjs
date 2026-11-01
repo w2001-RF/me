@@ -55,7 +55,9 @@ const clip = (v, n = 158) => (v.length > n ? `${v.slice(0, n - 1).replace(/\s+\S
 
 // root: relative path from the page to the site root ("" for home, "../" for subpages,
 // or an absolute path such as "/me/" for the 404 page, which can be served at any depth)
-export function renderPage(c, pageId = "home", { base = "", root = "" } = {}) {
+// cdn: optional absolute base for static files (images, CSS, JS, fonts), e.g. jsDelivr pinned to a commit,
+// so they are served with a long cache lifetime (GitHub Pages only allows 10 minutes)
+export function renderPage(c, pageId = "home", { base = "", root = "", cdn = "" } = {}) {
   const s = c.site;
   const p = c.profile;
   const name = `${p.firstName} ${p.lastName}`;
@@ -64,6 +66,9 @@ export function renderPage(c, pageId = "home", { base = "", root = "" } = {}) {
   const pageUrl = url + page.path;
   const absUrl = (path) => (/^https?:/.test(path) ? path : url + path.replace(/^\//, ""));
   const u = (path = "") => (/^(https?:|mailto:|data:|blob:|#)/.test(path) ? path : root + path.replace(/^\//, ""));
+  const a = (path = "") => (cdn && !/^(https?:|mailto:|data:|blob:|#)/.test(path) ? cdn + path.replace(/^\//, "") : u(path)); // static assets
+  // With a CDN, fall back to the copy on this site if it fails to load
+  const fallback = (path, attr) => (cdn ? ` onerror="this.onerror=null;this.${attr}='${u(path)}'"` : "");
   const to = (id) => u(PAGES.find((pg) => pg.id === id).path) || "./";
   const wa = `https://wa.me/${p.whatsapp}`;
   const initials = `${p.firstName[0] || ""}${p.lastName[0] || ""}`;
@@ -173,7 +178,7 @@ export function renderPage(c, pageId = "home", { base = "", root = "" } = {}) {
         <div class="hero-photo reveal">
           <div class="photo-ring">
             <div class="photo-frame">
-              <img src="${esc(u(p.photo))}" alt="${esc(name)}, ${esc(p.jobTitle)}" width="1138" height="1600" fetchpriority="high" decoding="async">
+              <img src="${esc(a(p.photo))}" alt="${esc(name)}, ${esc(p.jobTitle)}" width="900" height="1265" fetchpriority="high" decoding="async">
             </div>
           </div>
           <div class="float-card fc-1"><strong>${esc(c.heroCards.statValue)}</strong><span>${esc(c.heroCards.statLabel)}</span></div>
@@ -243,7 +248,7 @@ ${list(c.about.services, (sv) => `            <article class="service reveal">
         </header>
         <div class="certs-grid">
 ${list(c.certifications.items, (ct) => `          <article class="cert reveal">
-            ${ct.image ? `<a class="cert-media" href="${esc(u(ct.image))}" data-lightbox="${esc(ct.title)} — ${esc(ct.issuer)}"><img src="${esc(u(ct.image))}" alt="${esc(ct.issuer)} certificate: ${esc(ct.title)}" loading="lazy" width="1200" height="740"></a>` : ""}
+            ${ct.image ? `<a class="cert-media" href="${esc(a(ct.image))}" data-lightbox="${esc(ct.title)} — ${esc(ct.issuer)}"><img src="${esc(a(ct.image))}" alt="${esc(ct.issuer)} certificate: ${esc(ct.title)}" loading="lazy" width="1200" height="740"></a>` : ""}
             <div class="cert-body">
               <p class="cert-issuer">${esc(ct.issuer)} · ${esc(ct.date)}</p>
               <h3>${esc(ct.title)}</h3>
@@ -311,7 +316,7 @@ ${list(c.experience.items, (x) => `          <li class="reveal">
             <article class="tl-body">
               <div class="tl-head">
                 ${x.logo
-                  ? `<img class="co-logo" src="${esc(u(x.logo))}" alt="${esc(x.company.split("·")[0].trim())} logo" width="44" height="44" loading="lazy">`
+                  ? `<img class="co-logo" src="${esc(a(x.logo))}" alt="${esc(x.company.split("·")[0].trim())} logo" width="44" height="44" loading="lazy">`
                   : `<span class="co-logo" style="--co:${esc(x.logoColor || "#6e6e73")}" aria-hidden="true">${esc(x.logoText || "")}</span>`}
                 <h2 class="tl-title">${esc(x.role)} <span>${esc(x.company)}</span></h2>
               </div>
@@ -319,7 +324,7 @@ ${list(c.experience.items, (x) => `          <li class="reveal">
 ${list(x.bullets, (b) => `                <li>${rich(b)}</li>`)}
               </ul>
               ${tags(x.tags)}
-              ${(x.gallery || []).length ? `<div class="tl-gallery">${x.gallery.map((g, gi) => `<a href="${esc(u(g))}" data-lightbox="${esc(x.role)} — photo ${gi + 1}"><img src="${esc(u(g))}" alt="${esc(x.role)} at ${esc(x.company.split("·")[0].trim())}, photo ${gi + 1}" loading="lazy"></a>`).join("")}</div>` : ""}
+              ${(x.gallery || []).length ? `<div class="tl-gallery">${x.gallery.map((g, gi) => `<a href="${esc(a(g))}" data-lightbox="${esc(x.role)} — photo ${gi + 1}"><img src="${esc(a(g))}" alt="${esc(x.role)} at ${esc(x.company.split("·")[0].trim())}, photo ${gi + 1}" loading="lazy"></a>`).join("")}</div>` : ""}
             </article>
           </li>`)}
         </ol>
@@ -331,7 +336,7 @@ ${education()}
     const primary = pr.demo || pr.link || pr.repo || "";
     return `          <article class="project reveal${pr.image ? " has-image" : ""}" data-cat="${esc((pr.categories || []).join(" "))}" data-index="${i}">
             ${pr.image ? `<div class="project-media">
-              <img src="${esc(u(pr.image))}" alt="Screenshot of ${esc(pr.title)}" loading="lazy" decoding="async" width="1280" height="800">
+              <img src="${esc(a(pr.image))}" alt="Screenshot of ${esc(pr.title)}" loading="lazy" decoding="async" width="1280" height="800">
               ${pr.demo ? `<span class="live-badge">Live demo</span>` : ""}
             </div>` : ""}
             <div class="project-body">
@@ -348,7 +353,7 @@ ${education()}
           </article>`;
   };
   // Full project data for the details dialog, embedded so it works on every page
-  const projectData = (items) => `<script type="application/json" id="projects-data">${JSON.stringify(items.map((x) => ({ ...x, image: x.image ? u(x.image) : "", gallery: (x.gallery || []).map((g) => u(g)) }))).replace(/</g, "\\u003c")}</script>`;
+  const projectData = (items) => `<script type="application/json" id="projects-data">${JSON.stringify(items.map((x) => ({ ...x, image: x.image ? a(x.image) : "", gallery: (x.gallery || []).map((g) => a(g)) }))).replace(/</g, "\\u003c")}</script>`;
   const projectDialog = () => `
     <dialog class="project-dialog" aria-labelledby="pd-title">
       <form method="dialog"><button class="pd-close" aria-label="Close">✕</button></form>
@@ -577,16 +582,15 @@ ${education()}
   <meta name="twitter:image" content="${esc(absUrl(p.photo))}">
 
   <meta name="theme-color" content="#07070b">
-  <link rel="icon" href="${u("favicon.svg")}" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="${esc(u(p.photo))}">
+  <link rel="icon" href="${a("favicon.svg")}" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="${esc(a(p.photo))}">
   <link rel="manifest" href="${u("site.webmanifest")}">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Apple devices use SF Pro from the system stack; Inter is the fallback elsewhere -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
-  ${page.id === "home" ? `<link rel="preload" as="image" href="${esc(u(p.photo))}" fetchpriority="high">` : ""}
-  <link rel="stylesheet" href="${u("style.css")}">
+  <!-- Apple devices use SF Pro from the system stack; Inter (self-hosted, see style.css) is the fallback elsewhere -->
+  ${cdn ? `<link rel="preconnect" href="${new URL(cdn).origin}" crossorigin>` : ""}
+  ${page.id === "home" ? `<link rel="preload" as="image" href="${esc(a(p.photo))}" fetchpriority="high">` : ""}
+  <link rel="preload" as="font" type="font/woff2" href="${a("assets/fonts/inter-latin.woff2")}" crossorigin>
+  <link rel="stylesheet" href="${a("style.css")}"${fallback("style.css", "href")}>
 
   <script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replace(/</g, "\\u003c")}</script>
 </head>
@@ -648,8 +652,8 @@ ${Object.entries(ICONS).map(([k, v]) => `    <symbol id="i-${k}" viewBox="0 0 24
     </div>
   </footer>
 
-  <script src="${u("main.js")}" defer></script>
-  <script type="module" src="${u("scenes.js")}"></script>
+  <script src="${a("main.js")}" defer${fallback("main.js", "src")}></script>
+  <script type="module" src="${a("scenes.js")}"${fallback("scenes.js", "src")}></script>
 </body>
 </html>
 `;
