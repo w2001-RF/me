@@ -5,6 +5,7 @@ import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
+import { manifest } from "../scripts/manifest.mjs";
 
 const CDN = "https://cdn.jsdelivr.net/gh/example/site@0123456789abcdef/";
 const pages = [];
@@ -51,10 +52,17 @@ test("fonts are self-hosted (no Google Fonts requests)", () => {
   for (const m of css.matchAll(/url\((assets\/fonts\/[^)]+)\)/g)) assert.ok(existsSync(m[1]), m[1]);
 });
 
-test("the CV and the manifest stay on the site (download attribute, same-origin manifest)", () => {
+test("the CV stays on the site (the download attribute only works for same-origin files)", () => {
   const home = pages.find((p) => p.file.replace(/\\/g, "/") === "_site/index.html").html;
   assert.match(home, /href="assets\/Wassim-Rifay-CV\.pdf" class="btn btn-link" download/);
-  assert.match(home, /<link rel="manifest" href="site\.webmanifest">/);
+});
+
+test("the committed site.webmanifest matches content.json (run: node scripts/manifest.mjs)", () => {
+  const content = JSON.parse(readFileSync("data/content.json", "utf8"));
+  assert.equal(readFileSync("site.webmanifest", "utf8").replace(/\r\n/g, "\n"), manifest(content));
+  const home = pages.find((p) => p.file.replace(/\\/g, "/") === "_site/index.html").html;
+  assert.match(home, new RegExp(`<link rel="manifest" href="${CDN.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}site\\.webmanifest">`));
+  assert.match(manifest(content), /"start_url": "https:\/\//, "start_url must be absolute: the manifest is fetched from the CDN");
 });
 
 test("CSS and JS fall back to the site's own copy if the CDN fails", () => {

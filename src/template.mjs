@@ -584,7 +584,7 @@ ${education()}
   <meta name="theme-color" content="#07070b">
   <link rel="icon" href="${a("favicon.svg")}" type="image/svg+xml">
   <link rel="apple-touch-icon" href="${esc(a(p.photo))}">
-  <link rel="manifest" href="${u("site.webmanifest")}">
+  <link rel="manifest" href="${a("site.webmanifest")}">
 
   <!-- Apple devices use SF Pro from the system stack; Inter (self-hosted, see style.css) is the fallback elsewhere -->
   ${cdn ? `<link rel="preconnect" href="${new URL(cdn).origin}" crossorigin>` : ""}

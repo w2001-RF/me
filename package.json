@@ -4,7 +4,7 @@
   "description": "Static portfolio for GitHub Pages, built from data/content.json",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "optimize": "node scripts/optimize-images.mjs",
+    "optimize": "node scripts/optimize-images.mjs && node scripts/manifest.mjs",
     "test": "node --test \"test/*.test.mjs\"",
     "audit": "node scripts/perf-audit.mjs"
   },

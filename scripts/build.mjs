@@ -6,6 +6,7 @@
 import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { renderPage, PAGES } from "../src/template.mjs";
+import { manifest } from "./manifest.mjs";
 
 const OUT = "_site";
 const content = JSON.parse(await readFile("data/content.json", "utf8"));
@@ -29,20 +30,8 @@ for (const path of COPY) {
   if (existsSync(path)) await cp(path, `${OUT}/${path}`, { recursive: true });
 }
 
-const name = `${content.profile.firstName} ${content.profile.lastName}`;
-await writeFile(
-  `${OUT}/site.webmanifest`,
-  JSON.stringify({
-    name: `${name} | ${content.profile.jobTitle}`,
-    short_name: name,
-    start_url: basePath,
-    scope: basePath,
-    display: "standalone",
-    background_color: "#ffffff",
-    theme_color: "#fbfbfd",
-    icons: [{ src: `${basePath}favicon.svg`, sizes: "any", type: "image/svg+xml" }],
-  }, null, 2)
-);
+// Same file as the committed site.webmanifest (scripts/manifest.mjs), also served by the site itself
+await writeFile(`${OUT}/site.webmanifest`, manifest(content));
 
 const today = new Date().toISOString().slice(0, 10);
 await writeFile(
