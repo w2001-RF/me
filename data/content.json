@@ -199,7 +199,6 @@
     "groups": [
       {
         "title": "AI & Machine Learning",
-        "icon": "brain",
         "items": [
           "PyTorch",
           "TensorFlow",
@@ -213,7 +212,6 @@
       },
       {
         "title": "AI Agents & LLM",
-        "icon": "bot",
         "items": [
           "LangChain",
           "CrewAI",
@@ -225,7 +223,6 @@
       },
       {
         "title": "Backend & APIs",
-        "icon": "server",
         "items": [
           "FastAPI",
           "Flask",
@@ -238,7 +235,6 @@
       },
       {
         "title": "Frontend",
-        "icon": "layout",
         "items": [
           "React.js",
           "Next.js",
@@ -251,7 +247,6 @@
       },
       {
         "title": "Data & Databases",
-        "icon": "db",
         "items": [
           "PostgreSQL",
           "MySQL",
@@ -266,7 +261,6 @@
       },
       {
         "title": "MLOps, Cloud & DevOps",
-        "icon": "cloud",
         "items": [
           "AWS",
           "Docker",
@@ -995,17 +989,14 @@
     "subtitle": "Give me a hard problem and room to solve it. I work remotely and measure the result.",
     "offers": [
       {
-        "icon": "bot",
         "title": "AI & LLM integration",
         "text": "Chatbots and RAG over your documents, like my Dell competition assistant on local LLaMA models."
       },
       {
-        "icon": "layout",
         "title": "Full-stack development",
         "text": "Web apps, dashboards and APIs, prototype to deployment. Most projects here are live demos."
       },
       {
-        "icon": "code",
         "title": "Code & architecture review",
         "text": "Models, backend, pipeline or deployment: I measure first, then point to the weak part."
       }

@@ -35,7 +35,6 @@ const ICONS = {
   grad: `<path d="M11.5 3.1a1 1 0 0 1 1 0l10 5a1 1 0 0 1 0 1.8L21 10.6V16a1 1 0 1 1-2 0v-4.4l-6.5 3.3a1 1 0 0 1-1 0l-10-5a1 1 0 0 1 0-1.8l10-5ZM5 13.1l6.1 3a2 2 0 0 0 1.8 0l6.1-3V17c0 1.1-3.1 3-7 3s-7-1.9-7-3v-3.9Z"/>`,
   code: `<path d="M8.7 6.3a1 1 0 0 1 0 1.4L4.4 12l4.3 4.3a1 1 0 0 1-1.4 1.4l-5-5a1 1 0 0 1 0-1.4l5-5a1 1 0 0 1 1.4 0Zm6.6 0a1 1 0 0 1 1.4 0l5 5a1 1 0 0 1 0 1.4l-5 5a1 1 0 0 1-1.4-1.4l4.3-4.3-4.3-4.3a1 1 0 0 1 0-1.4Z"/>`,
 };
-export const ICON_NAMES = ["brain", "bot", "server", "layout", "db", "cloud", "code", "grad"];
 const icon = (name) => `<svg><use href="#i-${ICONS[name] ? name : "code"}"/></svg>`;
 const FACT_ICONS = ["pin", "grad", "brain"];
 
@@ -158,21 +157,13 @@ export function renderPage(c, pageId = "home", { base = "", root = "", cdn = "" 
           <p class="lead">${rich(p.intro)}</p>
           ${pathChooser()}
         </div>
-        <div class="hero-photo reveal">
-          <div class="photo-ring">
-            <div class="photo-frame">
-              <img src="${esc(a(p.photo))}" alt="${esc(name)}, ${esc(p.jobTitle)}" width="900" height="1265" fetchpriority="high" decoding="async">
-            </div>
+        <figure class="hero-photo reveal">
+          <div class="photo-frame">
+            <img src="${esc(a(p.photo))}" alt="${esc(name)}, ${esc(p.jobTitle)}" width="900" height="1265" fetchpriority="high" decoding="async">
           </div>
-          ${p.availability ? `<p class="avail"><span class="dot"></span> ${esc(p.availability)}</p>` : ""}
-        </div>
+          ${p.availability ? `<figcaption class="avail"><span class="dot" aria-hidden="true"></span> ${esc(p.availability)}</figcaption>` : ""}
+        </figure>
       </div>
-      ${(p.keywords || []).length ? `<div class="tech-strip" aria-label="Core technologies">
-        <ul class="marquee-track">
-          ${p.keywords.map((k) => `<li>${esc(k)}</li>`).join("")}
-          ${p.keywords.map((k) => `<li aria-hidden="true">${esc(k)}</li>`).join("")}
-        </ul>
-      </div>` : ""}
     </section>`;
 
   // "Where do you want to start?": each choice opens the first step of a guided path (main.js shows the next steps)
@@ -234,11 +225,8 @@ ${list(c.about.facts, (f, i) => `            <li>${icon(FACT_ICONS[i] || "pin")}
     </section>`;
 
   const education = () => list(c.experience.education, (ed) => `        <div class="edu reveal">
-          <div class="card-icon">${icon("grad")}</div>
-          <div>
-            <h3>${esc(ed.degree)}</h3>
-            <p>${esc(ed.school)} · ${esc(ed.period)}</p>
-          </div>
+          <h3>${esc(ed.degree)}</h3>
+          <p>${esc(ed.school)} · ${esc(ed.period)}</p>
         </div>`);
 
   const certs = c.certifications && c.certifications.items.length ? () => `
@@ -263,12 +251,9 @@ ${list(c.certifications.items, (ct) => `          <article class="cert reveal">
     </section>` : () => "";
 
   const languages = () => `
-        <div class="marquee reveal" aria-label="Programming languages">
-          <ul class="marquee-track">
-            ${c.skills.programmingLanguages.map((l) => `<li>${esc(l)}</li>`).join("")}
-            ${c.skills.programmingLanguages.map((l) => `<li aria-hidden="true">${esc(l)}</li>`).join("")}
-          </ul>
-        </div>`;
+        <ul class="lang-list reveal" aria-label="Programming languages">
+          ${c.skills.programmingLanguages.map((l) => `<li>${esc(l)}</li>`).join("")}
+        </ul>`;
 
   const skills = () => `
     <section class="section section-alt page-first" aria-labelledby="skills-title">
@@ -296,7 +281,6 @@ ${list(c.certifications.items, (ct) => `          <article class="cert reveal">
         </div>
         <div class="skills-grid">
 ${list(c.skills.groups, (g) => `          <article class="card reveal">
-            <div class="card-icon">${icon(g.icon)}</div>
             <h3>${esc(g.title)}</h3>
             ${tags(g.items, "tags")}
           </article>`)}
@@ -440,7 +424,6 @@ ${items.map((pr, i) => projectCard(pr, i, featured ? 3 : 2, featured)).join("\n"
         <div class="hire-grid">
           <div class="hire-offers">
 ${list(c.hire.offers || [], (o) => `            <article class="service reveal">
-              <div class="card-icon">${icon(o.icon)}</div>
               <h3>${esc(o.title)}</h3>
               <p>${esc(o.text)}</p>
             </article>`)}
@@ -519,7 +502,7 @@ ${list(c.hire.offers || [], (o) => `            <article class="service reveal">
   const notFound = () => `
     <section class="section page-first not-found" aria-labelledby="nf-title">
       <div class="container center">
-        <p class="nf-code grad">404</p>
+        <p class="nf-code">404</p>
         ${H(1, "nf-title", "This page doesn't exist")}
         <p class="section-sub">But the rest of my portfolio does.</p>
         <div class="hero-cta"><a class="btn" href="${to("home")}">Back to the homepage ${icon("arrow")}</a><a class="btn btn-link" href="${to("projects")}">See my projects</a></div>
@@ -551,7 +534,8 @@ ${education()}
   ${base ? `<base href="${esc(base)}">` : ""}
   <script>
     document.documentElement.classList.replace("no-js", "js");
-    let t = null; try { t = localStorage.getItem("theme"); } catch (e) {} document.documentElement.dataset.theme = t || "dark";
+    let t = null; try { t = localStorage.getItem("theme"); } catch (e) {}
+    document.documentElement.dataset.theme = t || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
   </script>
 
   <title>${esc(meta.title)}</title>
@@ -573,15 +557,15 @@ ${education()}
   <meta name="twitter:description" content="${esc(ogDesc)}">
   <meta name="twitter:image" content="${esc(absUrl(p.photo))}">
 
-  <meta name="theme-color" content="#07070b">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
   <link rel="icon" href="${a("favicon.svg")}" type="image/svg+xml">
   <link rel="apple-touch-icon" href="${esc(a(p.photo))}">
   <link rel="manifest" href="${a("site.webmanifest")}">
 
-  <!-- Apple devices use SF Pro from the system stack; Inter (self-hosted, see style.css) is the fallback elsewhere -->
+  <!-- No web fonts: the system font (SF Pro, Segoe UI Variable, Roboto) is used on every device -->
   ${cdn ? `<link rel="preconnect" href="${new URL(cdn).origin}" crossorigin>` : ""}
   ${page.id === "home" ? `<link rel="preload" as="image" href="${esc(a(p.photo))}" fetchpriority="high">` : ""}
-  <link rel="preload" as="font" type="font/woff2" href="${a("assets/fonts/inter-latin.woff2")}" crossorigin>
   <link rel="stylesheet" href="${a("style.css")}"${fallback("style.css", "href")}>
 
   <script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replace(/</g, "\\u003c")}</script>

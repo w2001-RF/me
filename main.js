@@ -74,53 +74,6 @@ function initPage() {
   document.querySelectorAll("main .reveal").forEach((el) => revealObserver.observe(el));
   onCleanup(() => revealObserver.disconnect());
 
-  // Count-up stats
-  const countObserver = new IntersectionObserver(
-    (entries) =>
-      entries.forEach((e) => {
-        if (!e.isIntersecting) return;
-        countObserver.unobserve(e.target);
-        const el = e.target;
-        const to = Number(el.dataset.to);
-        if (reduceMotion) return;
-        const start = performance.now();
-        const step = (now) => {
-          const p = Math.min((now - start) / 1400, 1);
-          el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3)));
-          if (p < 1 && el.isConnected) requestAnimationFrame(step);
-        };
-        requestAnimationFrame(step);
-      }),
-    { threshold: 0.6 }
-  );
-  document.querySelectorAll(".count").forEach((el) => countObserver.observe(el));
-  onCleanup(() => countObserver.disconnect());
-
-  // Spotlight + 3D tilt that follow the mouse
-  document.querySelectorAll(".card, .project").forEach((card) =>
-    card.addEventListener("pointermove", (e) => {
-      const r = card.getBoundingClientRect();
-      card.style.setProperty("--mx", `${e.clientX - r.left}px`);
-      card.style.setProperty("--my", `${e.clientY - r.top}px`);
-    })
-  );
-  if (finePointer && !reduceMotion) {
-    document.querySelectorAll(".project, .skills-grid .card, .photo-frame").forEach((el) => {
-      const max = el.classList.contains("photo-frame") ? 10 : 5;
-      el.addEventListener("pointermove", (e) => {
-        const r = el.getBoundingClientRect();
-        const x = (e.clientX - r.left) / r.width - 0.5;
-        const y = (e.clientY - r.top) / r.height - 0.5;
-        el.classList.add("tilt");
-        el.style.transform = `perspective(1000px) rotateX(${(-y * max).toFixed(2)}deg) rotateY(${(x * max).toFixed(2)}deg) scale(1.02)`;
-      });
-      el.addEventListener("pointerleave", () => {
-        el.style.transform = "";
-        setTimeout(() => el.classList.remove("tilt"), 200);
-      });
-    });
-  }
-
   // Phones: show the first two bullets of each job, with a "Show more" toggle
   document.querySelectorAll(".tl-body > ul:not(.tags)").forEach((ul) => {
     const extra = ul.children.length - 2;
@@ -301,6 +254,9 @@ function fly(el, card, reverse) {
   });
 }
 
+// Distance a flick carries on after release, with scroll-like exponential deceleration (Apple's projection)
+const project = (velocity, rate = 0.998) => ((velocity / 1000) * rate) / (1 - rate);
+
 // 3D coverflow of screenshots: drag or swipe, arrow keys, click a side shot to bring it forward,
 // click the front shot to zoom. The front shot tilts toward the pointer with a moving glare.
 function coverflow(dialog, media, shots, title) {
@@ -349,17 +305,22 @@ function coverflow(dialog, media, shots, title) {
   prev.addEventListener("click", () => go(active - 1));
   next.addEventListener("click", () => go(active + 1));
 
-  // Drag / swipe: the whole carousel follows the finger, then snaps to the nearest shot
+  // Drag / swipe: the whole carousel follows the finger 1:1; on release, the flick's velocity is projected
+  // forward (as scrolling decelerates) and the carousel lands on the shot nearest to where it was heading
   let startX = null;
   let moved = 0;
+  let trail = [];
   stage.addEventListener("pointerdown", (e) => {
     if (n < 2 || e.button > 0) return;
     startX = e.clientX;
     moved = 0;
+    trail = [{ x: e.clientX, t: e.timeStamp }];
   });
   stage.addEventListener("pointermove", (e) => {
     if (startX !== null) {
       moved = e.clientX - startX;
+      trail.push({ x: e.clientX, t: e.timeStamp });
+      if (trail.length > 6) trail.shift();
       if (Math.abs(moved) > 6) {
         if (!stage.classList.contains("dragging")) {
           stage.classList.add("dragging");
@@ -389,9 +350,13 @@ function coverflow(dialog, media, shots, title) {
   const release = () => {
     if (startX === null) return;
     stage.classList.remove("dragging");
-    const steps = Math.round(-moved / (stage.clientWidth * 0.45));
     startX = null;
-    go(active + (Math.abs(moved) > 40 && !steps ? -Math.sign(moved) : steps));
+    const unit = stage.clientWidth * 0.45;
+    const first = trail[0];
+    const last = trail[trail.length - 1];
+    const velocity = last.t > first.t ? ((last.x - first.x) / (last.t - first.t)) * 1000 : 0; // px/s
+    const steps = Math.round(-(moved + project(velocity)) / unit);
+    go(active + Math.max(-(n - 1), Math.min(n - 1, steps)));
   };
   stage.addEventListener("pointerup", release);
   stage.addEventListener("pointercancel", release);

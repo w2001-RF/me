@@ -1,6 +1,6 @@
 // Portfolio admin: edits data/content.json and uploads the photo/CV by committing to the GitHub repo.
 // The token never leaves this browser except in requests to api.github.com.
-import { render, ICON_NAMES } from "../src/template.mjs";
+import { render } from "../src/template.mjs";
 
 const CONTENT_PATH = "data/content.json";
 const DEFAULTS = { owner: "w2001-RF", repo: "me", branch: "main" };
@@ -225,11 +225,6 @@ function fieldFor(parent, key, label = humanize(String(key)), top = false) {
   }
   if (typeof value === "boolean") {
     return h("label", { class: "check" }, h("input", { type: "checkbox", checked: value, onchange: (e) => { parent[key] = e.target.checked; markDirty(); } }), label);
-  }
-  if (key === "icon") {
-    const sel = h("select", { onchange: (e) => { parent[key] = e.target.value; markDirty(); } },
-      ...ICON_NAMES.map((n) => h("option", { value: n, selected: n === value }, n)));
-    return h("label", {}, label, sel);
   }
   const long = LONG_KEYS.has(key) || String(value).length > 90;
   const input = long

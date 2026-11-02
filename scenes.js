@@ -6,7 +6,8 @@ const root = document.documentElement;
 const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const isSmall = () => matchMedia("(max-width: 600px)").matches;
 const finePointer = matchMedia("(hover: hover) and (pointer: fine)").matches;
-const PALETTE = ["#2997ff", "#a970ff", "#ff6ba3", "#ff9f0a", "#30d158", "#40c8e0"];
+// Zellige tones: blue, teal, Mamora green, saffron, terracotta, sand
+const PALETTE = ["#5aaee6", "#3cbfae", "#8cc46a", "#e6b45a", "#e07a4f", "#c9b79c"];
 
 function webglAvailable() {
   try {
@@ -83,7 +84,7 @@ function heroWave(THREE, hero, canvas) {
     uSize: { value: 60 },
     uOpacity: { value: 0.7 },
     uBase: { value: new THREE.Color("#8b8e97") },
-    uAccent: { value: new THREE.Color("#a594ff") },
+    uAccent: { value: new THREE.Color("#6ab7e6") },
   };
   const material = new THREE.ShaderMaterial({
     uniforms,
@@ -142,7 +143,7 @@ function heroWave(THREE, hero, canvas) {
     }
     dome.setAttribute("color", new THREE.Float32BufferAttribute(cols, 3));
     s.add(new THREE.Mesh(dome, new THREE.MeshBasicMaterial({ side: THREE.BackSide, vertexColors: true })));
-    for (const [x, y, z, w, h, col] of [[0, 7, 3, 10, 3.5, "#ffffff"], [-7, 1.5, -2, 3, 6, dark ? "#a594ff" : "#c9c0ff"], [6, 0, 5, 5, 3, dark ? "#c3c0b8" : "#ffffff"], [0, -6, 2, 12, 2, dark ? "#2a2d38" : "#d8dbe4"]]) {
+    for (const [x, y, z, w, h, col] of [[0, 7, 3, 10, 3.5, "#ffffff"], [-7, 1.5, -2, 3, 6, dark ? "#6ab7e6" : "#bcdcf2"], [6, 0, 5, 5, 3, dark ? "#c3c0b8" : "#ffffff"], [0, -6, 2, 12, 2, dark ? "#2a2d38" : "#d8dbe4"]]) {
       const box = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: col, side: THREE.DoubleSide }));
       box.position.set(x, y, z);
       box.lookAt(0, 0, 0);
@@ -154,20 +155,33 @@ function heroWave(THREE, hero, canvas) {
   };
   const envs = { dark: studio(true), light: studio(false) };
   const ball = new THREE.Mesh(new THREE.SphereGeometry(0.62, 64, 32), new THREE.MeshStandardMaterial({ metalness: 1, roughness: 0.05, envMap: envs.dark }));
-  const BALL = isSmall() ? { x: -1.6, z: 3.2, y: 0.95 } : { x: 1.5, z: 2, y: 1.05 };
-  const BOB = { amp: 0.32, period: 3.6 };
+  // In the gap between the text and the photo. Phones have no such gap and no mouse to throw it with: wave only.
+  const BALL = { x: 1.1, z: 2, y: 1.05 };
   ball.position.set(BALL.x, BALL.y, BALL.z);
+  ball.visible = !isSmall();
   scene.add(ball);
-  let lastDip = -1;
-  const moveBall = (t) => {
-    ball.position.y = BALL.y + Math.sin((t / BOB.period) * Math.PI * 2) * BOB.amp;
-    ball.rotation.y = t * 0.25;
-    // lowest point of each bob (sin = -1 at 3/4 of a period): drop a ripple
-    const dip = Math.floor(t / BOB.period + 0.25);
-    if (dip !== lastDip) {
-      lastDip = dip;
-      uniforms.uRipple.value.set(BALL.x, BALL.z, t);
+
+  // The sphere rests; with a mouse you can grab it and throw it. It follows the pointer 1:1 (from where it was
+  // grabbed, with rubber-band resistance far from home), then springs home carrying the release velocity,
+  // and drops a ripple into the wave. Springs use Apple's two parameters: damping ratio and response.
+  const spring = (damping, response) => ({ k: (2 * Math.PI / response) ** 2, c: (4 * Math.PI * damping) / response });
+  const THROWN = spring(0.8, 0.45); // momentum preceded it: a little overshoot is right
+  const SETTLE = spring(1, 0.35);   // the lift on grab: no overshoot
+  const LEASH = 3.2;
+  const rubberband = (over, dim, c = 0.55) => (over * dim * c) / (dim + c * Math.abs(over));
+  const ballState = { x: BALL.x, z: BALL.z, vx: 0, vz: 0, lift: 0, vl: 0, held: false };
+  const grab = { dx: 0, dz: 0, trail: [] };
+  const stepBall = (dt) => {
+    const s = ballState;
+    if (!s.held) {
+      for (const [p, v, home] of [["x", "vx", BALL.x], ["z", "vz", BALL.z]]) {
+        s[v] += (-THROWN.k * (s[p] - home) - THROWN.c * s[v]) * dt;
+        s[p] += s[v] * dt;
+      }
     }
+    s.vl += (-SETTLE.k * (s.lift - (s.held ? 0.45 : 0)) - SETTLE.c * s.vl) * dt;
+    s.lift += s.vl * dt;
+    ball.position.set(s.x, BALL.y + s.lift, s.z);
   };
 
   const applyTheme = () => {
@@ -175,7 +189,7 @@ function heroWave(THREE, hero, canvas) {
     material.blending = dark ? THREE.AdditiveBlending : THREE.NormalBlending;
     uniforms.uOpacity.value = dark ? 0.8 : 0.34;
     const css = getComputedStyle(root);
-    uniforms.uAccent.value.set(css.getPropertyValue("--accent").trim() || "#a594ff");
+    uniforms.uAccent.value.set(css.getPropertyValue("--accent").trim() || "#6ab7e6");
     uniforms.uBase.value.set(dark ? "#8b8e97" : "#6c6f78");
     material.needsUpdate = true;
     ball.material.envMap = envs[dark ? "dark" : "light"];
@@ -212,16 +226,68 @@ function heroWave(THREE, hero, canvas) {
     raycaster.setFromCamera(ndc, camera);
     return raycaster.ray.intersectPlane(plane, hit);
   };
+  const ballPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -BALL.y);
+  const onBall = (e) => {
+    if (!finePointer || reduceMotion || !ball.visible || e.target.closest(".hero-text, .hero-photo")) return false;
+    pointAt(e);
+    return raycaster.intersectObject(ball).length > 0;
+  };
+  const ballAt = () => raycaster.ray.intersectPlane(ballPlane, hit);
   hero.addEventListener("pointermove", (e) => {
     parallax.x = ndc.x;
     parallax.y = ndc.y;
     if (pointAt(e)) target.set(hit.x, hit.z);
+    if (ballState.held) {
+      if (!ballAt()) return;
+      // 1:1 from the grab offset, resisting progressively beyond the leash
+      let x = hit.x + grab.dx - BALL.x;
+      let z = hit.z + grab.dz - BALL.z;
+      const d = Math.hypot(x, z);
+      if (d > LEASH) {
+        const r = LEASH + rubberband(d - LEASH, LEASH);
+        x *= r / d;
+        z *= r / d;
+      }
+      ballState.x = BALL.x + x;
+      ballState.z = BALL.z + z;
+      grab.trail.push({ x: ballState.x, z: ballState.z, t: e.timeStamp });
+      if (grab.trail.length > 6) grab.trail.shift();
+      return;
+    }
+    hero.classList.toggle("grab-ball", onBall(e));
   });
   hero.addEventListener("pointerleave", () => target.set(999, 999));
   hero.addEventListener("pointerdown", (e) => {
     if (e.target.closest("a, button, input, textarea")) return;
+    if (onBall(e) && ballAt()) {
+      ballState.held = true;
+      ballState.vx = ballState.vz = 0;
+      grab.dx = ballState.x - hit.x;
+      grab.dz = ballState.z - hit.z;
+      grab.trail = [{ x: ballState.x, z: ballState.z, t: e.timeStamp }];
+      hero.setPointerCapture(e.pointerId);
+      hero.classList.add("grabbing-ball");
+      e.preventDefault();
+      return;
+    }
     if (pointAt(e)) uniforms.uRipple.value.set(hit.x, hit.z, now);
   });
+  const release = () => {
+    if (!ballState.held) return;
+    ballState.held = false;
+    hero.classList.remove("grabbing-ball");
+    // velocity handoff: the spring starts at the speed the pointer was moving
+    const a = grab.trail[0];
+    const b = grab.trail[grab.trail.length - 1];
+    const dt = (b.t - a.t) / 1000;
+    if (dt > 0) {
+      ballState.vx = (b.x - a.x) / dt;
+      ballState.vz = (b.z - a.z) / dt;
+    }
+    uniforms.uRipple.value.set(ballState.x, ballState.z, now);
+  };
+  hero.addEventListener("pointerup", release);
+  hero.addEventListener("pointercancel", release);
 
   function render() {
     camera.position.set(parallax.x * 2.2, 5.2 + parallax.y * 0.8, 12);
@@ -248,10 +314,16 @@ function heroWave(THREE, hero, canvas) {
 
   const mouse = uniforms.uMouse.value;
   const cam = { x: 0, y: 0 };
+  let last = 0;
   stopLoop = loopWhileVisible(hero, (t) => {
+    const dt = Math.min(t - last, 1 / 30); // a long gap (tab hidden) must not make the springs jump
+    last = t;
     now = t;
     uniforms.uTime.value = t;
-    moveBall(t);
+    stepBall(dt);
+    ball.rotation.y = t * 0.25;
+    // while held, the wave swells under the sphere instead of under the cursor
+    if (ballState.held) target.set(ballState.x, ballState.z);
     if (target.x > 900) mouse.set(999, 999);
     else if (mouse.x > 900) mouse.copy(target);
     else mouse.lerp(target, 0.08);
@@ -808,7 +880,7 @@ function storyScene(THREE, section) {
   const applyTheme = () => {
     const dark = root.dataset.theme === "dark";
     const css = getComputedStyle(root);
-    pMat.color.set(css.getPropertyValue("--accent").trim() || "#a594ff");
+    pMat.color.set(css.getPropertyValue("--accent").trim() || "#6ab7e6");
     pMat.blending = dark ? THREE.AdditiveBlending : THREE.NormalBlending;
     pMat.needsUpdate = true;
     for (const { mat } of lines) {

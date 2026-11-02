@@ -5,8 +5,8 @@
   "start_url": "https://w2001-rf.github.io/me/",
   "scope": "https://w2001-rf.github.io/me/",
   "display": "standalone",
-  "background_color": "#07070b",
-  "theme_color": "#07070b",
+  "background_color": "#000000",
+  "theme_color": "#000000",
   "icons": [
     {
       "src": "https://w2001-rf.github.io/me/favicon.svg",

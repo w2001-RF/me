@@ -14,8 +14,8 @@ export function manifest(content) {
     start_url: url,
     scope: url,
     display: "standalone",
-    background_color: "#07070b",
-    theme_color: "#07070b",
+    background_color: "#000000",
+    theme_color: "#000000",
     icons: [{ src: `${url}favicon.svg`, sizes: "any", type: "image/svg+xml" }],
   }, null, 2)}\n`;
 }
