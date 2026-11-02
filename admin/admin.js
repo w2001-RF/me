@@ -7,9 +7,9 @@ const DEFAULTS = { owner: "w2001-RF", repo: "me", branch: "main" };
 
 const SECTIONS = {
   profile: "Profile",
+  paths: "Guided paths",
+  story: "Story (home 3D)",
   site: "Site & SEO",
-  heroCards: "Hero cards",
-  trusted: "Experience with",
   about: "About",
   skills: "Skills",
   experience: "Experience",

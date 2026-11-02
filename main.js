@@ -74,33 +74,6 @@ function initPage() {
   document.querySelectorAll("main .reveal").forEach((el) => revealObserver.observe(el));
   onCleanup(() => revealObserver.disconnect());
 
-  // Typing effect for the hero role
-  const typed = document.querySelector(".typed");
-  if (typed && !reduceMotion) {
-    const words = JSON.parse(typed.dataset.words);
-    let w = 0;
-    let i = words[0].length;
-    let deleting = true;
-    let timer;
-    const tick = () => {
-      const word = words[w];
-      i += deleting ? -1 : 1;
-      typed.textContent = word.slice(0, i);
-      let delay = deleting ? 35 : 70;
-      if (!deleting && i === word.length) {
-        deleting = true;
-        delay = 2200;
-      } else if (deleting && i === 0) {
-        deleting = false;
-        w = (w + 1) % words.length;
-        delay = 300;
-      }
-      timer = setTimeout(tick, delay);
-    };
-    timer = setTimeout(tick, 2600);
-    onCleanup(() => clearTimeout(timer));
-  }
-
   // Count-up stats
   const countObserver = new IntersectionObserver(
     (entries) =>
@@ -721,6 +694,88 @@ if ("pushState" in history) {
   document.addEventListener("touchstart", prefetch, { passive: true });
 
   addEventListener("popstate", (e) => navigate(location.href, { push: false, scroll: e.state?.scroll || 0 }));
+}
+
+/* =================================================================== Guided paths */
+
+// The hero asks "Where do you want to start?". The chosen path is remembered in this browser and a small bar
+// shows where the visitor is in it and the next step, on every page (it lives outside <main>, so it survives
+// SPA navigations).
+const SITE_PATHS = (() => {
+  try {
+    return JSON.parse(document.getElementById("site-paths")?.textContent || "null");
+  } catch {
+    return null;
+  }
+})();
+const store = {
+  get: (k) => {
+    try {
+      return localStorage.getItem(k);
+    } catch {
+      return null;
+    }
+  },
+  set: (k, v) => {
+    try {
+      v === null ? localStorage.removeItem(k) : localStorage.setItem(k, v);
+    } catch {}
+  },
+};
+const stepUrl = (s) => `${ROOT}${SITE_PATHS.pages[s.page] ?? ""}${s.hash ? `#${s.hash}` : ""}`;
+const currentPath = () => SITE_PATHS?.paths.find((pt) => pt.id === store.get("path")) || null;
+const arrow = () => make("span", { className: "pb-arrow", innerHTML: '<svg><use href="#i-arrow"/></svg>' });
+
+// Index of the step the visitor is on (-1 if this page is not part of the path)
+function stepIndex(pt) {
+  const here = pt.steps.map((s, i) => [s, i]).filter(([s]) => s.page === root.dataset.page);
+  if (!here.length) return -1;
+  const byHash = here.find(([s]) => s.hash && location.hash === `#${s.hash}`);
+  return (byHash || here[0])[1];
+}
+
+function renderPathBar() {
+  let bar = document.querySelector(".path-bar");
+  const pt = currentPath();
+  document.querySelectorAll("a[data-path]").forEach((a) => a.toggleAttribute("aria-current", a.dataset.path === pt?.id));
+  if (!pt) return bar?.remove();
+  if (!bar) {
+    bar = make("nav", { className: "path-bar", ariaLabel: "Your path through the site" });
+    document.body.append(bar);
+  }
+  const idx = stepIndex(pt);
+  const seen = Math.max(idx, Number(store.get("path-step") ?? -1));
+  store.set("path-step", String(seen));
+  const next = pt.steps[idx >= 0 ? idx + 1 : seen + 1];
+  const steps = make("ol", { className: "pb-steps" }, ...pt.steps.map((s, i) =>
+    make("li", { className: i === idx ? "now" : i <= seen ? "done" : "" },
+      make("a", { href: stepUrl(s), title: s.label, ariaLabel: `Step ${i + 1} of ${pt.steps.length}: ${s.label}${i === idx ? " (you are here)" : ""}` }))));
+  const go = next
+    ? make("a", { className: "pb-next", href: stepUrl(next) }, `Next: ${next.label}`, arrow())
+    : root.dataset.page === "contact"
+      ? make("span", { className: "pb-done", textContent: "You've seen it all ✓" })
+      : make("a", { className: "pb-next", href: `${ROOT}${SITE_PATHS.pages.contact}` }, "Let's talk", arrow());
+  const close = make("button", { type: "button", className: "pb-close", ariaLabel: "Leave this path", textContent: "✕" });
+  close.addEventListener("click", () => {
+    store.set("path", null);
+    store.set("path-step", null);
+    renderPathBar();
+  });
+  bar.replaceChildren(make("span", { className: "pb-label", textContent: pt.label }), steps, go, close);
+}
+
+if (SITE_PATHS) {
+  // Capture phase: remember the choice before the router handles the link
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest("a[data-path]");
+    if (!a) return;
+    store.set("path", a.dataset.path);
+    store.set("path-step", "-1");
+    requestAnimationFrame(renderPathBar); // same-page anchors (#story) do not trigger page:mount
+  }, true);
+  document.addEventListener("page:mount", renderPathBar);
+  addEventListener("hashchange", renderPathBar);
+  renderPathBar();
 }
 
 /* =================================================================== Start */

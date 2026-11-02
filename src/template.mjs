@@ -73,7 +73,6 @@ export function renderPage(c, pageId = "home", { base = "", root = "", cdn = "" 
   const wa = `https://wa.me/${p.whatsapp}`;
   const initials = `${p.firstName[0] || ""}${p.lastName[0] || ""}`;
   const H = (level, id, text, cls = "section-title") => `<h${level} class="${cls}" id="${id}">${text}</h${level}>`;
-  const first = (id) => (page.id === id ? 1 : 2); // the page's main section uses <h1>
 
   const meta = {
     home: { title: s.title, description: s.description },
@@ -154,26 +153,10 @@ export function renderPage(c, pageId = "home", { base = "", root = "", cdn = "" 
       <canvas class="hero-canvas" aria-hidden="true"></canvas>
       <div class="container hero-grid">
         <div class="hero-text reveal">
-          <p class="eyebrow"><span class="dot"></span> ${p.roles.slice(0, 3).map((r, i) => `<span${i ? ' class="eb-alt"' : ""}>${esc(r)}</span>`).join("")}</p>
-          <h1 id="hero-title"><span class="hero-hi">Hi, I'm <span class="grad hero-name">${esc(name)}</span></span>${p.headline ? ` <span class="hero-statement">${tt(p.headline)}</span>` : ""}</h1>
-          <p class="hero-role">
-            <span class="sr-only">${esc(p.roles.join(", "))}.</span>
-            <span aria-hidden="true"><span class="typed" data-words="${esc(JSON.stringify(p.roles))}">${esc(p.roles[0] || "")}</span><span class="caret"></span></span>
-          </p>
+          <p class="hero-label">${esc(p.jobTitle)} <span>·</span> ${esc(p.city)}, ${esc(p.country)}</p>
+          <h1 id="hero-title"><span class="hero-hi">${esc(name)}</span>${p.headline ? ` <span class="hero-statement">${tt(p.headline)}</span>` : ""}</h1>
           <p class="lead">${rich(p.intro)}</p>
-          <ul class="hero-meta" aria-label="At a glance">
-            ${p.currentEmployer ? `<li>${icon("work")}<span>${esc(p.jobTitle.replace(/ Software/, ""))} at <strong>${esc(p.currentEmployer)}</strong></span></li>` : ""}
-            <li>${icon("pin")}<span>${esc(p.city)}, ${esc(p.country)}</span></li>
-            ${p.school ? `<li>${icon("grad")}<span>${esc(p.school)}</span></li>` : ""}
-          </ul>
-          <div class="hero-cta">
-            <a href="${to("contact")}" class="btn">Let's talk ${icon("arrow")}</a>
-            <a href="${to("projects")}" class="btn btn-ghost">View my work</a>
-            ${p.cv ? `<a href="${esc(u(p.cv))}" class="btn btn-link" download>Download CV ${icon("download")}</a>` : ""}
-          </div>
-          <ul class="socials" aria-label="Social profiles">${socials}
-            <li><a href="${wa}" target="_blank" rel="noopener" aria-label="WhatsApp">${icon("whatsapp")}</a></li>
-          </ul>
+          ${pathChooser()}
         </div>
         <div class="hero-photo reveal">
           <div class="photo-ring">
@@ -181,8 +164,6 @@ export function renderPage(c, pageId = "home", { base = "", root = "", cdn = "" 
               <img src="${esc(a(p.photo))}" alt="${esc(name)}, ${esc(p.jobTitle)}" width="900" height="1265" fetchpriority="high" decoding="async">
             </div>
           </div>
-          <div class="float-card fc-1"><strong>${esc(c.heroCards.statValue)}</strong><span>${esc(c.heroCards.statLabel)}</span></div>
-          <div class="float-card fc-2"><code>${esc(c.heroCards.code)}</code><span>${esc(c.heroCards.codeLabel)}</span></div>
           ${p.availability ? `<p class="avail"><span class="dot"></span> ${esc(p.availability)}</p>` : ""}
         </div>
       </div>
@@ -192,39 +173,61 @@ export function renderPage(c, pageId = "home", { base = "", root = "", cdn = "" 
           ${p.keywords.map((k) => `<li aria-hidden="true">${esc(k)}</li>`).join("")}
         </ul>
       </div>` : ""}
-      ${c.trusted.length ? `<div class="container">
-        <div class="trusted reveal">
-          <p>Experience with</p>
-          <ul>${c.trusted.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>
-        </div>
-      </div>` : ""}
     </section>`;
+
+  // "Where do you want to start?": each choice opens the first step of a guided path (main.js shows the next steps)
+  const stepHref = (step) => `${to(step.page)}${step.hash ? `#${esc(step.hash)}` : ""}`;
+  const pathChooser = () => c.paths && c.paths.items.length ? `<nav class="path-chooser" aria-labelledby="paths-title">
+            <p class="pc-title" id="paths-title">${esc(c.paths.title)}</p>
+            <ul>
+${list(c.paths.items, (pt) => `              <li><a href="${stepHref(pt.steps[0])}" data-path="${esc(pt.id)}"><strong>${esc(pt.label)}</strong><span>${esc(pt.hint)}</span>${icon("arrow")}</a></li>`)}
+            </ul>
+          </nav>` : `<div class="hero-cta">
+            <a href="${to("contact")}" class="btn">Let's talk ${icon("arrow")}</a>
+            <a href="${to("projects")}" class="btn btn-ghost">View my work</a>
+          </div>`;
+
+  // The story: one 3D shape (scenes.js) changes state as the chapters scroll past
+  const story = () => c.story && c.story.chapters.length ? `
+    <section class="story" id="story" aria-labelledby="story-title">
+      <div class="story-stage" aria-hidden="true">
+        <canvas class="story-canvas"></canvas>
+        <div class="story-hud"><span class="hud-no">01</span><span class="hud-bar"><i></i></span><span class="hud-label">${esc(c.story.chapters[0].label)}</span></div>
+      </div>
+      <div class="container story-flow">
+        <header class="story-head reveal">
+          <p class="section-tag">${esc(c.story.tag)}</p>
+          ${H(2, "story-title", tt(c.story.title))}
+        </header>
+${list(c.story.chapters, (ch, i) => `        <article class="chapter" data-step="${i}" data-label="${esc(ch.label)}">
+          <div class="chapter-card">
+            <p class="chapter-no"><span>${String(i + 1).padStart(2, "0")}</span> ${esc(ch.label)}</p>
+            <h3>${esc(ch.title)}</h3>
+            <p>${esc(ch.text)}</p>
+            ${ch.link ? `<a class="evidence" href="${stepHref(ch.link)}"><span>Evidence</span> ${esc(ch.link.label)} ${icon("arrow")}</a>` : ""}
+          </div>
+        </article>`)}
+      </div>
+    </section>` : "";
 
   const stats = () => `
           <dl class="stats">
 ${list(c.about.stats, (st) => `            <div><dt>${esc(st.label)}</dt><dd><span class="count" data-to="${Number(st.value) || 0}">${Number(st.value) || 0}</span>${esc(st.suffix)}</dd></div>`)}
           </dl>`;
 
-  const about = (teaser = false) => `
-    <section class="section${teaser ? " section-alt" : " page-first"}" aria-labelledby="about-title">
+  const about = () => `
+    <section class="section page-first" aria-labelledby="about-title">
       <div class="container about-grid">
         <div class="reveal about-text">
           <p class="section-tag">About me</p>
-          ${H(first("about"), "about-title", tt(c.about.title))}
-${list(teaser ? c.about.paragraphs.slice(0, 1) : c.about.paragraphs, (t) => `          <p>${rich(t)}</p>`)}
+          ${H(1, "about-title", tt(c.about.title))}
+${list(c.about.paragraphs, (t) => `          <p>${rich(t)}</p>`)}
           <ul class="about-facts">
 ${list(c.about.facts, (f, i) => `            <li>${icon(FACT_ICONS[i] || "pin")} ${esc(f)}</li>`)}
           </ul>
-          ${teaser ? `<a class="more-link" href="${to("about")}">More about me ${icon("arrow")}</a>` : ""}
         </div>
         <div class="about-side">
-          ${(c.about.services || []).length ? `<div class="services">
-${list(c.about.services, (sv) => `            <article class="service reveal">
-              <div class="card-icon">${icon(sv.icon)}</div>
-              <h3>${esc(sv.title)}</h3>
-              <p>${esc(sv.text)}</p>
-            </article>`)}
-          </div>` : ""}
+          <figure class="about-photo reveal"><img src="${esc(a(p.photo))}" alt="${esc(name)}" width="900" height="1265" loading="lazy" decoding="async"></figure>
           <div class="reveal">${stats()}</div>
         </div>
       </div>
@@ -259,14 +262,13 @@ ${list(c.certifications.items, (ct) => `          <article class="cert reveal">
       </div>
     </section>` : () => "";
 
-  const languages = (teaser = false) => `
+  const languages = () => `
         <div class="marquee reveal" aria-label="Programming languages">
           <ul class="marquee-track">
             ${c.skills.programmingLanguages.map((l) => `<li>${esc(l)}</li>`).join("")}
             ${c.skills.programmingLanguages.map((l) => `<li aria-hidden="true">${esc(l)}</li>`).join("")}
           </ul>
-        </div>
-        ${teaser ? `<div class="center reveal"><a class="more-link" href="${to("skills")}">Explore my skills in 3D ${icon("arrow")}</a></div>` : ""}`;
+        </div>`;
 
   const skills = () => `
     <section class="section section-alt page-first" aria-labelledby="skills-title">
@@ -332,18 +334,19 @@ ${education()}
       </div>
     </section>`;
 
-  const projectCard = (pr, i, h = 3) => {
-    const primary = pr.demo || pr.link || pr.repo || "";
+  // compact (home page): the one-line summary (or the first sentence) and no tag list, to keep the page short
+  const projectCard = (pr, i, h = 3, compact = false) => {
+    const desc = compact ? pr.summary || pr.description.split(/(?<=[.!?])\s/)[0] : pr.description;
     return `          <article class="project reveal${pr.image ? " has-image" : ""}" data-cat="${esc((pr.categories || []).join(" "))}" data-index="${i}">
             ${pr.image ? `<div class="project-media">
               <img src="${esc(a(pr.image))}" alt="Screenshot of ${esc(pr.title)}" loading="lazy" decoding="async" width="1280" height="800">
-              ${pr.demo ? `<span class="live-badge">Live demo</span>` : ""}
+              ${pr.demo ? `<span class="live-badge" aria-hidden="true">Live</span>` : ""}
             </div>` : ""}
             <div class="project-body">
               <div class="project-head"><span class="badge">${esc(pr.badge)}</span><span class="year">${esc(pr.year)}</span></div>
               <h${h}>${esc(pr.title)}</h${h}>
-              <p>${rich(pr.description)}</p>
-              ${tags(pr.tags)}
+              <p>${rich(desc)}</p>
+              ${compact ? "" : tags(pr.tags)}
               <div class="project-actions">
                 <button type="button" class="project-open" aria-haspopup="dialog">Details ${icon("arrow")}</button>
                 ${pr.demo ? `<a class="project-link" href="${esc(pr.demo)}" target="_blank" rel="noopener">Live demo ↗</a>` : ""}
@@ -384,14 +387,14 @@ ${education()}
         <header class="section-head reveal">
           <p class="section-tag">Portfolio</p>
           ${H(featured ? 2 : 1, "projects-title", tt(featured ? c.projects.featuredTitle || "Featured *work.*" : c.projects.title))}
-          <p class="section-sub">${esc(c.projects.subtitle)}</p>
+          ${featured ? "" : `<p class="section-sub">${esc(c.projects.subtitle)}</p>`}
         </header>
         ${featured ? "" : `<div class="filters reveal" role="group" aria-label="Filter projects">
           <button type="button" class="chip active" data-filter="all" aria-pressed="true">All</button>
 ${list(c.projects.filters, (f) => `          <button type="button" class="chip" data-filter="${esc(f.id)}" aria-pressed="false">${esc(f.label)}</button>`)}
         </div>`}
         <div class="projects-grid${featured ? " featured-grid" : ""}">
-${items.map((pr, i) => projectCard(pr, i, featured ? 3 : 2)).join("\n")}
+${items.map((pr, i) => projectCard(pr, i, featured ? 3 : 2, featured)).join("\n")}
         </div>
         <div class="swipe-hint" aria-hidden="true"><span>Swipe to see more →</span><span class="swipe-dots"></span></div>
         <div class="center reveal">
@@ -470,6 +473,10 @@ ${list(c.hire.offers || [], (o) => `            <article class="service reveal">
               <span class="ci ci-li">${icon("linkedin")}</span>
               <span><strong>LinkedIn</strong><small>${esc(p.linkedin.replace(/^https?:\/\/(www\.)?linkedin\.com\//, "").replace(/\/$/, ""))}</small></span>
             </a>
+            ${p.cv ? `<a class="contact-card" href="${esc(u(p.cv))}" download>
+              <span class="ci ci-cv">${icon("download")}</span>
+              <span><strong>CV</strong><small>Download the PDF</small></span>
+            </a>` : ""}
             <div class="contact-card static">
               <span class="ci ci-loc">${icon("pin")}</span>
               <span><strong>Location</strong><small>${esc(p.city)}, ${esc(p.country)}${p.timezone ? ` (${esc(p.timezone)})` : ""}</small></span>
@@ -520,23 +527,8 @@ ${list(c.hire.offers || [], (o) => `            <article class="service reveal">
     </section>`;
 
   const body = {
-    home: () => hero() + about(true) + `
-    <section class="section" aria-labelledby="teaser-title">
-      <div class="container">
-        <a class="universe-teaser reveal" href="${to("skills")}">
-          <div>
-            <p class="universe-kicker">Interactive · Built with Three.js</p>
-            <h2 class="section-title" id="teaser-title">Explore my skills <em>in 3D.</em></h2>
-            <p>${c.skills.groups.reduce((n, g) => n + g.items.length, 0)} skills across ${c.skills.groups.length} fields, laid out as a network you can rotate, hover and filter.</p>
-            <span class="btn">Open the skill universe ${icon("arrow")}</span>
-          </div>
-          <ul class="teaser-orbit" aria-hidden="true">
-${list(c.skills.groups, (g, i) => `            <li style="--i:${i};--n:${c.skills.groups.length}">${icon(g.icon)}<span>${esc(g.title)}</span></li>`)}
-          </ul>
-        </a>
-        ${languages()}
-      </div>
-    </section>` + projects(true) + hire() + cta(),
+    // Home tells one story: who (hero), how I work (3D story), proof (featured work), next step (work with me)
+    home: () => hero() + story() + projects(true) + hire(),
     about: () => about() + `
     <section class="section section-alt" aria-label="Education">
       <div class="container">
@@ -595,6 +587,7 @@ ${education()}
   <script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replace(/</g, "\\u003c")}</script>
 </head>
 <body data-email="${esc(p.email)}" data-whatsapp="${esc(p.whatsapp)}" data-form-key="${esc(s.web3formsKey)}">
+  ${c.paths && c.paths.items.length ? `<script type="application/json" id="site-paths">${JSON.stringify({ pages: Object.fromEntries(PAGES.map((pg) => [pg.id, pg.path])), paths: c.paths.items }).replace(/</g, "\\u003c")}</script>` : ""}
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
 ${Object.entries(ICONS).map(([k, v]) => `    <symbol id="i-${k}" viewBox="0 0 24 24">${v}</symbol>`).join("\n")}
   </svg>
@@ -636,6 +629,7 @@ ${Object.entries(ICONS).map(([k, v]) => `    <symbol id="i-${k}" viewBox="0 0 24
   </div>
 
   <footer class="footer">
+    <p class="wordmark" aria-hidden="true">${esc(name)}</p>
     <div class="container footer-inner">
       <div>
         <a href="${to("home")}" class="logo"><span class="logo-mark">${esc(initials)}</span><span class="logo-text">${esc(name)}</span></a>
