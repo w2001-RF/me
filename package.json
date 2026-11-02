@@ -5,7 +5,7 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "optimize": "node scripts/optimize-images.mjs && node scripts/manifest.mjs",
-    "test": "node --test \"test/*.test.mjs\"",
+    "test": "node --test --test-concurrency=1 \"test/*.test.mjs\"",
     "audit": "node scripts/perf-audit.mjs"
   },
   "devDependencies": {

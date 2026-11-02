@@ -1,4 +1,5 @@
-// 3D scenes built with Three.js: the hero particle wave and the interactive "skill universe".
+// 3D scenes built with Three.js: the hero wave and its floating sphere, the scroll-driven story
+// (home) and the interactive "skill universe" (skills page).
 // Loaded after the page is interactive; everything still works if WebGL or the CDN is unavailable.
 const THREE_URL = "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js";
 const root = document.documentElement;
@@ -47,6 +48,7 @@ function disposeScene(scene, renderer) {
     o.geometry?.dispose();
     (Array.isArray(o.material) ? o.material : [o.material]).forEach((m) => m?.dispose());
   });
+  if (!renderer) return;
   renderer.dispose();
   renderer.forceContextLoss();
 }
@@ -64,22 +66,15 @@ function heroWave(THREE, hero, canvas) {
   const W = isSmall() ? 26 : 48;
   const D = 34;
   const positions = new Float32Array(COLS * ROWS * 3);
-  const colors = new Float32Array(COLS * ROWS * 3);
-  const stops = ["#0071e3", "#8e44ec", "#e4447a"].map((c) => new THREE.Color(c));
-  const tmp = new THREE.Color();
   let k = 0;
   for (let r = 0; r < ROWS; r++) {
     for (let c = 0; c < COLS; c++) {
-      const u = c / (COLS - 1);
-      positions.set([(u - 0.5) * W, 0, 6 - (r / (ROWS - 1)) * D], k * 3);
-      tmp.lerpColors(u < 0.5 ? stops[0] : stops[1], u < 0.5 ? stops[1] : stops[2], u < 0.5 ? u * 2 : (u - 0.5) * 2);
-      colors.set([tmp.r, tmp.g, tmp.b], k * 3);
+      positions.set([(c / (COLS - 1) - 0.5) * W, 0, 6 - (r / (ROWS - 1)) * D], k * 3);
       k++;
     }
   }
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-  geometry.setAttribute("aColor", new THREE.BufferAttribute(colors, 3));
 
   const uniforms = {
     uTime: { value: 0 },
@@ -87,6 +82,8 @@ function heroWave(THREE, hero, canvas) {
     uRipple: { value: new THREE.Vector3(0, 0, -100) },
     uSize: { value: 60 },
     uOpacity: { value: 0.7 },
+    uBase: { value: new THREE.Color("#8b8e97") },
+    uAccent: { value: new THREE.Color("#a594ff") },
   };
   const material = new THREE.ShaderMaterial({
     uniforms,
@@ -96,7 +93,7 @@ function heroWave(THREE, hero, canvas) {
       uniform float uTime, uSize;
       uniform vec2 uMouse;
       uniform vec3 uRipple;
-      attribute vec3 aColor;
+      uniform vec3 uBase, uAccent;
       varying vec3 vColor;
       varying float vAlpha;
       void main() {
@@ -113,7 +110,8 @@ function heroWave(THREE, hero, canvas) {
         vec4 mv = modelViewMatrix * vec4(p, 1.0);
         gl_Position = projectionMatrix * mv;
         gl_PointSize = uSize * (1.0 + h * 0.18) / -mv.z;
-        vColor = aColor;
+        // neutral grid, the accent only where the wave is disturbed (crests, cursor, ripples)
+        vColor = mix(uBase, uAccent, clamp(h * 0.45 - 0.15, 0.0, 1.0));
         vAlpha = smoothstep(-28.0, 2.0, p.z) * smoothstep(0.0, 0.25, 1.0 - abs(p.x) / ${(W / 2).toFixed(1)});
       }`,
     fragmentShader: /* glsl */ `
@@ -128,11 +126,60 @@ function heroWave(THREE, hero, canvas) {
   });
   scene.add(new THREE.Points(geometry, material));
 
+  // Focal object: a small chrome sphere that slowly rises and dips, sending a ripple into the wave each time.
+  // It reflects a tiny generated studio (no image to download).
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  const studio = (dark) => {
+    const s = new THREE.Scene();
+    const dome = new THREE.SphereGeometry(10, 32, 16);
+    const top = new THREE.Color(dark ? "#5a5f73" : "#ffffff");
+    const bottom = new THREE.Color(dark ? "#0b0c10" : "#8f95a6");
+    const pa = dome.attributes.position;
+    const cols = [];
+    for (let i = 0; i < pa.count; i++) {
+      const col = bottom.clone().lerp(top, (pa.getY(i) / 10 + 1) / 2);
+      cols.push(col.r, col.g, col.b);
+    }
+    dome.setAttribute("color", new THREE.Float32BufferAttribute(cols, 3));
+    s.add(new THREE.Mesh(dome, new THREE.MeshBasicMaterial({ side: THREE.BackSide, vertexColors: true })));
+    for (const [x, y, z, w, h, col] of [[0, 7, 3, 10, 3.5, "#ffffff"], [-7, 1.5, -2, 3, 6, dark ? "#a594ff" : "#c9c0ff"], [6, 0, 5, 5, 3, dark ? "#c3c0b8" : "#ffffff"], [0, -6, 2, 12, 2, dark ? "#2a2d38" : "#d8dbe4"]]) {
+      const box = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: col, side: THREE.DoubleSide }));
+      box.position.set(x, y, z);
+      box.lookAt(0, 0, 0);
+      s.add(box);
+    }
+    const tex = pmrem.fromScene(s, 0.02).texture;
+    disposeScene(s, null);
+    return tex;
+  };
+  const envs = { dark: studio(true), light: studio(false) };
+  const ball = new THREE.Mesh(new THREE.SphereGeometry(0.62, 64, 32), new THREE.MeshStandardMaterial({ metalness: 1, roughness: 0.05, envMap: envs.dark }));
+  const BALL = isSmall() ? { x: -1.6, z: 3.2, y: 0.95 } : { x: 1.5, z: 2, y: 1.05 };
+  const BOB = { amp: 0.32, period: 3.6 };
+  ball.position.set(BALL.x, BALL.y, BALL.z);
+  scene.add(ball);
+  let lastDip = -1;
+  const moveBall = (t) => {
+    ball.position.y = BALL.y + Math.sin((t / BOB.period) * Math.PI * 2) * BOB.amp;
+    ball.rotation.y = t * 0.25;
+    // lowest point of each bob (sin = -1 at 3/4 of a period): drop a ripple
+    const dip = Math.floor(t / BOB.period + 0.25);
+    if (dip !== lastDip) {
+      lastDip = dip;
+      uniforms.uRipple.value.set(BALL.x, BALL.z, t);
+    }
+  };
+
   const applyTheme = () => {
     const dark = root.dataset.theme === "dark";
     material.blending = dark ? THREE.AdditiveBlending : THREE.NormalBlending;
-    uniforms.uOpacity.value = dark ? 0.85 : 0.55;
+    uniforms.uOpacity.value = dark ? 0.8 : 0.34;
+    const css = getComputedStyle(root);
+    uniforms.uAccent.value.set(css.getPropertyValue("--accent").trim() || "#a594ff");
+    uniforms.uBase.value.set(dark ? "#8b8e97" : "#6c6f78");
     material.needsUpdate = true;
+    ball.material.envMap = envs[dark ? "dark" : "light"];
+    ball.material.needsUpdate = true;
     if (reduceMotion) render();
   };
   const themeObserver = new MutationObserver(applyTheme);
@@ -189,6 +236,9 @@ function heroWave(THREE, hero, canvas) {
     stopLoop();
     themeObserver.disconnect();
     heroResize.disconnect();
+    envs.dark.dispose();
+    envs.light.dispose();
+    pmrem.dispose();
     disposeScene(scene, renderer);
   };
   if (reduceMotion) {
@@ -201,6 +251,7 @@ function heroWave(THREE, hero, canvas) {
   stopLoop = loopWhileVisible(hero, (t) => {
     now = t;
     uniforms.uTime.value = t;
+    moveBall(t);
     if (target.x > 900) mouse.set(999, 999);
     else if (mouse.x > 900) mouse.copy(target);
     else mouse.lerp(target, 0.08);
@@ -632,6 +683,235 @@ function skillUniverse(THREE, el) {
   };
 }
 
+/* ---------------------------------------------------------------- Story */
+
+// One shape, four states, driven by the chapters scrolling past:
+// a point (question) → a structure (model) → connected clusters (build) → spreading rings (ship)
+function storyScene(THREE, section) {
+  const stage = section.querySelector(".story-stage");
+  const canvas = stage.querySelector("canvas");
+  const chapters = [...section.querySelectorAll(".chapter")];
+  const hudNo = stage.querySelector(".hud-no");
+  const hudLabel = stage.querySelector(".hud-label");
+  const hudBar = stage.querySelector(".hud-bar");
+
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: "low-power" });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75));
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+  const group = new THREE.Group();
+  scene.add(group);
+
+  // Unique vertices and edges of an icosphere: the "structure" state
+  const ico = new THREE.IcosahedronGeometry(1.6, 2);
+  const pa = ico.attributes.position;
+  const ids = new Map();
+  const verts = [];
+  const remap = [];
+  for (let i = 0; i < pa.count; i++) {
+    const key = `${pa.getX(i).toFixed(3)},${pa.getY(i).toFixed(3)},${pa.getZ(i).toFixed(3)}`;
+    if (!ids.has(key)) {
+      ids.set(key, verts.length);
+      verts.push(new THREE.Vector3().fromBufferAttribute(pa, i));
+    }
+    remap.push(ids.get(key));
+  }
+  ico.dispose();
+  const seen = new Set();
+  const edges = [];
+  for (let t = 0; t < remap.length; t += 3) {
+    for (const [a, b] of [[0, 1], [1, 2], [2, 0]]) {
+      const u = remap[t + a];
+      const v = remap[t + b];
+      const key = u < v ? `${u}-${v}` : `${v}-${u}`;
+      if (!seen.has(key)) {
+        seen.add(key);
+        edges.push([u, v]);
+      }
+    }
+  }
+  const N = verts.length;
+  const rand = (i, s) => {
+    const x = Math.sin(i * 12.9898 + s * 78.233) * 43758.5453;
+    return x - Math.floor(x);
+  };
+
+  // The four layouts
+  const point = verts.map((v) => v.clone().normalize().multiplyScalar(0.28));
+  const structure = verts.map((v) => v.clone());
+  // Each vertex joins the cluster its direction points to, so neighbours stay together: a system of services
+  const dirs = [[1, 1, 1], [-1, -1, 1], [-1, 1, -1], [1, -1, -1]].map((d) => new THREE.Vector3(...d).normalize());
+  const centers = [new THREE.Vector3(2.0, 1.2, 0.3), new THREE.Vector3(-2.1, -0.7, 0.4), new THREE.Vector3(-1.1, 1.6, -1.0), new THREE.Vector3(1.1, -1.6, -0.5)];
+  const clusterOf = verts.map((v) => {
+    const n = v.clone().normalize();
+    let best = 0;
+    dirs.forEach((d, k) => (n.dot(d) > n.dot(dirs[best]) ? (best = k) : 0));
+    return best;
+  });
+  const clusters = verts.map((v, i) => centers[clusterOf[i]].clone()
+    .add(v.clone().normalize().sub(dirs[clusterOf[i]]).multiplyScalar(0.62)).addScalar((rand(i, 2) - 0.5) * 0.06));
+  // Three rings, points evenly spaced on each
+  const RINGS = 3;
+  const perRing = Math.ceil(N / RINGS);
+  const ring = verts.map((_, i) => ({ r: 0.6 + (i % RINGS) * 0.8, a: (Math.floor(i / RINGS) / perRing) * Math.PI * 2 }));
+  const ringAt = (i, t, out) => {
+    const { r, a } = ring[i];
+    const rr = 0.4 + ((r + t * 0.3) % 2.4); // rings drift outward, like ripples
+    return out.set(Math.cos(a + t * 0.04) * rr, -0.6 + Math.sin(rr * 3 - t * 2) * 0.03, Math.sin(a + t * 0.04) * rr);
+  };
+  const ringEdges = verts.map((_, i) => [i, i + RINGS < N ? i + RINGS : i % RINGS]);
+
+  // Round, soft points
+  const dot = document.createElement("canvas");
+  dot.width = dot.height = 64;
+  const g = dot.getContext("2d");
+  const grd = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+  grd.addColorStop(0, "rgba(255,255,255,1)");
+  grd.addColorStop(0.35, "rgba(255,255,255,.85)");
+  grd.addColorStop(1, "rgba(255,255,255,0)");
+  g.fillStyle = grd;
+  g.fillRect(0, 0, 64, 64);
+  const dotTex = new THREE.CanvasTexture(dot);
+
+  const pos = new Float32Array(N * 3);
+  const pGeo = new THREE.BufferGeometry();
+  pGeo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+  const pMat = new THREE.PointsMaterial({ size: 0.09, map: dotTex, transparent: true, depthWrite: false });
+  group.add(new THREE.Points(pGeo, pMat));
+  // Three sets of lines, each with its own opacity per state:
+  // edges inside a cluster, edges between clusters (they fade while building), and the rings
+  const lineSet = (pairs, ops) => {
+    const arr = new Float32Array(pairs.length * 6);
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.BufferAttribute(arr, 3));
+    const mat = new THREE.LineBasicMaterial({ transparent: true, opacity: 0, depthWrite: false });
+    group.add(new THREE.LineSegments(geo, mat));
+    return {
+      mat,
+      update(k, f) {
+        mat.opacity = ops[k] + (ops[k + 1] - ops[k]) * f;
+        if (mat.opacity < 0.005) return;
+        pairs.forEach(([u, v], e) => {
+          arr.set(pos.subarray(u * 3, u * 3 + 3), e * 6);
+          arr.set(pos.subarray(v * 3, v * 3 + 3), e * 6 + 3);
+        });
+        geo.attributes.position.needsUpdate = true;
+      },
+    };
+  };
+  const lines = [
+    lineSet(edges.filter(([u, v]) => clusterOf[u] === clusterOf[v]), [0, 0.5, 0.42, 0]),
+    lineSet(edges.filter(([u, v]) => clusterOf[u] !== clusterOf[v]), [0, 0.5, 0.05, 0]),
+    lineSet(ringEdges, [0, 0, 0, 0.4]),
+  ];
+
+  const applyTheme = () => {
+    const dark = root.dataset.theme === "dark";
+    const css = getComputedStyle(root);
+    pMat.color.set(css.getPropertyValue("--accent").trim() || "#a594ff");
+    pMat.blending = dark ? THREE.AdditiveBlending : THREE.NormalBlending;
+    pMat.needsUpdate = true;
+    for (const { mat } of lines) {
+      mat.color.set(css.getPropertyValue("--text").trim() || "#ebe8e1");
+      mat.blending = pMat.blending;
+      mat.needsUpdate = true;
+    }
+    frame(last);
+  };
+  const themeObserver = new MutationObserver(() => applyTheme());
+  themeObserver.observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+
+  const resize = () => {
+    const { width, height } = stage.getBoundingClientRect();
+    renderer.setSize(width, height, false);
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+    const phone = width < 700;
+    // the shape sits beside the text on wide screens, above it on phones
+    group.position.set(phone ? 0 : 2.1, phone ? 1.25 : 0.1, 0);
+    camera.position.set(0, 0.4, phone ? 11 : 8);
+    frame(last);
+  };
+  const stageResize = new ResizeObserver(resize);
+  stageResize.observe(stage);
+
+  // Continuous progress: 0 at the first chapter's centre, 3 at the last one's
+  const progress = () => {
+    const mid = innerHeight / 2;
+    const c = chapters.map((ch) => {
+      const r = ch.getBoundingClientRect();
+      return r.top + r.height / 2;
+    });
+    if (mid <= c[0]) return 0;
+    for (let i = 0; i < c.length - 1; i++) if (mid <= c[i + 1]) return i + (mid - c[i]) / (c[i + 1] - c[i]);
+    return c.length - 1;
+  };
+  const ease = (x) => x * x * (3 - 2 * x);
+  const mixLayouts = [point, structure, clusters];
+  const pSize = [0.07, 0.085, 0.1, 0.075];
+  const tmp = new THREE.Vector3();
+  const tmp2 = new THREE.Vector3();
+  let last = 0;
+  let active = -1;
+  const pointer = { x: 0, y: 0 };
+  const onPointer = (e) => {
+    pointer.x = e.clientX / innerWidth - 0.5;
+    pointer.y = e.clientY / innerHeight - 0.5;
+  };
+  addEventListener("pointermove", onPointer, { passive: true });
+
+  function frame(t) {
+    last = t;
+    const s = Math.min(Math.max(progress(), 0), 3);
+    const k = Math.min(Math.floor(s), 2);
+    const f = ease(s - k);
+    for (let i = 0; i < N; i++) {
+      const A = mixLayouts[k][i];
+      const B = k === 2 ? ringAt(i, t, tmp2) : mixLayouts[k + 1][i];
+      tmp.copy(A).lerp(B, f);
+      if (k === 0 && f < 0.5) tmp.multiplyScalar(1 + Math.sin(t * 2.2) * 0.12 * (1 - f * 2)); // the orb "breathes"
+      pos[i * 3] = tmp.x;
+      pos[i * 3 + 1] = tmp.y;
+      pos[i * 3 + 2] = tmp.z;
+    }
+    pGeo.attributes.position.needsUpdate = true;
+    lines.forEach((l) => l.update(k, f));
+    pMat.size = pSize[k] + (pSize[k + 1] - pSize[k]) * f;
+    group.rotation.y = t * 0.12 + pointer.x * 0.5;
+    group.rotation.x = 0.22 + pointer.y * 0.25 + (s > 2 ? (s - 2) * 0.35 : 0);
+
+    const now = Math.min(Math.round(s), chapters.length - 1);
+    if (now !== active) {
+      active = now;
+      chapters.forEach((ch, i) => ch.classList.toggle("on", i === now));
+      hudNo.textContent = String(now + 1).padStart(2, "0");
+      hudLabel.textContent = chapters[now].dataset.label;
+    }
+    hudBar.style.setProperty("--p", (s / 3).toFixed(3));
+    renderer.render(scene, camera);
+  }
+
+  section.classList.add("live");
+  applyTheme();
+  resize();
+  let stopLoop;
+  if (reduceMotion) {
+    // no idle animation: only follow the scroll
+    const onScroll = () => requestAnimationFrame(() => frame(0));
+    addEventListener("scroll", onScroll, { passive: true });
+    stopLoop = () => removeEventListener("scroll", onScroll);
+  } else stopLoop = loopWhileVisible(stage, frame);
+  return () => {
+    stopLoop();
+    removeEventListener("pointermove", onPointer);
+    themeObserver.disconnect();
+    stageResize.disconnect();
+    dotTex.dispose();
+    section.classList.remove("live");
+    disposeScene(scene, renderer);
+  };
+}
+
 /* ------------------------------------------------------------------ Start */
 
 let THREE = null;
@@ -650,7 +930,8 @@ async function mount() {
   const id = mountId;
   const heroCanvas = document.querySelector(".hero-canvas");
   const universe = document.querySelector(".universe");
-  if (!heroCanvas && !universe) return;
+  const story = document.querySelector(".story");
+  if (!heroCanvas && !universe && !story) return;
   if (!webglAvailable()) {
     root.classList.add("no-webgl");
     return;
@@ -665,6 +946,7 @@ async function mount() {
   if (id !== mountId) return; // the visitor already left this page
   if (heroCanvas?.isConnected) disposers.push(heroWave(THREE, heroCanvas.closest(".hero"), heroCanvas));
   if (universe?.isConnected) disposers.push(skillUniverse(THREE, universe));
+  if (story?.isConnected) disposers.push(storyScene(THREE, story));
   root.classList.add("has-3d");
 }
 

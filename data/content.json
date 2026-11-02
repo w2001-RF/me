@@ -1,26 +1,25 @@
 {
   "site": {
     "url": "https://w2001-rf.github.io/me",
-    "title": "Wassim Rifay | Full Stack Software Engineer & AI Engineer, Morocco",
-    "description": "Wassim Rifay is a Full Stack Software Engineer and aspiring AI researcher in Kenitra, Morocco, building AI-powered apps, LLM/RAG assistants, Python APIs and React interfaces.",
-    "shareTitle": "Wassim Rifay | Full Stack Software Engineer & AI Engineer",
-    "shareDescription": "Passionate Full Stack Software Engineer and aspiring AI researcher, driven by learning, innovation and problem-solving.",
+    "title": "Wassim Rifay | Full Stack AI Engineer in Morocco: LLM, RAG, FastAPI",
+    "description": "Wassim Rifay, Full Stack AI Engineer in Kenitra, Morocco: LLM and RAG assistants, FastAPI and Flask backends, computer vision with YOLOv8, React and Next.js interfaces.",
+    "shareTitle": "Wassim Rifay | Full Stack AI Engineer",
+    "shareDescription": "Full Stack AI Engineer in Kenitra, Morocco: LLM/RAG assistants, FastAPI backends and computer vision. SQL work at Orange Business cut ticket-processing time by an estimated 30%.",
     "web3formsKey": "25ae6517-5af4-4602-92ca-dad5e70ff928"
   },
   "profile": {
     "firstName": "Wassim",
     "lastName": "Rifay",
     "headline": "AI-powered software, *built end to end.*",
-    "jobTitle": "Full Stack Software Engineer",
-    "description": "Passionate Full Stack Software Engineer and aspiring AI researcher, driven by learning, innovation and problem-solving.",
+    "jobTitle": "Full Stack AI Engineer",
+    "description": "Full Stack AI Engineer in Kenitra, Morocco: LLM/RAG assistants, FastAPI backends and computer vision. SQL work at Orange Business cut ticket-processing time by an estimated 30%.",
     "availability": "Available for new opportunities",
     "roles": [
-      "Full Stack Software Engineer",
-      "Aspiring AI Researcher",
+      "Full Stack AI Engineer",
       "LLM & RAG Builder",
       "Python & FastAPI Developer"
     ],
-    "intro": "I'm driven by a passion for learning, innovation and problem-solving. I build AI-powered applications, data pipelines and production-ready backends, from LLM agents and computer vision to the APIs and interfaces that ship them.",
+    "intro": "At **Orange Business** my SQL work cut ticket-processing time by an estimated 30%, and I built the chatbot that automates access requests. On the side: RAG assistants and YOLOv8 computer vision.",
     "photo": "assets/wassim.jpg",
     "cv": "assets/Wassim-Rifay-CV.pdf",
     "city": "Kenitra",
@@ -57,51 +56,124 @@
       "AWS"
     ]
   },
-  "heroCards": {
-    "statValue": "2+",
-    "statLabel": "years building production software",
-    "code": "model.fit()",
-    "codeLabel": "AI · LLM · MLOps"
+  "paths": {
+    "title": "Where do you want to start?",
+    "items": [
+      {
+        "id": "hiring",
+        "label": "I'm hiring",
+        "hint": "Experience, projects, CV",
+        "steps": [
+          {
+            "page": "experience",
+            "label": "Experience"
+          },
+          {
+            "page": "projects",
+            "label": "Projects"
+          },
+          {
+            "page": "contact",
+            "label": "CV & contact"
+          }
+        ]
+      },
+      {
+        "id": "client",
+        "label": "I have a project",
+        "hint": "Work, rate, first call",
+        "steps": [
+          {
+            "page": "projects",
+            "label": "Projects"
+          },
+          {
+            "page": "home",
+            "hash": "hire",
+            "label": "Rate"
+          },
+          {
+            "page": "contact",
+            "label": "Contact"
+          }
+        ]
+      },
+      {
+        "id": "curious",
+        "label": "Just curious",
+        "hint": "How I think, in 3D",
+        "steps": [
+          {
+            "page": "home",
+            "hash": "story",
+            "label": "The story"
+          },
+          {
+            "page": "skills",
+            "label": "Skill universe"
+          },
+          {
+            "page": "projects",
+            "label": "Projects"
+          }
+        ]
+      }
+    ]
   },
-  "trusted": [
-    "Orange Business",
-    "Artéka",
-    "OCP Group",
-    "Dell Technologies Competition"
-  ],
+  "story": {
+    "tag": "How I work",
+    "title": "From a question *to a system.*",
+    "chapters": [
+      {
+        "label": "Question",
+        "title": "It starts with a question I can't drop.",
+        "text": "Why does a support ticket take hours? Why does a cache evict the wrong item? I start there, not with a framework.",
+        "link": {
+          "page": "projects",
+          "label": "projects"
+        }
+      },
+      {
+        "label": "Model",
+        "title": "Find the pattern before building.",
+        "text": "I look for what does not fit: failure signs in infrared and vibration data at OCP, eviction policies compared on the same traffic for CacheBench.",
+        "link": {
+          "page": "experience",
+          "label": "experience"
+        }
+      },
+      {
+        "label": "Build",
+        "title": "Then build the whole system.",
+        "text": "Not just the notebook: FastAPI services, RAG on local LLaMA models, YOLOv8 vision, React interfaces, Docker and CI/CD.",
+        "link": {
+          "page": "skills",
+          "label": "the stack, in 3D"
+        }
+      },
+      {
+        "label": "Ship",
+        "title": "Ship it where it can be measured.",
+        "text": "At Orange Business: an estimated 30% less ticket-processing time, and a chatbot that automates recurring access requests.",
+        "link": {
+          "page": "home",
+          "hash": "hire",
+          "label": "work with me"
+        }
+      }
+    ]
+  },
   "about": {
-    "title": "Driven by learning, *innovation & problem-solving.*",
+    "title": "I build AI that ships, *not just demos.*",
     "facts": [
       "Kenitra, Morocco (UTC+00:00)",
       "Engineering degree, ENSA Kénitra",
       "French · Arabic · English"
     ],
     "paragraphs": [
-      "I'm a passionate **Full Stack Software Engineer** and **aspiring AI researcher**. I'm driven by a passion for learning, innovation, and problem-solving.",
+      "I like to understand how a system works before I change it. At **OCP** that meant predicting machine failures from infrared thermal images and vibration signals; at **Artéka**, re-identifying players in video and streaming the results through Kafka.",
       "I hold an Engineering degree in Computer Science from **ENSA Kénitra**. I work across the stack, from machine learning models and LLM agents to backend services, web interfaces and the CI/CD pipelines that deliver them.",
-      "I currently work at **Orange Business**, building business web applications and an internal AI chatbot. I care about software quality, performance and measurable impact."
-    ],
-    "services": [
-      {
-        "icon": "bot",
-        "title": "LLM & RAG apps",
-        "text": "Assistants and agents grounded in your own data, with LangChain, LlamaIndex and local or hosted models."
-      },
-      {
-        "icon": "brain",
-        "title": "Machine learning & vision",
-        "text": "Models that go from notebook to production: forecasting, classification and YOLO-based computer vision."
-      },
-      {
-        "icon": "server",
-        "title": "Backends & APIs",
-        "text": "FastAPI, Flask and Django services with authentication, roles and clean, documented REST APIs."
-      },
-      {
-        "icon": "layout",
-        "title": "Full-stack web",
-        "text": "React, Next.js and Vue interfaces, from dashboards to interactive 3D experiences in the browser."
-      }
+      "I currently work at **Orange Business**, where I build business web applications and an internal AI chatbot that automates recurring authentication and access requests."
     ],
     "stats": [
       {
@@ -398,6 +470,7 @@
           "web"
         ],
         "description": "The 3D timber yard is the catalogue: visitors walk through a procedural depot, inspect real-scale products, build a cart and request a quote on WhatsApp.",
+        "summary": "A 3D timber yard you walk through to browse products and request a quote.",
         "details": "A single-page app for a timber depot in Sidi Yahya El Gharb. The whole yard is generated from a plan file (zones, racks, piles), with colliders and pathfinding. A classic catalogue, plan view and configurator expose the same products without 3D.",
         "highlights": [
           "Procedural 3D world: instanced timber piles, procedural textures, no downloaded assets",
@@ -430,6 +503,7 @@
           "3d"
         ],
         "description": "A third-person survival open-world RPG in the browser, set in Morocco in 1945 under the French Protectorate. Playable in English and Moroccan Darija.",
+        "summary": "An open-world survival RPG in the browser, set in 1945 Morocco.",
         "details": "You play Driss, a young resistance fighter. Survive (hunger, thirst), loot and craft, fight with five weapons, stay unseen from guards with vision cones, hunt, trade, camp and grow six skills, all in a procedural open world rendered with **Three.js**.",
         "highlights": [
           "Stealth AI with vision cones and detection meters; daylight changes guard sight",
@@ -550,6 +624,7 @@
           "ai"
         ],
         "description": "Track income, expenses, rental income against a loan and a savings goal, with charts, quick insights and opt-in monthly AI advice.",
+        "summary": "Income, expenses, loan and savings tracking, with charts and monthly AI advice.",
         "details": "A static app backed by **Supabase** (auth, Postgres with Row Level Security, Edge Functions). A scheduled job asks an LLM for personalised monthly advice.",
         "highlights": [
           "Quick transactions, search, filters and CSV export",
@@ -670,6 +745,7 @@
           "web"
         ],
         "description": "Dell Technologies competition: an assistant for healthcare professionals that answers questions from medical documents (RAG) and analyses medical images.",
+        "summary": "Answers from medical documents with RAG and reads medical images with YOLOv8.",
         "details": "Built for the **Dell Technologies competition**. Doctors chat with an assistant that retrieves answers from the knowledge base and patient files, and upload medical images that **YOLOv8** models detect and segment. Patients, history, medications, lab results and visit notes are managed in the same app.",
         "highlights": [
           "**RAG pipeline**: LlamaIndex + Ollama (LLaMA) with nomic-embed-text embeddings and a ChromaDB vector store, streaming answers",
@@ -916,22 +992,22 @@
   "hire": {
     "tag": "Work with me",
     "title": "Freelance help for your *AI or web project.*",
-    "subtitle": "Bring an idea, a prototype or an existing codebase. I can build it with you, extend it or review it.",
+    "subtitle": "Give me a hard problem and room to solve it. I work remotely and measure the result.",
     "offers": [
       {
         "icon": "bot",
         "title": "AI & LLM integration",
-        "text": "Chatbots, RAG over your documents and AI features added to an existing product."
+        "text": "Chatbots and RAG over your documents, like my Dell competition assistant on local LLaMA models."
       },
       {
         "icon": "layout",
         "title": "Full-stack development",
-        "text": "Web apps, dashboards and APIs, from the first prototype to a deployed product."
+        "text": "Web apps, dashboards and APIs, prototype to deployment. Most projects here are live demos."
       },
       {
         "icon": "code",
         "title": "Code & architecture review",
-        "text": "A second pair of eyes on your models, backend, data pipeline or deployment."
+        "text": "Models, backend, pipeline or deployment: I measure first, then point to the weak part."
       }
     ],
     "rate": {
@@ -939,9 +1015,8 @@
       "currency": "MAD",
       "unit": "hour",
       "label": "Standard hourly rate",
-      "note": "For development, integration and technical advice. The final quote depends on the scope of the project.",
+      "note": "Development, integration and technical advice. The quote depends on the scope.",
       "includes": [
-        "Remote, with clients in any time zone",
         "French, Arabic or English"
       ],
       "button": "Discuss your project"
@@ -949,12 +1024,12 @@
   },
   "cta": {
     "title": "Have a project or a role *in mind?*",
-    "text": "I'm open to full-time roles, freelance missions and AI collaborations.",
+    "text": "Full-time roles, freelance missions and AI collaborations.",
     "button": "Start a conversation"
   },
   "contact": {
     "title": "Let's *work together.*",
-    "subtitle": "Send me a message by email or WhatsApp and I'll get back to you quickly."
+    "subtitle": "Email or WhatsApp. I usually reply within a day."
   },
   "certifications": {
     "title": "Always *learning.*",

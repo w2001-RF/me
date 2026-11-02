@@ -54,7 +54,9 @@ test("fonts are self-hosted (no Google Fonts requests)", () => {
 
 test("the CV stays on the site (the download attribute only works for same-origin files)", () => {
   const home = pages.find((p) => p.file.replace(/\\/g, "/") === "_site/index.html").html;
-  assert.match(home, /href="assets\/Wassim-Rifay-CV\.pdf" class="btn btn-link" download/);
+  const contact = pages.find((p) => p.file.replace(/\\/g, "/") === "_site/contact/index.html").html;
+  assert.match(home, /href="assets\/Wassim-Rifay-CV\.pdf" class="btn btn-ghost" download/); // phone menu
+  assert.match(contact, /href="\.\.\/assets\/Wassim-Rifay-CV\.pdf" download/); // contact card (end of the hiring path)
 });
 
 test("the committed site.webmanifest matches content.json (run: node scripts/manifest.mjs)", () => {
